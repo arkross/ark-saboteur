@@ -26,7 +26,7 @@ $config['base_url']	= '';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'D4rk5|4y3r';
 
 /*
 |--------------------------------------------------------------------------
@@ -357,6 +357,23 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+$config['modules_locations'] = array(APPPATH.'modules/' => '../modules/');
 
+/*
+| -------------------------------------------------------------------
+|  Native Auto-load
+| -------------------------------------------------------------------
+|
+| Nothing to do with cnfig/autoload.php, this allows PHP autoload to work
+| for base controllers and some third-party libraries.
+|
+*/
+function __autoload($class)
+{
+ if(strpos($class, 'CI_') !== 0)
+ {
+  @include_once( APPPATH . 'core/'. $class . EXT );
+ }
+}
 /* End of file config.php */
 /* Location: ./application/config/config.php */
