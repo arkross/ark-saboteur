@@ -14,7 +14,7 @@
 
 /*  Global Styles  */
 * {
-	font-family: Tahoma;
+	font-family: "DejaVu Sans", "Bitstream Vera Sans", Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -25,19 +25,31 @@ header {
 	height: 60px;
 }
 
-form {
-	background-color: #cccccc
+a, a:hover, a:active, a:visited {
+	color: #f6c709;
+	text-decoration: none;
 }
 
-section.row {
+#wrapper {
 	margin-top: 10px;
 	min-height: 400px;
+}
+
+.background-grey {
+	background-color: #808080;
+	color: white;
 }
 
 .important {
 	font-weight: bold;
 }
 
+.margin-auto {
+	margin: auto;
+}
+
+
+/*  Header Section  */
 .sabo-logo {
 	background: url('../img/saboteur-logo.png') no-repeat;
 	height: 49px;
@@ -51,7 +63,9 @@ section.row {
 	box-shadow: 0px 5px 5px ;
 }
 
-#footer {
+
+/*  Footer Section */
+footer {
 	font-size: 1.25em;
 	float: right;
 }
@@ -63,4 +77,133 @@ section.row {
 #sabocover {
 	width: 57px;
 	height: 73px;
+}
+
+/*  Room List  */
+#room-list{
+	margin-top: 20px;
+}
+
+#room-list select {
+	margin-top: 0px;
+}
+
+#room-list div, #room-create div {
+	margin-bottom: 0px;
+}
+
+#room-create {
+	margin-top: 20px;
+}
+
+#room-create input {
+	width: 100%;
+}
+
+.tab-top {
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	padding: 5px;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+/*  Here we go, the game part  */
+#board-game {
+	background-color: #cccccc;
+	border: 2px solid white;
+	width: 473px;
+	height: 405px;
+	overflow: auto;
+}
+
+.grid {
+	width: 42px;
+	height: 57px;
+	position: absolute;
+	border: 1px solid #808080;
+	margin-top: -1px;
+	margin-left: -1px;
+}
+
+#player-list ul {
+	margin: 0;
+}
+
+#player-list li {
+	list-style: none;
+	width: 285px;
+	height: 30px;
+	margin-top: 3px;
+	margin-left: -1px;
+}
+
+#player-list li * {
+	float: left;
+}
+
+.player-name {
+	cursor: pointer;
+	color: #003399;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 0px;
+	background-color: #cccc99;
+	height: 16px;
+	width: 135px;
+	text-align: right;
+	font-weight: bold;
+	vertical-align: middle;
+	padding: 5px;
+	border: 1px solid white;
+	font-size: 1.2em;
+}
+
+.gold-count {
+	padding: 5px;
+	font-weight: bold;
+}
+
+#round {
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 0px;
+	font-size: 1.5em;
+	background-color: #bbcb99;
+	border: 2px solid white;
+	margin-left: -2px;
+	padding: 5px;
+}
+
+#cards {
+	margin-top: 10px;
+}
+
+#hand-cards img {
+	float: left;
+	margin-right: 10px;
+}
+
+#discard-pile {
+	margin-right: 10px;
+}
+#discard-count, #deck-count {
+	text-align: center;
+	font-weight: bold;
 }

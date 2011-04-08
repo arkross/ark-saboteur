@@ -13,12 +13,9 @@
  * Company : http://mimicreative.net
  */
 ?>
-
-<div id="footer">
-	<div id="zmanlogo" class="right"><?php echo img(image_url('zmanlogo.jpg')); ?></div>
-	<div id="sabocover" class="right"><?php echo img(image_url('sabo-cover.jpg')); ?></div><br class="clear"/>
-	<div id="originalwork" class="right">
-		Original Work by<br/>
-		<span class="important right">Frederic Moyersoen</span>
-	</div>
+<div id="zmanlogo" class="right"><?php echo img(image_url('zmanlogo.jpg')); ?></div>
+<div id="sabocover" class="right"><?php echo img(image_url('sabo-cover.jpg')); ?></div><br class="clear"/>
+<div id="originalwork" class="right">
+	Original Work by<br/>
+	<span class="important right">Frederic Moyersoen</span>
 </div>

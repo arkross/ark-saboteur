@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /* 
  * DO NOT REMOVE THIS LICENSE
  * 
@@ -14,18 +14,15 @@
  */
 
 /**
- * Description of login
- *
  * @author Alexander
  * @property Template $template
  */
-class Login extends Client_Controller {
-  //put your code here
-  function __construct() {
-    parent::__construct();
-  }
+class Room extends Client_Controller {
+	public function __construct() {
+		parent::__construct();
+	}
 
-  function index() {
-    $this->template->build('login');
-  }
+	function index() {
+		$this->template->build('room');
+	}
 }

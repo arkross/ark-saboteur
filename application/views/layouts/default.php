@@ -17,21 +17,24 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
+		<script type="text/javascript" src="application/assets/js/jquery/jquery.js"></script>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>
+		
 		<div id="header" class="box-shadow">
 			<header class="row">
 				<?php echo $template['partials']['header']; ?>
 			</header>
 		</div>
-		
-		<section class="row">
-			<?php echo $template['body']; ?>
-		</section>
+		<div id="wrapper" class="row">
+			<section>
+				<?php echo $template['body']; ?>
+			</section>
 
-		<footer class="row">
-			<?php echo $template['partials']['footer']; ?>
-		</footer>
+			<footer>
+				<?php echo $template['partials']['footer']; ?>
+			</footer>
+		</div>
 	</body>
 </html>
