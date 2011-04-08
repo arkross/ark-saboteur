@@ -26,6 +26,8 @@ class Login extends Client_Controller {
   }
 
   function index() {
-    $this->template->build('login');
+    $this->template
+			->append_metadata(css('52/forms.css'))
+			->build('login');
   }
 }

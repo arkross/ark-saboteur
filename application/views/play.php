@@ -14,7 +14,34 @@
  */
 ?>
 <div id="board-game" class="left"></div>
-<div id="round" class="left">Round <span id="round-count">1</span></div><br /><br /><br />
+<div id="round" class="left">Round <span id="round-count">1</span></div>
+
+<div id="chatbox" class="right">
+	<nav id="switch">
+		<ul>
+			<li class="active">All</li>
+			<li>Event</li>
+			<li>Chat</li>
+		</ul>
+	</nav>
+
+	<div id="chatlog">
+		<span class="event-entry">Round 1 started</span>
+		<span class="chat-entry"><span class="sender-name">Yudhi:</span> Hello, this is chatbox</span>
+		<span class="chat-entry"><span class="sender-name">Alexander:</span> Hello, this is a reply text using 2 line</span>
+		<span class="event-entry">Alexander plays a path card</span>
+	</div>
+	<form action="" method="POST">
+		<input id="chat-input" type="text" name="chat" value="This is chat input" placeholder="Press Enter to set focus here" autofocus />
+	</form>
+</div>
+
+<div id="actions" class="left">
+	<div id="role">You are a Saboteur</div>
+	<div id="leave">Leave Room</div>
+</div>
+
+<br /><br /><br />
 <div id="player-list" class="left">
 	<ul>
 		<li>

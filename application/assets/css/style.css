@@ -58,11 +58,41 @@ a, a:hover, a:active, a:visited {
 
 #header {
 	background-color: #808080;
-	-webkit-box-shadow: 0px 5px 5px ;
-	-moz-box-shadow: 0px 5px 5px ;
-	box-shadow: 0px 5px 5px ;
+	-webkit-box-shadow: 0px 5px 5px #000000;
+	-moz-box-shadow: 0px 5px 5px #000000;
+	box-shadow: 0px 5px 5px #000000;
+	color: white;
 }
 
+#logged-in {
+	padding: 10px;
+}
+
+#login-avatar {
+	width: 32px;
+	height: 32px;
+	background-color: black;
+	border: 1px solid #f6c709;
+	margin: 0px 5px;
+}
+
+#menu {
+	height: 100%;
+}
+
+#menu ul {
+	margin: 0px;
+	margin-top: auto;
+}
+
+#menu li {
+	display: inline;
+	background-color: black;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid white;
+}
 
 /*  Footer Section */
 footer {
@@ -77,6 +107,10 @@ footer {
 #sabocover {
 	width: 57px;
 	height: 73px;
+}
+
+#footer address {
+	margin: 0;
 }
 
 /*  Room List  */
@@ -205,5 +239,79 @@ footer {
 }
 #discard-count, #deck-count {
 	text-align: center;
+	font-weight: bold;
+}
+
+#actions {
+	margin: 5px;
+}
+
+#leave {
+	color: #003399;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+/*  Chatbox  */
+#chatbox {
+	width: 173px;
+	height: 390px;
+	background-color: #cccc99;
+	border: 1px solid white;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+#switch ul {
+	margin-left: 0px;
+}
+
+#switch li {
+	display: inline;
+	margin: 5px 5px;
+	cursor: pointer;
+	color: #003399;
+}
+
+#switch li.active {
+	font-weight: bold;
+}
+
+#chatlog {
+	width: 100%;
+	height: 320px;
+	background-color: white;
+	text-align: left;
+	overflow: auto;
+}
+
+#chat-input {
+	margin-top: 5px;
+	width: 95%;
+	background-color: white;
+}
+
+#chatlog .event-entry {
+	display: block;
+	font-style: italic;
+	color: #808080;
+}
+
+#chatlog .chat-entry {
+	display: block;
+}
+
+#chatlog .sender-name {
+	color: #003399;
+	display: block;
 	font-weight: bold;
 }

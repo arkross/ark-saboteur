@@ -28,7 +28,6 @@ class Client_Controller extends MY_Controller {
 			->append_metadata(css('52/css3.css'))
 			->append_metadata(css('52/general.css'))
 			->append_metadata(css('52/grid.css'))
-			->append_metadata(css('52/forms.css'))
 			->append_metadata(css('style.css'));
 
     $this->template
@@ -37,6 +36,7 @@ class Client_Controller extends MY_Controller {
 			->append_metadata(js('52/selectivizr.js'));
 			
 		$this->template
+			->set_partial('navigation', 'partials/navigation.php')
 			->set_partial('header', 'partials/header.php')
 			->set_partial('footer', 'partials/footer.php');
   }
