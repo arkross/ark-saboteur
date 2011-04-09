@@ -53,7 +53,7 @@
 			<?php echo image('cartoff.png'); ?>
 			<br class="clear" />
 		</li>
-		<li>
+		<li class="active">
 			<span class="player-name">Alexander</span>
 			<?php echo image('gold.png'); ?>
 			<span class="gold-count">0</span>

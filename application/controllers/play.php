@@ -15,7 +15,6 @@
 
 /**
  * @author Alexander
- * @property Template $template
  */
 class Play extends Client_Controller {
 	public function __construct() {
@@ -25,6 +24,6 @@ class Play extends Client_Controller {
 	function index() {
 		$this->template
 			->append_metadata(js('game.js'))
-			->build('play');
+			->build('play', $this->data);
 	}
 }

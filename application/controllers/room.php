@@ -15,7 +15,6 @@
 
 /**
  * @author Alexander
- * @property Template $template
  */
 class Room extends Client_Controller {
 	public function __construct() {
@@ -23,6 +22,6 @@ class Room extends Client_Controller {
 	}
 
 	function index() {
-		$this->template->build('room');
+		$this->template->build('room', $this->data);
 	}
 }

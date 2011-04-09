@@ -17,7 +17,11 @@
 
 //  CI 2.0 Compatibility
 if(!class_exists('CI_Model')) { class CI_Model extends CI_Model {  } }
-
+/**
+ * @property CI_DB_Active_Record $db
+ * @property CI_DB_Forge $dbforge
+ * @property CI_Loader $load
+ */
 class MY_Model extends CI_Model
 {
 	/**
@@ -614,4 +618,13 @@ class MY_Model extends CI_Model
 		}
 	}
 
+	/**
+	 * Create table statements
+	 */
+	public function _create(){}
+
+	/**
+	 * Drop table statements
+	 */
+	public function _drop(){}
 }

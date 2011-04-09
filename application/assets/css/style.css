@@ -131,6 +131,7 @@ footer {
 }
 
 #room-create input {
+	margin-top: -2px;
 	width: 100%;
 }
 
@@ -180,6 +181,10 @@ footer {
 
 #player-list li * {
 	float: left;
+}
+
+#player-list li.active .player-name {
+	background-color: white;
 }
 
 .player-name {

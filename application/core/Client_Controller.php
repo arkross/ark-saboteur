@@ -17,12 +17,25 @@
  * Description of Client_Controller
  *
  * @author Alexander
+ * @property Template $template
+ * @property Users_m $users_m
  */
 class Client_Controller extends MY_Controller {
-  //put your code here
+
+	/**
+	 * Logged in User
+	 * @var Mixed false if no user is logged in.
+	 */
+	protected $user;
+
   function  __construct() {
     parent::__construct();
 
+		if ($this->users_m->logged_in()) {
+			$this->user = $this->users_m->get_user();
+			$this->data['user'] = $this->user;
+		}
+		
 		$this->template
 			->append_metadata(css('52/reset.css'))
 			->append_metadata(css('52/css3.css'))
@@ -40,5 +53,21 @@ class Client_Controller extends MY_Controller {
 			->set_partial('header', 'partials/header.php')
 			->set_partial('footer', 'partials/footer.php');
   }
+
+	function _check_access() {
+		$ignored_pages = array('login');
+
+		$current_page = $this->uri->segment(1, 'login');
+
+		if (in_array($current_page, $ignored_pages)) {
+			return TRUE;
+		}
+
+		if ( ! $this->user) {
+			return FALSE;
+		}
+
+		return TRUE;
+	}
 }
 ?>
