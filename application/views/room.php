@@ -16,7 +16,7 @@
 <div class="margin-auto col_7">
 	<form id="room-list" action="" method="POST">
 		<div class="tab-top background-grey col_6">Select a mine below and <a href="">Join The Digging!</a></div>
-		<select class="col_7" size="15" autofocus></select>
+		<select name="room_id" class="col_7" size="15" autofocus></select>
 	</form>
 
 	<form id="room-create" action="" method="POST">

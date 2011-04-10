@@ -13,9 +13,6 @@
  * Company : http://mimicreative.net
  */
 
-/**
- * @property CI_Session $session
- */
 class Users_m extends MY_Model {
 	public function __construct() {
 		parent::__construct();
@@ -30,7 +27,6 @@ class Users_m extends MY_Model {
 	}
 
 	public function get_user() {
-		$this->load->library('session');
 		if ($user_id = $this->session->userdata('user_id')) {
 			return $this->get($user_id);
 		}
@@ -42,7 +38,6 @@ class Users_m extends MY_Model {
 			return FALSE;
 		}
 		if ($user->password == sha1($password) && $user->active == '1') {
-			$this->load->library('session');
 			$this->session->set_userdata('user_id', $user->id);
 			return TRUE;
 		}
@@ -50,7 +45,6 @@ class Users_m extends MY_Model {
 	}
 
 	public function logout() {
-		$this->load->library('session');
 		$this->session->unset_userdata('user_id');
 	}
 
@@ -70,8 +64,6 @@ class Users_m extends MY_Model {
 	}
 
 	public function _drop() {
-		$this->dbforge->drop_table('users');
+		return $this->dbforge->drop_table($this->_table);
 	}
-
-	
 }

@@ -19,6 +19,8 @@
  * @author Alexander
  * @property Template $template
  * @property Users_m $users_m
+ * @property Rooms_m $rooms_m
+ * @property Roles_m $roles_m
  */
 class Client_Controller extends MY_Controller {
 
@@ -34,6 +36,10 @@ class Client_Controller extends MY_Controller {
 		if ($this->users_m->logged_in()) {
 			$this->user = $this->users_m->get_user();
 			$this->data['user'] = $this->user;
+		}
+		
+		if (!$this->_check_access()) {
+			redirect('');
 		}
 		
 		$this->template
