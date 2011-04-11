@@ -30,6 +30,14 @@ a, a:hover, a:active, a:visited {
 	text-decoration: none;
 }
 
+#messages {
+	border: 1px solid red;
+	text-align: center;
+	background-color: #cccccc;
+	color: black;
+	display: none;
+}
+
 #wrapper {
 	margin-top: 10px;
 	min-height: 400px;

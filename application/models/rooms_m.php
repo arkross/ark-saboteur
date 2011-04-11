@@ -13,6 +13,9 @@
  * Company : http://mimicreative.net
  */
 
+/**
+ * @author Alexander
+ */
 class Rooms_m extends MY_Model {
 	
 	var $min_player = 3;
@@ -21,6 +24,10 @@ class Rooms_m extends MY_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->_table = 'rooms';
+	}
+	
+	public function get_current() {
+		return $this->get($this->session->userdata('room_id'));
 	}
 	
 	/**
@@ -36,11 +43,11 @@ class Rooms_m extends MY_Model {
 		if ($room->is_playing) {
 			return FALSE;
 		}
-		$current_players = $this->db->select('*')
+		$current_players = count($this->db->select('*')
 			->where('room_id', $room->id)
 			->join('roles', $this->_table.'.id = roles.room_id')
 			->get($this->_table)
-			->result();
+			->result());
 		if ($current_players < $this->max_player) {
 			$this->session->set_userdata('room_id', $room->id);
 			return TRUE;

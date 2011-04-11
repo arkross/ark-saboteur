@@ -13,6 +13,16 @@
  */
 
 jQuery(document).ready(function($) {
+	
+	$("#leave").click(function(event) {
+		event.preventDefault();
+		$.get('play/ajax_leave', '', function(data) {
+			if (data == '1') {
+				window.location = 'room';
+			}
+		});
+	});
+	
 	var grid_x_count = 11;
 	var grid_y_count = 7;
 	var grid_width = 42;
@@ -23,7 +33,7 @@ jQuery(document).ready(function($) {
 			$("#board-game").append('<div class="grid"></div>');
 		}
 	}
-	
+
 	function setPosition() {
 		$("#board-game").children("div").each(function(index, el) {
 			var offset = $("#board-game").offset();

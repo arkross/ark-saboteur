@@ -14,7 +14,7 @@
  */
 ?>
 <div id="board-game" class="left"></div>
-<div id="round" class="left">Round <span id="round-count">1</span></div>
+<div id="round" class="left"><?php echo $room->title; ?> - Round <span id="round-count">1</span></div>
 
 <div id="chatbox" class="right">
 	<nav id="switch">

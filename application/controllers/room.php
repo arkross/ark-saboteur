@@ -19,7 +19,12 @@
 class Room extends Client_Controller {
 	public function __construct() {
 		parent::__construct();
-		$this->template->append_metadata(js('room.js'));
+		if ($this->session->userdata('room_id')) {
+			redirect('play');
+		}
+		$this->template
+			->append_metadata(js('general.js'))
+			->append_metadata(js('room.js'));
 	}
 
 	function index() {
@@ -39,10 +44,19 @@ class Room extends Client_Controller {
 	}
 	
 	function _create($room_name) {
-		$this->rooms_m->create($room_name);
+		// Automatically joins the room after creating it
+		if ($id = $this->rooms_m->create($room_name)) {
+			if (!$this->_join($id)) {
+				$this->data['messages'] = 'Failed to join';
+			} else {
+				redirect('play');
+			}
+		} else {
+			$this->data['messages'] = 'Failed to join';
+		}
 	}
 	
 	function _join($id) {
-		$this->rooms_m->enter($id);
+		return $this->rooms_m->enter($id);
 	}
 }

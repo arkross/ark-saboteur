@@ -19,11 +19,22 @@
 class Play extends Client_Controller {
 	public function __construct() {
 		parent::__construct();
+		if (!$this->session->userdata('room_id')) {
+			redirect('room');
+		}
+		
+		$this->data['room'] = $this->rooms_m->get_current();
 	}
 
 	function index() {
 		$this->template
+			->append_metadata(js('general.js'))
 			->append_metadata(js('game.js'))
 			->build('play', $this->data);
+	}
+	
+	function ajax_leave() {
+		$this->rooms_m->quit();
+		echo '1';
 	}
 }

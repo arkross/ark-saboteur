@@ -13,9 +13,10 @@
  * Company : http://mimicreative.net
  */
 ?>
+<div id="messages"><?php if (isset($messages)) echo $messages; ?></div>
 <div class="margin-auto col_7">
 	<form id="room-list" action="" method="POST">
-		<div class="tab-top background-grey col_6">Select a mine below and <a href="">Join The Digging!</a></div>
+		<div class="tab-top background-grey col_6">Select a mine below and <a href="#">Join The Digging!</a></div>
 		<select name="room_id" class="col_7" size="15" autofocus></select>
 	</form>
 

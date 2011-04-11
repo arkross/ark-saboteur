@@ -14,6 +14,17 @@
 
 jQuery(document).ready(function($) {
 	
+	function selectGame() {
+		$("#room-list option").dblclick(function() {
+			$("#room-list").submit();
+			console.log('doubleclicked');
+		});
+		$("#room-list a").click(function(event) {
+			event.preventDefault();
+			$("#room-list").submit();
+		});
+	}
+	
 	function refreshGameList() {
 		$.post('room/ajax_list', '', function(data) {
 			console.log(data);
@@ -22,6 +33,7 @@ jQuery(document).ready(function($) {
 				str += '<option value="'+i+'">'+v+'</option>';
 			});
 			$("#room-list select").html(str);
+			selectGame();
 		}, 'json');
 	}
 	refreshGameList();

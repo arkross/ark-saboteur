@@ -13,11 +13,10 @@
  * Company : http://mimicreative.net
  */
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
-		<script type="text/javascript" src="application/assets/js/jquery/jquery.js"></script>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>

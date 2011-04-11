@@ -13,6 +13,9 @@
  * Company : http://mimicreative.net
  */
 
+/**
+ * @author Alexander
+ */
 class Users_m extends MY_Model {
 	public function __construct() {
 		parent::__construct();
@@ -47,6 +50,17 @@ class Users_m extends MY_Model {
 	public function logout() {
 		$this->session->unset_userdata('user_id');
 	}
+	
+	public function ping($id) {
+		if (! $user = $this->db->where('id', $id)->get($this->_table)->row_array()) {
+			return FALSE;
+		} else {
+			$user['last_seen'] = now();
+			if ($this->update($user['id'], $user)) {
+				return TRUE;
+			}
+		}
+	}
 
 	public function _create() {
 		$query = "CREATE  TABLE IF NOT EXISTS `users` (
@@ -57,9 +71,10 @@ class Users_m extends MY_Model {
 			`avatar` TEXT NULL ,
 			`treasure` INT NULL ,
 			`active` TINYINT(1)  NOT NULL ,
+			`last_seen` INT NULL ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB
-		COMMENT = 'A user is registered via email. Every user has reputation' ";
+		COMMENT = 'A user is registered via email. Every user has reputation, represented by treasure.'";
 		return $this->db->query($query);
 	}
 

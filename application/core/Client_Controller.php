@@ -14,8 +14,6 @@
  */
 
 /**
- * Description of Client_Controller
- *
  * @author Alexander
  * @property Template $template
  * @property Users_m $users_m
@@ -50,7 +48,7 @@ class Client_Controller extends MY_Controller {
 			->append_metadata(css('style.css'));
 
     $this->template
-			->append_metadata(js('jquery/jquery.js'))
+			->append_metadata(js('jquery/jquery-1.5.2.min.js'))
 			->append_metadata(js('52/modernizr-1.7.min.js'))
 			->append_metadata(js('52/selectivizr.js'));
 			
@@ -74,6 +72,14 @@ class Client_Controller extends MY_Controller {
 		}
 
 		return TRUE;
+	}
+	
+	function ping() {
+		if ($this->users_m->ping($this->session->userdata('user_id'))) {
+			echo '1';
+		} else {
+			echo '0';
+		}
 	}
 }
 ?>
