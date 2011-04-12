@@ -26,16 +26,37 @@ jQuery(document).ready(function($) {
 	}
 	
 	function refreshGameList() {
-		$.post('room/ajax_list', '', function(data) {
-			console.log(data);
-			var str = '';
-			$.each(data, function(i, v) {
-				str += '<option value="'+i+'">'+v+'</option>';
-			});
-			$("#room-list select").html(str);
-			selectGame();
-		}, 'json');
+		$("#room-list select").smartupdater({
+			url: 'room/ajax_list',
+			dataType: 'json',
+			minTimeout: 5000},
+			function(data) {
+				var str = '';
+				$.each(data, function(i, v) {
+					str += '<option value="'+i+'">'+v+'</option>';
+				});
+				$("#room-list select").html(str);
+				selectGame();
+			}
+		);
 	}
+	
+	function refreshPlayerList() {
+		$("#login-list ul").smartupdater({
+			url: 'room/ajax_players',
+			dataType: 'json',
+			minTimeout: 5000},
+			function(data) {
+				var str = '';
+				$.each(data, function(i, v) {
+					str += '<li>'+v.username+'</li>';
+				});
+				$("#login-list ul").html(str);
+				$("#login-list div span").html(data.length);
+			}
+		);
+	}
+	
 	refreshGameList();
-	window.setInterval(refreshGameList, 10000);
+	refreshPlayerList();
 });

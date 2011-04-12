@@ -51,6 +51,12 @@ class Users_m extends MY_Model {
 		$this->session->unset_userdata('user_id');
 	}
 	
+	public function get_online_players() {
+		$this->db->where('last_seen >= ', now() - 10);
+		$this->db->select('username, last_seen');
+		return $this->db->get('users')->result_array();
+	}
+	
 	public function ping($id) {
 		if (! $user = $this->db->where('id', $id)->get($this->_table)->row_array()) {
 			return FALSE;

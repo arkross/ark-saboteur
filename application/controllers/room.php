@@ -24,6 +24,7 @@ class Room extends Client_Controller {
 		}
 		$this->template
 			->append_metadata(js('general.js'))
+			->append_metadata(js('jquery/smartupdater-3.0.02beta.js'))
 			->append_metadata(js('room.js'));
 	}
 
@@ -41,6 +42,11 @@ class Room extends Client_Controller {
 	function ajax_list() {
 		$rooms = $this->rooms_m->dropdown();
 		echo json_encode($rooms);
+	}
+	
+	function ajax_players() {
+		$users = $this->users_m->get_online_players();
+		echo json_encode($users);
 	}
 	
 	function _create($room_name) {

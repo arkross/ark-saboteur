@@ -130,6 +130,18 @@ footer {
 	margin-top: 0px;
 }
 
+#room-list option {
+	cursor: pointer;
+}
+
+#room-list option:nth-child(2n) {
+	background-color: #eeeeee;
+}
+
+#room-list option:hover {
+	background-color: #cccccc;
+}
+
 #room-list div, #room-create div {
 	margin-bottom: 0px;
 }
@@ -141,6 +153,29 @@ footer {
 #room-create input {
 	margin-top: -2px;
 	width: 100%;
+}
+
+#login-list {
+	overflow: auto;
+}
+
+#login-list ul {
+	margin: 0;
+	background: white;
+}
+
+#login-list li{
+	list-style: none;
+	padding: 1px;
+}
+
+#login-list li:nth-child(2n) {
+	background-color: #eeeeee;
+}
+
+#login-list li:hover {
+	background-color: #cccc99;
+	cursor: pointer;
 }
 
 .tab-top {
