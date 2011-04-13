@@ -25,7 +25,7 @@ class Chat_Packets_m extends MY_Model {
 	/**
 	 * Gets all log updates
 	 * 全てのログアプデートを手に入れる
-	 * @param type $from_rev Takes update from revision n
+	 * @param int $from_rev Takes update from revision n
 	 * @return Mixed array of records
 	 */
 	public function get_updates($from_rev = 0) {

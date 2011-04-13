@@ -48,11 +48,6 @@ class Room extends Client_Controller {
 		echo json_encode($rooms);
 	}
 	
-	function ajax_players() {
-		$users = $this->users_m->get_online_players();
-		echo json_encode($users);
-	}
-	
 	function _create($room_name) {
 		// Automatically joins the room after creating it
 		if ($id = $this->rooms_m->create($room_name)) {
@@ -67,6 +62,8 @@ class Room extends Client_Controller {
 	}
 	
 	function _join($id) {
-		return $this->rooms_m->enter($id);
+		if($this->rooms_m->enter($id)) {
+			redirect('play');
+		}
 	}
 }

@@ -14,6 +14,19 @@
 
 jQuery(document).ready(function($) {
 	
+	$("#player-list").smartupdater({
+		url: 'play/ajax_players',
+		minTimeout: 5000,
+		dataType: 'json'},
+		function(data) {
+			var str = '';
+			$.each(data, function(i, v) {
+				str += '<li><span class="player-name">'+v.player+'</span></li>';
+			});
+			$("#player-list ul").html(str);
+		}
+	);
+	
 	$("#leave").click(function(event) {
 		event.preventDefault();
 		$.get('play/ajax_leave', '', function(data) {

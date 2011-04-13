@@ -23,9 +23,28 @@ class Roles_m extends MY_Model {
 	}
 	
 	public function set_role($role) {
-		if ($user_id = $this->session->userdata('user_id')) {
-			$user = $this->users_m->get($user_id);
+		$user = $this->users_m->get_user();
+		$room = $this->rooms_m->get_current();
+		$data = array(
+			'player_id' => $user->id,
+			'room_id' => $room->id,
+			'role' => $role
+		);
+		if (!$existing_role = $this->get_by('player_id', $user->id)) {
+			return $this->insert($data);
+		} else {
+			return $this->update($existing_role->id, $data);
 		}
+	}
+	
+	public function get_current_room_players() {
+		$room = $this->rooms_m->get_current();
+		return $this->db
+			->select('users.username as player, roles.*')
+			->join('users', 'users.id = roles.player_id', 'LEFT')
+			->where('room_id', $room->id)
+			->get($this->_table)
+			->result_array();
 	}
 	
 	public function _create() {

@@ -59,8 +59,7 @@ class Users_m extends MY_Model {
 		}
 		if ($user->password == sha1($password) && $user->active == '1') {
 			$this->session->set_userdata('user_id', $user->id);
-			$this->session->set_userdata('room_id', 1); //lobby
-			return TRUE;
+			return $this->rooms_m->enter(1); //lobby
 		}
 		return FALSE;
 	}

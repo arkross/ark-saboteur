@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
 			function(data) {
 				var str = '';
 				$.each(data, function(i, v) {
-					str += '<li>'+v.username+'</li>';
+					str += '<li>'+v.player+'</li>';
 				});
 				$("#login-list ul").html(str);
 				$("#login-list div span").html(data.length);

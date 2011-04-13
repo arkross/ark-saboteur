@@ -85,5 +85,10 @@ class Client_Controller extends MY_Controller {
 			echo '0';
 		}
 	}
+	
+	function ajax_players() {
+		$users = $this->roles_m->get_current_room_players();
+		echo json_encode($users);
+	}
 }
 ?>
