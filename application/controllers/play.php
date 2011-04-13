@@ -23,12 +23,14 @@ class Play extends Client_Controller {
 			redirect('room');
 		}
 		
-		$this->data['room'] = $this->rooms_m->get_current();
+		$this->load->model('chat_packets_m');
 	}
 
 	function index() {
 		$this->template
+			->append_metadata(js('jquery/smartupdater-3.0.02beta.js'))
 			->append_metadata(js('general.js'))
+			->append_metadata(js('chat.js'))
 			->append_metadata(js('game.js'))
 			->build('play', $this->data);
 	}

@@ -627,5 +627,7 @@ class MY_Model extends CI_Model
 	/**
 	 * Drop table statements
 	 */
-	public function _drop(){}
+	public function _drop() {
+		return $this->dbforge->drop_table($this->_table);
+	}
 }

@@ -26,6 +26,11 @@ class Rooms_m extends MY_Model {
 		$this->_table = 'rooms';
 	}
 	
+	/**
+	 * Get current game room. 1 indicates lobby
+	 * 現在のルームを手に入れる。一はロビです。
+	 * @return Record current room
+	 */
 	public function get_current() {
 		return $this->get($this->session->userdata('room_id'));
 	}
@@ -77,8 +82,15 @@ class Rooms_m extends MY_Model {
 		return $this->insert($new_room);
 	}
 	
+	/**
+	 * Gets currently available rooms
+	 * 最近有効なルームを手に入れる
+	 * @return Mixed Array of records
+	 */
 	public function dropdown() {
-		return parent::dropdown('id', 'title');
+		$result = parent::dropdown('id', 'title');
+		unset($result[1]);
+		return $result;
 	}
 	
 	public function _create() {
@@ -89,10 +101,7 @@ class Rooms_m extends MY_Model {
 			`is_playing` TINYINT(1)  NOT NULL DEFAULT 0 ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB";
-		return $this->db->query($query);
-	}
-	
-	public function _drop() {
-		return $this->dbforge->drop_table($this->_table);
+		$inserts = "INSERT INTO `rooms` (`id`, `title`, `created_at`, `is_playing`) VALUES ('1', 'Lobby', NULL, '1');";
+		return $this->db->query($query) && $this->db->query($inserts);
 	}
 }

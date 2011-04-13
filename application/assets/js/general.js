@@ -21,13 +21,21 @@ jQuery(document).ready(function($) {
 		}
 	}
 	
+	/**
+	 * Ping the server to indicate that this user is still online
+	 * サーバーをPingする、ユザーがオンラインかどうか
+	 */
 	function ping() {
-		$.get('ping', '', function(data) {
+		$("title").smartupdater({
+			url: 'ping',
+			minTimeout: 10000
+		}, function(data){
 			if (data == '0') {
 				messages('You were disconnected');
 			}
 		});
 	}
+	
+	ping();
 	messages();
-	window.setInterval(ping, 10000);
 });

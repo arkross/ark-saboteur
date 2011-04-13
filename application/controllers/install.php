@@ -18,8 +18,18 @@ class Install extends MY_Controller {
 		parent::__construct();
 	}
 
-	public function index() {
-		foreach ($this->load->_ci_models as $model) {
+	function _remap($method) {
+		if ($method != 'clean') {
+			$this->index($method);
+		}
+	}
+	
+	public function index($model = '') {
+		if ($model == '') {
+			foreach ($this->load->_ci_models as $model) {
+				$this->{$model}->_create();
+			}
+		} else {
 			$this->{$model}->_create();
 		}
 	}

@@ -36,6 +36,10 @@ class Client_Controller extends MY_Controller {
 			$this->data['user'] = $this->user;
 		}
 		
+		if ($this->session->userdata('room_id')) {
+			$this->data['room'] = $this->rooms_m->get_current();
+		}
+		
 		if (!$this->_check_access()) {
 			redirect('');
 		}

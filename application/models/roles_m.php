@@ -24,7 +24,7 @@ class Roles_m extends MY_Model {
 	
 	public function set_role($role) {
 		if ($user_id = $this->session->userdata('user_id')) {
-			$user = $this->db->select('*')->get('users')->row();
+			$user = $this->users_m->get($user_id);
 		}
 	}
 	
@@ -37,9 +37,5 @@ class Roles_m extends MY_Model {
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB";
 		return $this->db->query($query);
-	}
-	
-	public function _drop() {
-		return $this->dbforge->drop_table($this->_table);
 	}
 }

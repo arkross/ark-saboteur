@@ -17,7 +17,6 @@ jQuery(document).ready(function($) {
 	function selectGame() {
 		$("#room-list option").dblclick(function() {
 			$("#room-list").submit();
-			console.log('doubleclicked');
 		});
 		$("#room-list a").click(function(event) {
 			event.preventDefault();
@@ -25,6 +24,10 @@ jQuery(document).ready(function($) {
 		});
 	}
 	
+	/**
+	 * Refreshes Game room list
+	 * ルームのリストを更新する
+	 */
 	function refreshGameList() {
 		$("#room-list select").smartupdater({
 			url: 'room/ajax_list',
@@ -41,6 +44,10 @@ jQuery(document).ready(function($) {
 		);
 	}
 	
+	/**
+	 * Refreshes Logged in player list
+	 * ログインしているプレヤーのリストを更新する
+	 */
 	function refreshPlayerList() {
 		$("#login-list ul").smartupdater({
 			url: 'room/ajax_players',

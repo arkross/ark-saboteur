@@ -19,12 +19,16 @@
 class Room extends Client_Controller {
 	public function __construct() {
 		parent::__construct();
-		if ($this->session->userdata('room_id')) {
+		if ($this->session->userdata('room_id') > 1) {
 			redirect('play');
 		}
+		
+		$this->load->model('chat_packets_m');
+		
 		$this->template
-			->append_metadata(js('general.js'))
 			->append_metadata(js('jquery/smartupdater-3.0.02beta.js'))
+			->append_metadata(js('general.js'))
+			->append_metadata(js('chat.js'))
 			->append_metadata(js('room.js'));
 	}
 

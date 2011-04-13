@@ -17,6 +17,10 @@
 <html>
 	<head>
 		<title><?php echo $template['title']; ?></title>
+		<script type="text/javascript">
+			var room_id = <?php if(isset($room->id)) echo $room->id; else echo '0'; ?>;
+			var user_id = <?php if(isset($user->id)) echo $user->id; else echo '0'; ?>;
+		</script>
 		<?php echo $template['metadata']; ?>
 	</head>
 	<body>
