@@ -47,7 +47,7 @@
 		<span class="event-entry">Alexander plays a path card</span>
 	</div>
 	<form action="" method="POST">
-		<input id="chat-input" type="text" name="chat" value="This is chat input" placeholder="Press Enter to set focus here" autofocus />
+		<input id="chat-input" type="text" name="chat" placeholder="Chat here" autofocus />
 	</form>
 </div>
 <br class="clear" />

@@ -38,11 +38,11 @@ class Roles_m extends MY_Model {
 	}
 	
 	public function get_current_room_players() {
-		$room = $this->rooms_m->get_current();
 		return $this->db
-			->select('users.username as player, roles.*')
+			->select('users.username as player, roles.*, users.last_seen')
 			->join('users', 'users.id = roles.player_id', 'LEFT')
-			->where('room_id', $room->id)
+			->where('room_id', $this->session->userdata('room_id'))
+			->where('users.last_seen >=', now() - 5)
 			->get($this->_table)
 			->result_array();
 	}

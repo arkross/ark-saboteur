@@ -28,7 +28,7 @@ jQuery(document).ready(function($) {
 	function ping() {
 		$("title").smartupdater({
 			url: 'ping',
-			minTimeout: 10000
+			minTimeout: 5000
 		}, function(data){
 			if (data == '0') {
 				messages('You were disconnected');

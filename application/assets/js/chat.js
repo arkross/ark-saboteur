@@ -13,9 +13,8 @@
  */
 
 jQuery(document).ready(function($) {
-	var chat_rev = 0;
-	
-	// Chat switch（チャットの切り替え）
+	var chat_id = 0;
+	// Chat switch
 	$("#switch li").click(function(event) {
 		event.preventDefault();
 		$("#switch li").removeClass("active");
@@ -35,24 +34,6 @@ jQuery(document).ready(function($) {
 	});
 	
 	function chatbox(box, input) {
-		// Chat log（チャットログ）
-		$(box).smartupdater({
-			url: 'chat/ajax_chatlog',
-			data: {'rev': chat_rev},
-			minTimeout: 2000,
-			type: 'POST',
-			dataType: 'json'
-		}, function(data) {
-			chat_rev += data.length;
-			var str = '';
-			$.each(data, function(i, v){
-				str += '<span class="chat-entry"><span class="sender-name">';
-				str += v.sender + ':</span>' + v.message + '</span>';
-			});
-			$(box).append(str);
-		});
-		
-		// Chat input（チャットの入力）
 		$(input).keydown(function(event) {
 			if (event.keyCode == '13') {
 				event.preventDefault();
@@ -62,6 +43,23 @@ jQuery(document).ready(function($) {
 					$(this).val('');
 				}
 			}
+		});
+		
+		$(box).smartupdater({
+			url: "chat/ajax_chatlog",
+			data: {rev: chat_id},
+			minTimeout: 2000,
+			type: 'POST',
+			dataType: 'json'
+		}, function(data) {
+			var str = '';
+			$.each(data, function(i, v){
+				str += '<span class="chat-entry"><span class="sender-name">';
+				str += v.sender + ':</span>' + v.message + '</span>';
+				chat_id = v.id;
+				$(box).smartupdaterAlterUrl('chat/ajax_chatlog', {rev: chat_id});
+			});
+			$(box).append(str);
 		});
 	}
 	

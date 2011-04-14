@@ -28,17 +28,16 @@ class Chat_Packets_m extends MY_Model {
 	 * @param int $from_rev Takes update from revision n
 	 * @return Mixed array of records
 	 */
-	public function get_updates($from_rev = 0) {
+	public function get_updates($from_id = 0) {
 		$room_id = $this->session->userdata('room_id');
 		$result = $this->db
 			->select('chat_packets.*, users.username as sender')
-			->join('users', 'users.id = chat_packets.sender_id', 'LEFT')
+			->join('users', 'users.id = chat_packets.sender_id', 'right')
 			->where('room_id', $room_id)
+			->where('chat_packets.id >', $from_id)
+			->order_by('created_at')
 			->get($this->_table)
 			->result_array();
-		for($i = 0; $i < $from_rev; $i++) {
-			unset($result[$i]);
-		}
 		return $result;
 	}
 	
