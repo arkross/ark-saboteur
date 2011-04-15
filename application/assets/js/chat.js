@@ -55,13 +55,14 @@ jQuery(document).ready(function($) {
 			dataType: 'json'
 		}, function(data) {
 			var str = '';
-			$.each(data, function(i, v){
+			$.each(data, function(i, v) {
 				if (v.message != undefined) {
 					str += '<span class="chat-entry"><span class="sender-name">';
 					str += v.sender + ':</span>' + v.message + '</span>';
 					chat_id = v.id;
 				} else {
-					str += '<span class="event-entry">'+v.details+"</span>";
+					str += '<span class="event-entry">'+v.string+"</span>";
+					event_id = v.id
 				}
 				$(box).smartupdaterAlterUrl('chat/log', {chat_rev: chat_id, event_rev: event_id});
 			});

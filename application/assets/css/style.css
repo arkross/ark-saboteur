@@ -162,11 +162,15 @@ footer {
 #login-list ul {
 	margin: 0;
 	background: white;
+	min-height: 300px;
+	border: #808080 1px solid;
+	overflow: auto;
 }
 
 #login-list li{
 	list-style: none;
-	padding: 1px;
+	padding: 1px 5px;
+	border-bottom: 1px solid #808080;
 }
 
 #login-list li:nth-child(2n) {

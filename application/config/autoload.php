@@ -96,7 +96,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array('general', 'room');
+$autoload['language'] = array('general', 'room', 'events');
 
 
 /*

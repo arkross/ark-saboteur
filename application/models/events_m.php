@@ -19,6 +19,19 @@ class Events_m extends MY_Model {
 		$this->_table = 'events';
 	}
 	
+	public function fire_event($type, $details = array()) {
+		$user_id = $this->session->userdata('user_id');
+		$room_id = $this->session->userdata('room_id');
+		$details = array_merge($details, array('type' => $type));
+		$data = array(
+			'sender_id' => $user_id,
+			'room_id' => $room_id,
+			'details' => serialize($details),
+			'created_at' => now()
+		);
+		return $this->insert($data);
+	}
+	
 	public function get_all_updates($from_chat_id, $from_event_id) {
 		$this->load->model('chat_packets_m');
 		$chats = $this->chat_packets_m->get_updates($from_chat_id);
@@ -36,14 +49,29 @@ class Events_m extends MY_Model {
 	public function get_updates($from_id = 0) {
 		$room_id = $this->session->userdata('room_id');
 		$result = $this->db
-			->select('events.*, users.username as sender')
+			->select('events.*, users.username as sender, rooms.title as room_title')
 			->join('users', 'users.id = events.sender_id', 'right')
+			->join('rooms', 'rooms.id = events.room_id', 'right')
 			->where('room_id', $room_id)
 			->where('events.id >', $from_id)
 			->order_by('created_at')
 			->get($this->_table)
 			->result_array();
+		
+		foreach($result as &$res) {
+			$res['string'] = $this->_generate_string($res);
+		}
 		return $result;
+	}
+	
+	function _generate_string(&$record) {
+		$args = array(
+			$record['sender'],
+			$record['room_title']
+		);
+		$type = unserialize($record['details']);
+		$type = $type['type'];
+		return vsprintf(lang($type), $args);
 	}
 	
 	public function _create() {

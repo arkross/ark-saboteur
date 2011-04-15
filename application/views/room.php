@@ -26,7 +26,7 @@
 	</form>
 </div>
 
-<div class="col_5 col" id="login-list">
+<div class="col_4 col" id="login-list">
 	<div class="tab-top background-grey"><?php echo lang('players.logged_in'); ?> (<span></span>)</div>
 	<ul></ul>
 </div>
@@ -40,12 +40,7 @@
 		</ul>
 	</nav>
 
-	<div id="chatlog">
-		<span class="event-entry">Round 1 started</span>
-		<span class="chat-entry"><span class="sender-name">Yudhi:</span> Hello, this is chatbox</span>
-		<span class="chat-entry"><span class="sender-name">Alexander:</span> Hello, this is a reply text using 2 line</span>
-		<span class="event-entry">Alexander plays a path card</span>
-	</div>
+	<div id="chatlog"></div>
 	<form action="" method="POST">
 		<input id="chat-input" type="text" name="chat" placeholder="Chat here" autofocus />
 	</form>

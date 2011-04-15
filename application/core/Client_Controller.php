@@ -32,15 +32,6 @@ class Client_Controller extends MY_Controller {
     parent::__construct();
 		$this->load->library('template');
 		
-		if ($this->users_m->logged_in()) {
-			$this->user = $this->users_m->get_user();
-			$this->data['user'] = $this->user;
-		}
-		
-		if ($this->session->userdata('room_id')) {
-			$this->data['room'] = $this->rooms_m->get_current();
-		}
-		
 		if (!$this->_check_access()) {
 			redirect('');
 		}

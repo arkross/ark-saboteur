@@ -69,6 +69,7 @@ class Users_m extends MY_Model {
 	 * ログアウトする
 	 */
 	public function logout() {
+		$this->rooms_m->quit();
 		$this->session->unset_userdata('user_id');
 	}
 	

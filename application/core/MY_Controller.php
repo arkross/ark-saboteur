@@ -30,8 +30,19 @@
  * @property Roles_m $roles_m
  */
 class MY_Controller extends CI_Controller {
+	
 	var $data;
+	
 	public function __construct() {
 		parent::__construct();
+		
+		if ($this->users_m->logged_in()) {
+			$this->user = $this->users_m->get_user();
+			$this->data['user'] = $this->user;
+		}
+		
+		if ($this->session->userdata('room_id')) {
+			$this->data['room'] = $this->rooms_m->get_current();
+		}
 	}
 }

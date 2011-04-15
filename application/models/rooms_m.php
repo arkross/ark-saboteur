@@ -55,6 +55,8 @@ class Rooms_m extends MY_Model {
 			->result());
 		if ($current_players < $this->max_player) {
 			$this->session->set_userdata('room_id', $room->id);
+			$this->load->model('events_m');
+			$this->events_m->fire_event('enter_room');
 			return $this->roles_m->set_role('ready');
 		}
 		return FALSE;
@@ -64,8 +66,10 @@ class Rooms_m extends MY_Model {
 	 * Leaves a room
 	 */
 	public function quit() {
+		$this->load->model('events_m');
+		$this->events_m->fire_event('leave_room');
 		$this->session->set_userdata('room_id', 1);
-		$this->roles_m->set_role('ready');
+		return $this->roles_m->set_role('ready');
 	}
 
 	/**
