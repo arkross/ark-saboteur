@@ -16,6 +16,6 @@
 <div id="zmanlogo" class="right"><?php echo img(image_url('zmanlogo.jpg')); ?></div>
 <div id="sabocover" class="right"><?php echo img(image_url('sabo-cover.jpg')); ?></div><br class="clear"/>
 <address id="originalwork" class="right">
-	Original Work by<br/>
+	<?php echo lang('foot.original'); ?><br/>
 	<span class="important right">Frederic Moyersoen</span>
 </address>

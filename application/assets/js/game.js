@@ -15,7 +15,7 @@
 jQuery(document).ready(function($) {
 	
 	$("#player-list").smartupdater({
-		url: 'play/ajax_players',
+		url: 'presence/players',
 		minTimeout: 5000,
 		dataType: 'json'},
 		function(data) {
@@ -29,7 +29,7 @@ jQuery(document).ready(function($) {
 	
 	$("#leave").click(function(event) {
 		event.preventDefault();
-		$.get('play/ajax_leave', '', function(data) {
+		$.get('presence/leave', '', function(data) {
 			if (data == '1') {
 				window.location = 'room';
 			}

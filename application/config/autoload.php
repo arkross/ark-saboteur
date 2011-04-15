@@ -52,7 +52,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('asset', 'template', 'session', 'database');
+$autoload['libraries'] = array('asset', 'session', 'database', 'user_agent');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('asset', 'template', 'session', 'database');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'html', 'form', 'asset', 'date');
+$autoload['helper'] = array('url', 'html', 'form', 'asset', 'date', 'language');
 
 
 /*
@@ -96,7 +96,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('general', 'room');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('users_m', 'rooms_m', 'roles_m', 'chat_packets_m');
+$autoload['model'] = array('users_m', 'rooms_m', 'roles_m');
 
 
 /* End of file autoload.php */

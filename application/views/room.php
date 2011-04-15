@@ -27,7 +27,7 @@
 </div>
 
 <div class="col_5 col" id="login-list">
-	<div class="tab-top background-grey">Logged-in Miners (<span></span>)</div>
+	<div class="tab-top background-grey"><?php echo lang('players.logged_in'); ?> (<span></span>)</div>
 	<ul></ul>
 </div>
 

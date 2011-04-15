@@ -15,7 +15,6 @@
 
 /**
  * @author Alexander
- * @property Template $template
  * @property Asset $asset
  * @property CI_Loader $load
  * @property CI_Benchmark $benchmark
@@ -23,6 +22,12 @@
  * @property CI_Input $input
  * @property CI_Output $output
  * @property CI_Session $session
+ * @property CI_Lang $lang
+ * @property CI_User_Agent $user_agent
+ * 
+ * @property Users_m $users_m
+ * @property Rooms_m $rooms_m
+ * @property Roles_m $roles_m
  */
 class MY_Controller extends CI_Controller {
 	var $data;

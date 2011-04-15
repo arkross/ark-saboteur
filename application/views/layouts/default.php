@@ -14,9 +14,11 @@
  */
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?php echo config_item('language'); ?>">
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title><?php echo $template['title']; ?></title>
+		<link href="http://www.arkross.com" rel="author" />
 		<script type="text/javascript">
 			var room_id = <?php if(isset($room->id)) echo $room->id; else echo '0'; ?>;
 			var user_id = <?php if(isset($user->id)) echo $user->id; else echo '0'; ?>;

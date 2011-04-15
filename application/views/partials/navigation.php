@@ -15,9 +15,10 @@
 ?>
 <nav id="menu" class="left">
 	<ul>
-		<li><a href="#">Home</a></li>
-		<li><a href="#">Comments</a></li>
-		<li><a href="#">About Author</a></li>
-		<li><a href="#">About Developer</a></li>
+		<li><a href="#"><?php echo lang('menu.home'); ?></a></li>
+		<li><a href="#"><?php echo lang('menu.comments'); ?></a></li>
+		<li><a href="#"><?php echo lang('menu.author'); ?></a></li>
+		<li><a href="#"><?php echo lang('menu.developer'); ?></a></li>
+		<li><a href="#"><?php echo lang('menu.help'); ?></a></li>
 	</ul>
 </nav>

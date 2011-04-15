@@ -75,7 +75,7 @@
 					cache	: false, // MUST be set to false to prevent IE caching bug.
 
 					success: function (data, statusText, xhr) {
-					
+						
 						var dataNotModified = false, 
 							rCallback = false, 
 							xSmart = jQuery.parseJSON(xhr.getResponseHeader("X-Smartupdater")),
@@ -108,7 +108,7 @@
 									clearTimeout(es.h);
 									es.h = setTimeout(start, es.minTimeout);
 								}
-									
+								
 						} else { // data is changed 
 
 						/* cache response data */

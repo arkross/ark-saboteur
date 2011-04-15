@@ -40,7 +40,7 @@
 
 $route['default_controller'] = "login";
 $route['logout(:any)?'] = 'login/logout$1';
-$route['ping(:any)?'] = 'login/ping$1';
+$route['ping(:any)?'] = 'presence/ping$1';
 $route['404_override'] = '';
 
 

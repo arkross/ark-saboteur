@@ -13,28 +13,33 @@
  * Company : http://mimicreative.net
  */
 
-/**
- * @author Alexander
- */
-class Chat_Packets_m extends MY_Model {
+class Events_m extends MY_Model {
 	public function __construct() {
 		parent::__construct();
-		$this->_table = 'chat_packets';
+		$this->_table = 'events';
 	}
 	
-	/**
-	 * Gets all chatlog updates
-	 * 全てのログアプデートを手に入れる
-	 * @param int $from_rev Takes update from revision n
-	 * @return Mixed array of records
-	 */
+	public function get_all_updates($from_chat_id, $from_event_id) {
+		$this->load->model('chat_packets_m');
+		$chats = $this->chat_packets_m->get_updates($from_chat_id);
+		$events = $this->get_updates($from_event_id);
+		$all = array_merge($chats, $events);
+		function mysort($a, $b) {
+			if ($a['created_at'] < $b['created_at']) return -1;
+			if ($a['created_at'] > $b['created_at']) return 1;
+			if ($a['created_at'] == $b['created_at']) return 0;
+		}
+		usort($all, 'mysort');
+		return $all;
+	}
+	
 	public function get_updates($from_id = 0) {
 		$room_id = $this->session->userdata('room_id');
 		$result = $this->db
-			->select('chat_packets.*, users.username as sender')
-			->join('users', 'users.id = chat_packets.sender_id', 'right')
+			->select('events.*, users.username as sender')
+			->join('users', 'users.id = events.sender_id', 'right')
 			->where('room_id', $room_id)
-			->where('chat_packets.id >', $from_id)
+			->where('events.id >', $from_id)
 			->order_by('created_at')
 			->get($this->_table)
 			->result_array();
@@ -42,15 +47,16 @@ class Chat_Packets_m extends MY_Model {
 	}
 	
 	public function _create() {
-		$query = "CREATE TABLE IF NOT EXISTS `chat_packets` (
+		$create = "CREATE  TABLE IF NOT EXISTS `ark-sabo`.`events` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
-			`sender_id` INT NOT NULL ,
 			`room_id` INT NOT NULL ,
-			`message` TEXT NULL ,
+			`sender_id` INT NOT NULL ,
+			`details` TEXT NULL ,
 			`created_at` INT NOT NULL ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB
-		COMMENT = 'Chat can only happen when a user has entered a room.'";
-		return $this->db->query($query);
+		COMMENT = 'Every changes to the board will be recorded here.'";
+		
+		return $this->db->query($create);
 	}
 }

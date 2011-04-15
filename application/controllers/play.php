@@ -34,9 +34,4 @@ class Play extends Client_Controller {
 			->append_metadata(js('game.js'))
 			->build('play', $this->data);
 	}
-	
-	function ajax_leave() {
-		$this->rooms_m->quit();
-		echo '1';
-	}
 }

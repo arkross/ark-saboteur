@@ -14,6 +14,8 @@
 
 jQuery(document).ready(function($) {
 	var chat_id = 0;
+	var event_id = 0;
+	
 	// Chat switch
 	$("#switch li").click(function(event) {
 		event.preventDefault();
@@ -39,25 +41,29 @@ jQuery(document).ready(function($) {
 				event.preventDefault();
 				if ($(this).val() != '') {
 					var message = $(this).val();
-					$.post('chat/ajax_send', {'message': message});
+					$.post('chat/send', {'message': message});
 					$(this).val('');
 				}
 			}
 		});
 		
 		$(box).smartupdater({
-			url: "chat/ajax_chatlog",
-			data: {rev: chat_id},
+			url: "chat/log",
+			data: {chat_rev: chat_id, event_rev: event_id},
 			minTimeout: 2000,
 			type: 'POST',
 			dataType: 'json'
 		}, function(data) {
 			var str = '';
 			$.each(data, function(i, v){
-				str += '<span class="chat-entry"><span class="sender-name">';
-				str += v.sender + ':</span>' + v.message + '</span>';
-				chat_id = v.id;
-				$(box).smartupdaterAlterUrl('chat/ajax_chatlog', {rev: chat_id});
+				if (v.message != undefined) {
+					str += '<span class="chat-entry"><span class="sender-name">';
+					str += v.sender + ':</span>' + v.message + '</span>';
+					chat_id = v.id;
+				} else {
+					str += '<span class="event-entry">'+v.details+"</span>";
+				}
+				$(box).smartupdaterAlterUrl('chat/log', {chat_rev: chat_id, event_rev: event_id});
 			});
 			$(box).append(str);
 		});

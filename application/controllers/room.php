@@ -43,11 +43,6 @@ class Room extends Client_Controller {
 		$this->template->build('room', $this->data);
 	}
 	
-	function ajax_list() {
-		$rooms = $this->rooms_m->dropdown();
-		echo json_encode($rooms);
-	}
-	
 	function _create($room_name) {
 		// Automatically joins the room after creating it
 		if ($id = $this->rooms_m->create($room_name)) {

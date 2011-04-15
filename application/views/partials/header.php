@@ -18,9 +18,9 @@
 <div id="logged-in" class="right">
 	<?php if (isset($user)) : ?>
 	<div id="login-avatar" class="right"><?php if ($user->avatar) echo img($user->avatar); ?></div>
-	<div id="login-text" class="right">You are Logged in as <a href="#" id="login-name"><?php echo $user->username; ?></a></div><br />
-	<div id="logout" class="right"><a href="logout">Logout</a></div>
+	<div id="login-text" class="right"><?php echo sprintf(lang('user.logged_in'), anchor('#', $user->username, 'id="login-name"')); ?></div><br />
+	<div id="logout" class="right"><a href="logout"><?php echo lang('user.logout'); ?></a></div>
 	<?php else : ?>
-	<div id="login-text">You are not logged in</div>
+	<div id="login-text"><?php echo lang('user.not_logged_in'); ?></div>
 	<?php endif; ?>
 </div>

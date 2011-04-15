@@ -30,7 +30,8 @@ class Client_Controller extends MY_Controller {
 
   function  __construct() {
     parent::__construct();
-
+		$this->load->library('template');
+		
 		if ($this->users_m->logged_in()) {
 			$this->user = $this->users_m->get_user();
 			$this->data['user'] = $this->user;
@@ -76,19 +77,6 @@ class Client_Controller extends MY_Controller {
 		}
 
 		return TRUE;
-	}
-	
-	function ping() {
-		if ($this->users_m->ping($this->session->userdata('user_id'))) {
-			echo '1';
-		} else {
-			echo '0';
-		}
-	}
-	
-	function ajax_players() {
-		$users = $this->roles_m->get_current_room_players();
-		echo json_encode($users);
 	}
 }
 ?>

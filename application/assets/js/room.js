@@ -30,8 +30,9 @@ jQuery(document).ready(function($) {
 	 */
 	function refreshGameList() {
 		$("#room-list select").smartupdater({
-			url: 'room/ajax_list',
+			url: 'presence/rooms',
 			dataType: 'json',
+			httpCache: true,
 			minTimeout: 5000},
 			function(data) {
 				var str = '';
@@ -50,8 +51,9 @@ jQuery(document).ready(function($) {
 	 */
 	function refreshPlayerList() {
 		$("#login-list ul").smartupdater({
-			url: 'room/ajax_players',
+			url: 'presence/players',
 			dataType: 'json',
+			httpCache: true,
 			minTimeout: 5000},
 			function(data) {
 				var str = '';

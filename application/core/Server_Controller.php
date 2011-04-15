@@ -7,18 +7,32 @@
  * you are forbidden to change or remove this license.
  * 
  * Nick    : Alex
- * YM      : arch_angel_lx
- * Email   : konpaku.tomofumi@gmail.com
- * Blog    : http://arkross.co.cc
+ * YM      : nikolas_alexander@ymail.com
+ * Email   : nikolas.l.alexander@gmail.com
+ * Blog    : http://www.arkross.com
  * Company : http://mimicreative.net
  */
 
 /**
- * Description of Server_Controller
- *
- * @author Arkross
+ * Manages the requests sent by Client Controllers
+ * @author Alexander
+ * @property Chat_Packets_m $chat_packets_m
+ * @property Events_m $events_m
  */
 class Server_Controller extends MY_Controller {
-  //put your code here
+  public function __construct() {
+		parent::__construct();
+		
+		// Not an Ajax Request? Just die
+		$this->_isAjax() or die('No Direct Browsing is allowed');
+		
+		$this->load->model('chat_packets_m');
+		$this->load->model('events_m');
+	}
+	
+	private function _isAjax() {
+		return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+	}
 }
 ?>

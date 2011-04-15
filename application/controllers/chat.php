@@ -1,7 +1,4 @@
-<?php
-
-if (!defined('BASEPATH'))
-	exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))	exit('No direct script access allowed');
 /* 
  * DO NOT REMOVE THIS LICENSE
  * 
@@ -18,17 +15,17 @@ if (!defined('BASEPATH'))
 
 /**
  * @author Alexander
- * @property Chat_Packets_m $chat_packets_m
  */
-class Chat extends Client_Controller {
+class Chat extends Server_Controller {
 	public function __construct() {
 		parent::__construct();
 	}
 	
-	public function ajax_chatlog() {
+	public function log() {
 		if ($_POST) {
-			$cur_rev = $this->input->post('rev');
-			$logs = $this->chat_packets_m->get_updates($cur_rev);
+			$chat_rev = $this->input->post('chat_rev');
+			$event_rev = $this->input->post('event_rev');
+			$logs = $this->events_m->get_all_updates($chat_rev, $event_rev);
 			echo json_encode($logs);
 		}
 	}
@@ -37,7 +34,7 @@ class Chat extends Client_Controller {
 		
 	}
 	
-	public function ajax_send() {
+	public function send() {
 		if ($_POST) {
 			$room = $this->data['room'];
 			$user = $this->data['user'];
