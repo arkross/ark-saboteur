@@ -67,6 +67,7 @@ jQuery(document).ready(function($) {
 				$(box).smartupdaterAlterUrl('chat/log', {chat_rev: chat_id, event_rev: event_id});
 			});
 			$(box).append(str);
+			$(box).animate({ scrollTop: $(box).attr("scrollHeight") - $(box).height() });
 		});
 	}
 	

@@ -17,6 +17,7 @@
  * @author Alexander
  * @property Asset $asset
  * @property CI_Loader $load
+ * @property CI_Config $config
  * @property CI_Benchmark $benchmark
  * @property CI_URI $uri
  * @property CI_Input $input
@@ -28,6 +29,7 @@
  * @property Users_m $users_m
  * @property Rooms_m $rooms_m
  * @property Roles_m $roles_m
+ * @property Cards_m $cards_m
  */
 class MY_Controller extends CI_Controller {
 	

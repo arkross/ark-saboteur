@@ -24,7 +24,7 @@ class Users_m extends MY_Model {
 
 	/**
 	 * Check whether this user is logged in
-	 * このユザーがログインしたのかい？
+	 * このユーザがログインしたのかい？
 	 * @return boolean True if logged in
 	 */
 	public function logged_in() {
@@ -36,7 +36,7 @@ class Users_m extends MY_Model {
 
 	/**
 	 * Gets current user
-	 * 現在ログインしているユザーを手に入れる
+	 * 現在ログインしているユーザを手に入れる
 	 * @return Mixed current user
 	 */
 	public function get_user() {
@@ -86,7 +86,7 @@ class Users_m extends MY_Model {
 	
 	/**
 	 * Ping the server to indicate that this user is still online
-	 * サーバーをPingする、このユザーがオンラインがどうか
+	 * サーバーをPingする、このユーザがオンラインがどうか
 	 * @param type $id
 	 * @return type 
 	 */

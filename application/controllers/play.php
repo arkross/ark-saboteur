@@ -15,6 +15,7 @@
 
 /**
  * @author Alexander
+ * @property Card $card
  */
 class Play extends Client_Controller {
 	public function __construct() {
@@ -24,6 +25,7 @@ class Play extends Client_Controller {
 		}
 		
 		$this->load->model('chat_packets_m');
+		$this->load->library('card');
 	}
 
 	function index() {

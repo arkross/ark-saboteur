@@ -30,6 +30,8 @@ class Install extends MY_Controller {
 				$this->{$model}->_create();
 			}
 		} else {
+			if (!in_array($model, $this->load->_ci_models))
+				$this->load->model($model);
 			$this->{$model}->_create();
 		}
 	}

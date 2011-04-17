@@ -30,10 +30,6 @@ class Chat extends Server_Controller {
 		}
 	}
 	
-	public function ajax_eventlog($cur_rev = 0) {
-		
-	}
-	
 	public function send() {
 		if ($_POST) {
 			$room = $this->data['room'];

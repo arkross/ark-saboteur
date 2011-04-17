@@ -56,6 +56,9 @@ a, a:hover, a:active, a:visited {
 	margin: auto;
 }
 
+section {
+	min-height: 420px;
+}
 
 /*  Header Section  */
 .sabo-logo {

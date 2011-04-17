@@ -102,8 +102,8 @@ class Rooms_m extends MY_Model {
 		$query = "CREATE TABLE IF NOT EXISTS `rooms` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
 			`title` VARCHAR(255) NOT NULL ,
-			`created_at` TIMESTAMP NOT NULL ,
-			`is_playing` TINYINT(1)  NOT NULL DEFAULT 0 ,
+			`created_at` INT NOT NULL ,
+			`is_playing` SMALLINT NOT NULL DEFAULT 0 COMMENT '0 if not playing, 1, 2, 3 indicates round.' ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB";
 		$inserts = "INSERT INTO `rooms` (`id`, `title`, `created_at`, `is_playing`) VALUES ('1', 'Lobby', NULL, '1');";
