@@ -77,6 +77,8 @@ class Cards_m extends MY_Model {
 	public function insert($data) {
 		$type_id = $this->db->where('name', $data['type'])->get('card_types')->row();
 		$type_id = $type_id->id;
+		$slug = preg_replace('/[^a-zA-Z0-9 ]/', '', $data['name']);
+		$data['slug'] = str_replace(' ', '-', strtolower($slug));
 		$data['photo'] = $this->root_path.$data['photo'].'.'.$this->pic_ext;
 		if (isset($data['effect']))
 			$data['effect'] = serialize($data['effect']);
@@ -247,7 +249,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Wagon Off',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialCartOff-x3',
 				'quantity' => 3,
 				'effect' => array(
 					'target' => 'player',
@@ -259,7 +261,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Pick Off',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialHoeOff-x3',
 				'quantity' => 3,
 				'effect' => array(
 					'target' => 'player',
@@ -271,7 +273,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Lantern Off',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialLampOff-x3',
 				'quantity' => 3,
 				'effect' => array(
 					'target' => 'player',
@@ -283,7 +285,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Wagon On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialCartOn-x2',
 				'quantity' => 2,
 				'effect' => array(
 					'target' => 'player',
@@ -295,7 +297,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Pick On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialHoeOn-x2',
 				'quantity' => 2,
 				'effect' => array(
 					'target' => 'player',
@@ -307,7 +309,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Lantern On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/43-SpecialLampOn-x2',
 				'quantity' => 2,
 				'effect' => array(
 					'target' => 'player',
@@ -319,43 +321,43 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Pick Wagon On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/44-SpecialHoeCartOn',
 				'quantity' => 1,
 				'effect' => array(
 					'target' => 'player',
-					'rules' => 'has[pick_off]~has[wagon_off]',
-					'result' => 'remove[pick_off]~remove[wagon_off]'
+					'rules' => 'has[pick_off,wagon_off]',
+					'result' => 'remove[pick_off,wagon_off]'
 				),
 				'description' => 'Re-enables Pick or Wagon (Choose one)'
 			),
 			array(
 				'name' => 'Pick Lantern On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/44-SpecialHoeLampOn',
 				'quantity' => 1,
 				'effect' => array(
 					'target' => 'player',
-					'rules' => 'has[pick_off]~has[lantern_off]',
-					'result' => 'remove[pick_off]~remove[lantern_off]'
+					'rules' => 'has[pick_off,lantern_off]',
+					'result' => 'remove[pick_off,lantern_off]'
 				),
 				'description' => 'Re-enables Pick or Lantern (Choose one)'
 			),
 			array(
 				'name' => 'Wagon Lantern On',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/44-SpecialLampCartOn',
 				'quantity' => 1,
 				'effect' => array(
 					'target' => 'player',
-					'rules' => 'has[lantern_off]~has[wagon_off]',
-					'result' => 'remove[lantern_off]~remove[wagon_off]'
+					'rules' => 'has[lantern_off,wagon_off]',
+					'result' => 'remove[lantern_off,wagon_off]'
 				),
 				'description' => 'Re-enables Wagon or Lantern (Choose one)'
 			),
 			array(
 				'name' => 'Road Off',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/45-SpecialRoadOff-x3',
 				'quantity' => 3,
 				'effect' => array(
 					'target' => 'maze',
@@ -367,7 +369,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Map',
 				'type' => 'action',
-				'photo' => '',
+				'photo' => 'deck/45-SpecialMap-x6',
 				'quantity' => 6,
 				'effect' => array(
 					'target' => 'maze',
@@ -381,7 +383,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Right Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathRightLeft-x4',
 				'quantity' => 3,
 				'effect' => array(
 					'rules' => 'adj[10101]'
@@ -390,7 +392,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Down',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpDown-x4',
 				'quantity' => 4,
 				'effect' => array(
 					'rules' => 'adj[11010]'
@@ -399,7 +401,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpLeft-x5',
 				'quantity' => 4,
 				'effect' => array(
 					'rules' => 'adj[11001]'
@@ -408,7 +410,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Right',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpRight-x5',
 				'quantity' => 5,
 				'effect' => array(
 					'rules' => 'adj[11100]'
@@ -417,7 +419,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Right Down',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpRightDown-x3',
 				'quantity' => 5,
 				'effect' => array(
 					'rules' => 'adj[11110]'
@@ -426,7 +428,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Right Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpRightLeft-x5',
 				'quantity' => 5,
 				'effect' => array(
 					'rules' => 'adj[11101]'
@@ -435,7 +437,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Path Up Right Down Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/41-PathUpRightDownLeft-x5',
 				'quantity' => 5,
 				'effect' => array(
 					'rules' => 'adj[11111]'
@@ -446,7 +448,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Right',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedRight',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[00100]'
@@ -455,7 +457,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUp',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01000]'
@@ -464,7 +466,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Right Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedRightLeft',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[00101]'
@@ -473,7 +475,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Down',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpDown',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01010]'
@@ -482,7 +484,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Right',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpRight',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01100]'
@@ -491,7 +493,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpLeft',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01001]'
@@ -500,7 +502,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Right Down',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpRightDown',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01110]'
@@ -509,7 +511,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Right Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpRightLeft',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01101]'
@@ -518,7 +520,7 @@ class Cards_m extends MY_Model {
 			array(
 				'name' => 'Blocked Up Right Down Left',
 				'type' => 'path',
-				'photo' => '',
+				'photo' => 'deck/42-BlockedUpRightDownLeft',
 				'quantity' => 1,
 				'effect' => array(
 					'rules' => 'adj[01111]'

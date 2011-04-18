@@ -36,6 +36,26 @@ class Roles_m extends MY_Model {
 			return $this->update($existing_role->id, $data);
 		}
 	}
+
+	public function add_status($user_id, $status = array()) {
+		$role = $this->db
+			->where('player_id', $user_id)
+			->where('room_id', $this->session->userdata('room_id'))
+			->get($this->_table)
+			->row_array();
+		$role['role'] = array_merge($role['role'], $status);
+		return $this->update($role['id'], $role);
+	}
+
+	public function get_status($user_id) {
+		$role = $this->db
+			->select('role')
+			->where('room_id', $this->session->userdata('room_id'))
+			->where('player_id', $user_id)
+			->get($this->_table)
+			->row_array();
+		return unserialize($role['role']);
+	}
 	
 	public function get_current_room_players() {
 		return $this->db
