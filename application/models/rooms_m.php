@@ -25,7 +25,27 @@ class Rooms_m extends MY_Model {
 		parent::__construct();
 		$this->_table = 'rooms';
 	}
-	
+
+	/**
+	 * Sets the current round
+	 * @param int $round 1/2/3 if playing, 0 if standby
+	 * @return bool true if successful
+	 */
+	public function set_round($round) {
+		$room = $this->get_current();
+		$room['is_playing'] = $round;
+		return $this->update($room['id'], $room);
+	}
+
+	/**
+	 * Gets the current round
+	 * @return int 1/2/3 if playing, 0 if standby
+	 */
+	public function get_round() {
+		$room = $this->get_current();
+		return $room['is_playing'];
+	}
+
 	/**
 	 * Get current game room. 1 indicates lobby
 	 * 現在のルームを手に入れる。一はロビです。

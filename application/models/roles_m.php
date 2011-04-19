@@ -28,7 +28,7 @@ class Roles_m extends MY_Model {
 		$data = array(
 			'player_id' => $user->id,
 			'room_id' => $room->id,
-			'role' => $role
+			'role' => serialize(array('role' => $role))
 		);
 		if (!$existing_role = $this->get_by('player_id', $user->id)) {
 			return $this->insert($data);
@@ -43,7 +43,8 @@ class Roles_m extends MY_Model {
 			->where('room_id', $this->session->userdata('room_id'))
 			->get($this->_table)
 			->row_array();
-		$role['role'] = array_merge($role['role'], $status);
+		$role['role'] = array_merge(unserialize($role['role']), $status);
+		$role['role'] = serialize($role['role']);
 		return $this->update($role['id'], $role);
 	}
 
@@ -58,13 +59,24 @@ class Roles_m extends MY_Model {
 	}
 	
 	public function get_current_room_players() {
-		return $this->db
-			->select('users.username as player, roles.id')
+		$players = $this->db
+			->select('users.username as player, roles.*')
 			->join('users', 'users.id = roles.player_id', 'LEFT')
 			->where('room_id', $this->session->userdata('room_id'))
 			->where('users.last_seen >=', now() - 5)
 			->get($this->_table)
 			->result_array();
+		foreach($players as &$value) {
+			$value['role'] = unserialize($value['role']);
+		}
+		if (isset($players[0]['role']['turn'])) {
+			$newplayers = array();
+			for($i = 0; $i < count($players); $i++) {
+				$newplayers[$players[$i]['role']['turn']] = $players[$i];
+			}
+			return $newplayers;
+		}
+		return $players;
 	}
 	
 	public function _create() {

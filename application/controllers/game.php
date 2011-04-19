@@ -24,7 +24,23 @@ class Game extends Server_Controller {
 		$this->load->library('board');
 	}
 
+	public function start_game() {
+		$this->_shuffle_players();
+	}
+
 	public function start_round() {
 		
+	}
+
+	public function _shuffle_players() {
+		$players = $this->roles_m->get_current_room_players();
+		foreach($players as $key => $value) {
+			$players[$key] = $value['id'];
+		}
+		shuffle($players);
+		foreach($players as $key => $value) {
+			$this->roles_m->add_status($value, array('turn' => $key));
+		}
+		print_r($players);
 	}
 }

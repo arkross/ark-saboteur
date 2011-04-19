@@ -13,6 +13,13 @@
  */
 
 jQuery(document).ready(function($) {
+
+	$("#playing").click(function(event) {
+		event.preventDefault();
+		$.post('game/start_game', '', function(data){
+			
+		}, 'json');
+	});
 	
 	$("#player-list").smartupdater({
 		url: 'presence/players',

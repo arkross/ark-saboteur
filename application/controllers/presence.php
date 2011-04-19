@@ -51,7 +51,7 @@ class Presence extends Server_Controller {
 		if ($checksum != $_SERVER['HTTP_IF_NONE_MATCH']) {
 			echo $data;
 		} else {
-			if (! $this->user_agent->browser('Firefox'))
+			if ($this->agent->browser() != 'Firefox')
 				header('HTTP/1.1 304 Not Modified');
 		}
 	}

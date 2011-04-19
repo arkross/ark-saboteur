@@ -307,6 +307,10 @@ footer {
 	cursor: pointer;
 }
 
+#playing {
+	cursor: pointer;
+}
+
 /*  Chatbox  */
 #chatbox {
 	width: 173px;

@@ -24,7 +24,7 @@
  * @property CI_Output $output
  * @property CI_Session $session
  * @property CI_Lang $lang
- * @property CI_User_Agent $user_agent
+ * @property CI_User_Agent $agent
  * 
  * @property Users_m $users_m
  * @property Rooms_m $rooms_m
