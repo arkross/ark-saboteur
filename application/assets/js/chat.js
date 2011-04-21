@@ -48,9 +48,10 @@ jQuery(document).ready(function($) {
 		});
 		
 		$(box).smartupdater({
-			url: "chat/log",
+			url: "chat",
 			data: {chat_rev: chat_id, event_rev: event_id},
 			minTimeout: 2000,
+			httpCache: true,
 			type: 'POST',
 			dataType: 'json'
 		}, function(data) {

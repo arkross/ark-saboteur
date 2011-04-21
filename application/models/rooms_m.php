@@ -59,25 +59,26 @@ class Rooms_m extends MY_Model {
 	 * Player joins a room
 	 * @todo Finish
 	 * @param String $room_name
+	 * @param Boolean $creator
 	 * @return boolean true if successful 
 	 */
-	public function enter($room_id) {
+	public function enter($room_id, $creator = false) {
+		$creator ? $creator = 1 : $creator = 0;
 		if (! $room = $this->get($room_id)) {
 			return FALSE;
 		}
 		if ($room->is_playing) {
 			return FALSE;
 		}
-		$current_players = count($this->db->select('*')
+		$current_players = $this->db->select('*')
 			->where('room_id', $room->id)
 			->join('roles', $this->_table.'.id = roles.room_id')
-			->get($this->_table)
-			->result());
+			->count_all_results($this->_table);
 		if ($current_players < $this->max_player) {
 			$this->session->set_userdata('room_id', $room->id);
 			$this->load->model('events_m');
 			$this->events_m->fire_event('enter_room');
-			return $this->roles_m->set_role('ready');
+			return $this->roles_m->set_role(array('role' => 'ready', 'creator' => $creator));
 		}
 		return FALSE;
 	}
@@ -88,8 +89,12 @@ class Rooms_m extends MY_Model {
 	public function quit() {
 		$this->load->model('events_m');
 		$this->events_m->fire_event('leave_room');
+		// Checks if it's the room creator quitting
+		if ($this->roles_m->is_creator()) {
+			$this->_close();
+		}
 		$this->session->set_userdata('room_id', 1);
-		return $this->roles_m->set_role('ready');
+		return $this->roles_m->set_role(array('role'=>'ready'));
 	}
 
 	/**
@@ -105,6 +110,17 @@ class Rooms_m extends MY_Model {
 			'is_playing' => 0
 		);
 		return $this->insert($new_room);
+	}
+
+	public function _close() {
+		$id = $this->session->userdata('room_id');
+		$this->db
+			->where('room_id', $id)
+			->delete('chat_packets');
+		$this->db
+			->where('room_id', $id)
+			->delete('events');
+		$this->delete($id);
 	}
 	
 	/**

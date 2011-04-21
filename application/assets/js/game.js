@@ -17,7 +17,9 @@ jQuery(document).ready(function($) {
 	$("#playing").click(function(event) {
 		event.preventDefault();
 		$.post('game/start_game', '', function(data){
-			
+			if (data.success == '1') {
+				$("#playing").html('Round ' + data.round);
+			}
 		}, 'json');
 	});
 	
@@ -43,6 +45,18 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
+	
+	$("#round").smartupdater({
+		url: 'presence/validate_room',
+		minTimeout: 5000,
+		httpCache: true},
+		function(data) {
+			// room no longer exists
+			if (data == '1') {
+				$("#leave").click();
+			}
+		}
+	);
 	
 	var grid_x_count = 11;
 	var grid_y_count = 7;

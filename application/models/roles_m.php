@@ -28,7 +28,7 @@ class Roles_m extends MY_Model {
 		$data = array(
 			'player_id' => $user->id,
 			'room_id' => $room->id,
-			'role' => serialize(array('role' => $role))
+			'role' => serialize($role)
 		);
 		if (!$existing_role = $this->get_by('player_id', $user->id)) {
 			return $this->insert($data);
@@ -79,11 +79,24 @@ class Roles_m extends MY_Model {
 		return $players;
 	}
 	
+	public function is_creator() {
+		$player_id = $this->session->userdata('user_id');
+		$role = $this->db
+			->where('player_id', $player_id)
+			->get($this->_table)
+			->row_array();
+		$role = unserialize($role['role']);
+		if (isset($role['creator']) && $role['creator'] == 1) {
+			return true;
+		}
+		return false;
+	}
+	
 	public function _create() {
 		$query = "CREATE TABLE IF NOT EXISTS `roles` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
 			`player_id` INT NOT NULL ,
-			`role` VARCHAR(45) NOT NULL ,
+			`role` VARCHAR(255) NOT NULL ,
 			`room_id` INT NOT NULL ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB";

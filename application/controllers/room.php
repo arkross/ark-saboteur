@@ -46,7 +46,7 @@ class Room extends Client_Controller {
 	function _create($room_name) {
 		// Automatically joins the room after creating it
 		if ($id = $this->rooms_m->create($room_name)) {
-			if (!$this->_join($id)) {
+			if (!$this->_join($id, true)) {
 				$this->data['messages'] = 'Failed to join';
 			} else {
 				redirect('play');
@@ -56,8 +56,8 @@ class Room extends Client_Controller {
 		}
 	}
 	
-	function _join($id) {
-		if($this->rooms_m->enter($id)) {
+	function _join($id, $creator = false) {
+		if($this->rooms_m->enter($id, $creator)) {
 			redirect('play');
 		}
 	}

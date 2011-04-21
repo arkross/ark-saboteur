@@ -21,12 +21,16 @@ class Chat extends Server_Controller {
 		parent::__construct();
 	}
 	
+	public function index() {
+		$this->log();
+	}
+	
 	public function log() {
 		if ($_POST) {
 			$chat_rev = $this->input->post('chat_rev');
 			$event_rev = $this->input->post('event_rev');
 			$logs = $this->events_m->get_all_updates($chat_rev, $event_rev);
-			echo json_encode($logs);
+			$this->_respond(json_encode($logs));
 		}
 	}
 	

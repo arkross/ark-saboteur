@@ -28,6 +28,8 @@ jQuery(document).ready(function($) {
 	function ping() {
 		$("title").smartupdater({
 			url: 'ping',
+			httpCache: true,
+			dataType: 'json',
 			minTimeout: 2000
 		}, function(data){
 			if (data == '0') {

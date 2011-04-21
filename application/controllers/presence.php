@@ -21,11 +21,25 @@ class Presence extends Server_Controller {
 		parent::__construct();
 	}
 	
+	function index() {
+		$this->ping();
+	}
+	
 	function ping() {
 		if ($this->users_m->ping($this->session->userdata('user_id'))) {
-			echo '1';
+			$this->_respond('1');
 		} else {
-			echo '0';
+			$this->_respond('0');
+		}
+	}
+	
+	function validate_room() {
+		$room = $this->db->where('id', $this->session->userdata('room_id'))
+			->count_all_results('rooms');
+		if ($room < 1) {
+			$this->_respond('1');
+		} else {
+			$this->_respond('0');
 		}
 	}
 	
@@ -42,17 +56,5 @@ class Presence extends Server_Controller {
 	function leave() {
 		$this->rooms_m->quit();
 		echo '1';
-	}
-	
-	function _respond($data) {
-		$checksum = md5($data);
-		header('Content-type: text/html');
-		header('ETag:'.$checksum);
-		if ($checksum != $_SERVER['HTTP_IF_NONE_MATCH']) {
-			echo $data;
-		} else {
-			if ($this->agent->browser() != 'Firefox')
-				header('HTTP/1.1 304 Not Modified');
-		}
 	}
 }
