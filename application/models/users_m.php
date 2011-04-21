@@ -99,6 +99,7 @@ class Users_m extends MY_Model {
 				return TRUE;
 			}
 		}
+		return FALSE;
 	}
 
 	public function _create() {

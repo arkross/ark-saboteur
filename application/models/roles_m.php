@@ -58,6 +58,10 @@ class Roles_m extends MY_Model {
 		return unserialize($role['role']);
 	}
 	
+	/**
+	 * Gets all players on the current room
+	 * @return Mixed Players records
+	 */
 	public function get_current_room_players() {
 		$players = $this->db
 			->select('users.username as player, roles.*')

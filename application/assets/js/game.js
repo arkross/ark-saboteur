@@ -13,6 +13,28 @@
  */
 
 jQuery(document).ready(function($) {
+	
+	function update_board(data) {
+		
+	}
+	
+	function update_players(data) {
+		var str = '';
+		$.each(data, function(i, v) {
+			str += '<li';
+			if (v.role.active != undefined && v.player.role.active == 1) str += ' class="active"'
+			str += '><span class="player-name">'+v.player+'</span>';
+			if (v.role.status != undefined) {
+				if (v.player.status.wagon_off == 1) str += '<img />';
+			}
+			str += '</li>';
+		});
+		$("#player-list ul").html(str);
+	}
+	
+	function update_cards(data) {
+		
+	}
 
 	$("#playing").click(function(event) {
 		event.preventDefault();
@@ -23,19 +45,15 @@ jQuery(document).ready(function($) {
 		}, 'json');
 	});
 	
-	$("#player-list").smartupdater({
-		url: 'presence/players',
+	// Requests update for the whole game
+	$("#board-game").smartupdater({
+		url: 'game/update',
 		minTimeout: 5000,
 		httpCache: true,
-		dataType: 'json'},
-		function(data) {
-			var str = '';
-			$.each(data, function(i, v) {
-				str += '<li><span class="player-name">'+v.player+'</span></li>';
-			});
-			$("#player-list ul").html(str);
-		}
-	);
+		dataType: 'json'
+	}, function(data){
+		update_players(data.players);
+	});
 	
 	$("#leave").click(function(event) {
 		event.preventDefault();

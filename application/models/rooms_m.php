@@ -77,6 +77,7 @@ class Rooms_m extends MY_Model {
 		if ($current_players < $this->max_player) {
 			$this->session->set_userdata('room_id', $room->id);
 			$this->load->model('events_m');
+			$this->_clean();
 			$this->events_m->fire_event('enter_room');
 			return $this->roles_m->set_role(array('role' => 'ready', 'creator' => $creator));
 		}
@@ -112,6 +113,9 @@ class Rooms_m extends MY_Model {
 		return $this->insert($new_room);
 	}
 
+	/**
+	 * Dismisses the room, cleaning any chat entries and events
+	 */
 	public function _close() {
 		$id = $this->session->userdata('room_id');
 		$this->db
@@ -121,6 +125,21 @@ class Rooms_m extends MY_Model {
 			->where('room_id', $id)
 			->delete('events');
 		$this->delete($id);
+	}
+	
+	/**
+	 * Cleans the room chat entries
+	 */
+	public function _clean() {
+		$id = $this->session->userdata('room_id');
+		$this->db
+			->where('room_id', $id)
+			->where('created_at <= ', now() - 2)
+			->delete('chat_packets');
+		$this->db
+			->where('room_id', $id)
+			->where('created_at <= ', now() - 2)
+			->delete('events');
 	}
 	
 	/**

@@ -25,6 +25,11 @@ class Game extends Server_Controller {
 		parent::__construct();
 		$this->load->library('board');
 	}
+	
+	public function update() {
+		$this->response['players'] = $this->roles_m->get_current_room_players();
+		$this->_respond();
+	}
 
 	public function start_game() {
 		$this->response = array('round' => 1);
@@ -57,7 +62,7 @@ class Game extends Server_Controller {
 		}
 	}
 	
-	private function _respond() {
+	protected function _respond() {
 		parent::_respond(json_encode($this->response));
 	}
 }
