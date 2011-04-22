@@ -15,13 +15,16 @@
 
 /**
  * @author Alexander
- * @property MY_Controller $ci
+ * @property Server_Controller $ci
  * @property Boards_m $boards_m
  */
 class Board {
 	var $deck;
 	var $discard;
+	var $roles;
 
+	var $players;
+	
 	public function __construct() {
 		$this->ci =& get_instance();
 
@@ -32,6 +35,8 @@ class Board {
 	}
 
 	public function prepare() {
+		$this->roles = $this->ci->card->build_role_cards(count($players));
+		$this->deck = $this->ci->card->build_deck();
 		
 	}
 }

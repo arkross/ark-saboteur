@@ -32,7 +32,7 @@ class Rooms_m extends MY_Model {
 	 * @return bool true if successful
 	 */
 	public function set_round($round) {
-		$room = $this->get_current();
+		$room = (array)$this->get_current();
 		$room['is_playing'] = $round;
 		return $this->update($room['id'], $room);
 	}
@@ -43,7 +43,7 @@ class Rooms_m extends MY_Model {
 	 */
 	public function get_round() {
 		$room = $this->get_current();
-		return $room['is_playing'];
+		return $room->is_playing;
 	}
 
 	/**

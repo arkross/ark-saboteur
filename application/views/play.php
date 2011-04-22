@@ -13,6 +13,12 @@
  * Company : http://mimicreative.net
  */
 ?>
+<script type="text/javascript">
+	var gold_img = '<?php echo image('gold.png'); ?>';
+	var pick_off_img = '<?php echo image('hoeoff.png'); ?>';
+	var lantern_off_img = '<?php echo image('lampoff.png'); ?>';
+	var wagon_off_img = '<?php echo image('cartoff.png'); ?>';
+</script>
 <div id="board-game" class="left"></div>
 <div id="round" class="left"><?php echo $room->title; ?> - <span id="playing">Start Game</span></div>
 
@@ -71,7 +77,6 @@
 	</div>
 	<div id="discard-pile" class="left">
 		<div id="discard-cards"><?php echo image('discard-pile.png'); ?></div>
-		<div id="discard-count">1</div>
 	</div>
 	<div id="deck" class="left">
 		<div id="deck-cards"><?php echo image('deck-pile.png'); ?></div>

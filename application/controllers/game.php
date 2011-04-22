@@ -26,12 +26,36 @@ class Game extends Server_Controller {
 		$this->load->library('board');
 	}
 	
+	/**
+	 * All game updates should be requested here
+	 */
 	public function update() {
 		$this->response['players'] = $this->roles_m->get_current_room_players();
+		
+		// Prevents other players' roles for being broadcast
+		foreach($this->response['players'] as &$player) {
+			unset($player['role']['role']);
+		}
+		
+		$this->response['round'] = $this->rooms_m->get_round();
+		if ($this->response['round'] == 0) {
+			if ($this->roles_m->is_creator())
+				$this->response['round'] = lang('game.start');
+			else
+				$this->response['round'] = lang('game.wait');
+		} else {
+			$this->response['round'] = sprintf(lang('game.round'), $this->response['round']);
+		}
+		
+		$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
+		$this->response['actions'] = lang('game.'.$this->response['actions']['role']['role']);
 		$this->_respond();
 	}
 
 	public function start_game() {
+		// Not the room creator? no way you can start the game
+		if (! $this->roles_m->is_creator()) return;
+		
 		$this->response = array('round' => 1);
 		$this->_shuffle_players();
 		if (!$this->response['success']) {
@@ -42,11 +66,14 @@ class Game extends Server_Controller {
 	}
 
 	public function start_round() {
-		
+		$this->rooms_m->set_round($this->rooms_m->get_round() + 1);
+		$this->board->prepare();
+		$this->_apply_roles($this->board->roles);
 	}
 
 	public function _shuffle_players() {
 		$players = $this->roles_m->get_current_room_players();
+		$this->board->players = $players;
 		if (count($players) < 3 || count($players) > 10) {
 			$this->response = array_merge(array('success' => '0'), $this->response);
 			return;
@@ -59,6 +86,13 @@ class Game extends Server_Controller {
 		shuffle($players);
 		foreach($players as $key => $value) {
 			$this->roles_m->add_status($value, array('turn' => $key));
+		}
+	}
+	
+	protected function _apply_roles($roles) {
+		$players = $this->roles_m->get_current_room_players();
+		for ($i = 0; $i < count($players); $i++) {
+			$this->roles_m->add_status($players[$i]['id'], array('role' => $role[$i]));
 		}
 	}
 	

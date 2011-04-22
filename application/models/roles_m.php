@@ -78,6 +78,7 @@ class Roles_m extends MY_Model {
 			for($i = 0; $i < count($players); $i++) {
 				$newplayers[$players[$i]['role']['turn']] = $players[$i];
 			}
+			ksort($newplayers);
 			return $newplayers;
 		}
 		return $players;

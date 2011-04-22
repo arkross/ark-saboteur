@@ -30,6 +30,9 @@
  * @property Rooms_m $rooms_m
  * @property Roles_m $roles_m
  * @property Cards_m $cards_m
+ * 
+ * @property Card $card
+ * @property Board $board
  */
 class MY_Controller extends CI_Controller {
 	

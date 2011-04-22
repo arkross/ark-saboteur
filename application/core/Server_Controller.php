@@ -44,7 +44,7 @@ class Server_Controller extends MY_Controller {
 		} else {
 			if ($this->agent->browser() != 'Firefox')
 				header('HTTP/1.1 304 Not Modified');
-			else 
+			else
 				header('HTTP/1.1 204 No Content');
 		}
 	}

@@ -79,10 +79,10 @@ class Card {
 		$miner = $this->distribution[$player_count]['miner'];
 		$rolecards = array();
 		for($i = 0; $i < $saboteur; $i++) {
-			array_push($rolecards, 'Saboteur');
+			array_push($rolecards, 'saboteur');
 		}
 		for ($i = 0; $i < $miner; $i++) {
-			array_push($rolecards, 'Gold Digger');
+			array_push($rolecards, 'gold-digger');
 		}
 		return shuffle($rolecards);
 	}

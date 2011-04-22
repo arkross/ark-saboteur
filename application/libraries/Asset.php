@@ -117,7 +117,7 @@ class Asset {
 
 		$attribute_str = $this->_parse_asset_html($attributes);
 
-		return '<img src="' . $this->image_path($asset_name, $module_name) . '"' . $attribute_str . ' />' . "\n";
+		return '<img src="' . $this->image_path($asset_name, $module_name) . '"' . $attribute_str . ' />';
 	}
 
 	// ------------------------------------------------------------------------

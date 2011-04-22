@@ -14,6 +14,12 @@
 
 jQuery(document).ready(function($) {
 	
+	function update_actions(data) {
+		if (data != undefined && data != false) {
+			$("#role").html(data);
+		}
+	}
+	
 	function update_board(data) {
 		
 	}
@@ -24,8 +30,13 @@ jQuery(document).ready(function($) {
 			str += '<li';
 			if (v.role.active != undefined && v.player.role.active == 1) str += ' class="active"'
 			str += '><span class="player-name">'+v.player+'</span>';
+			if (v.role.gold != undefined) {
+				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
+			}
 			if (v.role.status != undefined) {
-				if (v.player.status.wagon_off == 1) str += '<img />';
+				if (v.player.status.pick_off == 1) str += pick_off_img;
+				if (v.player.status.lantern_off == 1) str += lantern_off_img;
+				if (v.player.status.wagon_off == 1) str += wagon_off_img;
 			}
 			str += '</li>';
 		});
@@ -33,15 +44,22 @@ jQuery(document).ready(function($) {
 	}
 	
 	function update_cards(data) {
+		// update hand cards
 		
+		// update deck count
+		
+	}
+	
+	function update_round(data) {
+		if (data != undefined) {
+			$("#playing").html(data);
+		}
 	}
 
 	$("#playing").click(function(event) {
 		event.preventDefault();
 		$.post('game/start_game', '', function(data){
-			if (data.success == '1') {
-				$("#playing").html('Round ' + data.round);
-			}
+			$("#board-game").smartupdaterRestart();
 		}, 'json');
 	});
 	
@@ -52,6 +70,8 @@ jQuery(document).ready(function($) {
 		httpCache: true,
 		dataType: 'json'
 	}, function(data){
+		update_round(data.round);
+		update_actions(data.actions);
 		update_players(data.players);
 	});
 	
