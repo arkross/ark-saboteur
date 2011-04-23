@@ -32,6 +32,8 @@ class Game extends Server_Controller {
 	public function update() {
 		$this->response['players'] = $this->roles_m->get_current_room_players();
 		
+		$this->board->update();
+		
 		// Prevents other players' roles for being broadcast
 		foreach($this->response['players'] as &$player) {
 			unset($player['role']['role']);
@@ -47,8 +49,10 @@ class Game extends Server_Controller {
 			$this->response['round'] = sprintf(lang('game.round'), $this->response['round']);
 		}
 		
+		$this->response['cards']['deck_count'] = count($this->board->deck);
+		
 		$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
-		$this->response['actions'] = lang('game.'.$this->response['actions']['role']['role']);
+		$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
 		$this->_respond();
 	}
 
@@ -56,8 +60,10 @@ class Game extends Server_Controller {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
 		
-		$this->response = array('round' => 1);
+		
 		$this->_shuffle_players();
+		
+		// If it's not successful, return immediately and do nothing
 		if (!$this->response['success']) {
 			$this->respond();
 			return;
@@ -68,7 +74,6 @@ class Game extends Server_Controller {
 	public function start_round() {
 		$this->rooms_m->set_round($this->rooms_m->get_round() + 1);
 		$this->board->prepare();
-		$this->_apply_roles($this->board->roles);
 	}
 
 	public function _shuffle_players() {
@@ -86,13 +91,6 @@ class Game extends Server_Controller {
 		shuffle($players);
 		foreach($players as $key => $value) {
 			$this->roles_m->add_status($value, array('turn' => $key));
-		}
-	}
-	
-	protected function _apply_roles($roles) {
-		$players = $this->roles_m->get_current_room_players();
-		for ($i = 0; $i < count($players); $i++) {
-			$this->roles_m->add_status($players[$i]['id'], array('role' => $role[$i]));
 		}
 	}
 	

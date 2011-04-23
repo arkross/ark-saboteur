@@ -47,7 +47,9 @@ jQuery(document).ready(function($) {
 		// update hand cards
 		
 		// update deck count
-		
+		if (data != undefined && data.deck_count != undefined) {
+			$("#deck-count").html(data.deck_count);
+		}
 	}
 	
 	function update_round(data) {
@@ -73,6 +75,7 @@ jQuery(document).ready(function($) {
 		update_round(data.round);
 		update_actions(data.actions);
 		update_players(data.players);
+		update_cards(data.cards);
 	});
 	
 	$("#leave").click(function(event) {

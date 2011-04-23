@@ -38,8 +38,8 @@
 </div>
 
 <div id="actions" class="left">
-	<div id="role">You are a Saboteur</div>
-	<div id="leave">Leave Room</div>
+	<div id="role"></div>
+	<div id="leave"><?php echo lang('game.leave'); ?></div>
 </div>
 
 <br /><br /><br />
@@ -80,6 +80,6 @@
 	</div>
 	<div id="deck" class="left">
 		<div id="deck-cards"><?php echo image('deck-pile.png'); ?></div>
-		<div id="deck-count">20</div>
+		<div id="deck-count">0</div>
 	</div>
 </div>

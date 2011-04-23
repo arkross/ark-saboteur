@@ -19,11 +19,11 @@
  * @property Boards_m $boards_m
  */
 class Board {
-	var $deck;
-	var $discard;
-	var $roles;
+	var $deck = array();
+	var $discard = array();
+	var $roles = array();
 
-	var $players;
+	var $players = array();
 	
 	public function __construct() {
 		$this->ci =& get_instance();
@@ -34,9 +34,24 @@ class Board {
 		$this->ci->load->model('boards_m');
 	}
 
+	/**
+	 * Prepares everything for a new round
+	 */
 	public function prepare() {
-		$this->roles = $this->ci->card->build_role_cards(count($players));
-		$this->deck = $this->ci->card->build_deck();
+		$this->players = $this->ci->roles_m->get_current_room_players();
 		
+		// Applies roles to players
+		$this->roles = $this->ci->card->build_role_cards(count($this->players));
+		for ($i = 0; $i < count($this->players); $i++) {
+			$this->ci->roles_m->add_status($this->players[$i]['id'], array('role' => $this->roles[$i]));
+		}
+		
+		// Builds deck cards
+		$this->deck = $this->ci->card->build_deck();
+		$this->ci->boards_m->set_deck($this->deck);
+	}
+	
+	public function update() {
+		$this->deck = $this->ci->boards_m->get_deck();
 	}
 }

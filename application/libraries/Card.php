@@ -66,12 +66,17 @@ class Card {
 	}
 
 	public function build_deck() {
-		$deck = $this->cards_m->get_cards('action');
-		$deck = array_merge($this->cards_m->get_cards('path'), $deck);
-		foreach($deck as $key => $value) {
-			$deck[$key] = $value['id'];
+		$cards = $this->ci->cards_m->get_cards('action');
+		$cards = array_merge($this->ci->cards_m->get_cards('path'), $cards);
+		$deck = array();
+		foreach($cards as $card) {
+			for ($i = 0; $i < $card['quantity']; ++$i) {
+				array_push($deck, $card['id']);
+			}
 		}
-		return shuffle($deck);
+		
+		shuffle($deck);
+		return $deck;
 	}
 
 	public function build_role_cards($player_count) {
@@ -84,6 +89,7 @@ class Card {
 		for ($i = 0; $i < $miner; $i++) {
 			array_push($rolecards, 'gold-digger');
 		}
-		return shuffle($rolecards);
+		shuffle($rolecards);
+		return $rolecards;
 	}
 }

@@ -37,10 +37,12 @@ class Events_m extends MY_Model {
 		$chats = $this->chat_packets_m->get_updates($from_chat_id);
 		$events = $this->get_updates($from_event_id);
 		$all = array_merge($chats, $events);
-		function mysort($a, $b) {
-			if ($a['created_at'] < $b['created_at']) return -1;
-			if ($a['created_at'] > $b['created_at']) return 1;
-			if ($a['created_at'] == $b['created_at']) return 0;
+		if (!function_exists('mysort')) {
+			function mysort($a, $b) {
+				if ($a['created_at'] < $b['created_at']) return -1;
+				if ($a['created_at'] > $b['created_at']) return 1;
+				if ($a['created_at'] == $b['created_at']) return 0;
+			}
 		}
 		usort($all, 'mysort');
 		return $all;

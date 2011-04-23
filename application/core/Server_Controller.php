@@ -30,18 +30,30 @@ class Server_Controller extends MY_Controller {
 		$this->load->model('events_m');
 	}
 	
+	/**
+	 * Checks if the request if Ajax
+	 * @return boolean true if the request if XMLHttpRequest
+	 */
 	private function _isAjax() {
 		return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-           ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+    ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
 	}
 
+	/**
+	 * General response method for ajax.
+	 * Returns 304/204 Header if the cache is still usable.
+	 * Returns 200 Header along with the content if cache is expired.
+	 * @param String $data the response
+	 */
 	protected function _respond($data) {
 		$checksum = md5($data);
-		header('Content-type: text/html');
 		header('ETag:'.$checksum);
 		if ($checksum != $_SERVER['HTTP_IF_NONE_MATCH']) {
 			echo $data;
 		} else {
+			
+			// Firefox interprets 304 as XML parse error,
+			// so give 204 instead
 			if ($this->agent->browser() != 'Firefox')
 				header('HTTP/1.1 304 Not Modified');
 			else

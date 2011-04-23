@@ -34,14 +34,14 @@ class Cards_m extends MY_Model {
 			return $this->get_all();
 		} else {
 			$cards = $this->db
-				->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, t.name')
-				->join('card_types t', 't.id = cards.type', 'right')
+				->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, c.quantity, t.name')
+				->join('card_types t', 't.id = c.type', 'right')
 				->where('t.name', $type)
 				->get($this->_table.' c')
 				->result_array();
 			foreach ($cards as &$card) {
 				$card['effect'] = unserialize($card['effect']);
-				$card['photo'] = unserialize($card['photo']);
+//				$card['photo'] = unserialize($card['photo']);
 			}
 			return $cards;
 		}
