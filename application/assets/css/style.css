@@ -284,6 +284,14 @@ footer {
 	margin-top: 10px;
 }
 
+#hand-cards img:hover {
+	border: 2px solid #bbcb99;
+}
+
+#hand-cards img.selected {
+	border: 5px solid white;
+}
+
 #hand-cards img {
 	float: left;
 	margin-right: 10px;

@@ -13,6 +13,13 @@
  */
 
 jQuery(document).ready(function($) {
+	var active = false;
+	
+	const WAITING = 0;
+	const READY = 1;
+	const CARD_CHOSEN = 2;
+	const TARGET_CHOSEN = 3;
+	var state = WAITING;
 	
 	function update_actions(data) {
 		if (data != undefined && data != false) {
@@ -26,9 +33,16 @@ jQuery(document).ready(function($) {
 	
 	function update_players(data) {
 		var str = '';
+		active = false;
 		$.each(data, function(i, v) {
 			str += '<li';
-			if (v.role.active != undefined && v.role.active == 1) str += ' class="active"'
+			if (v.role.active != undefined && v.role.active == 1) {
+				str += ' class="active"';
+				if (v.id == user_id) {
+					active = true;
+					state = READY;
+				}
+			}
 			str += '><span class="player-name">'+v.player+'</span>';
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
@@ -53,8 +67,9 @@ jQuery(document).ready(function($) {
 		if (data != undefined && data.hand != undefined) {
 			$('#hand-cards').html('');
 			$.each(data.hand, function(i, v) {
-				$('img#card-'+v.card_id).clone(true).appendTo('#hand-cards');
+				$('#all-cards img#card-'+v.card_id).clone(true).appendTo('#hand-cards');
 			});
+			reloadEvent();
 		}
 	}
 	
@@ -84,6 +99,7 @@ jQuery(document).ready(function($) {
 		update_cards(data.cards);
 	});
 	
+	// Leave link click event
 	$("#leave").click(function(event) {
 		event.preventDefault();
 		$.get('presence/leave', '', function(data) {
@@ -93,6 +109,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 	
+	// Validates room
 	$("#round").smartupdater({
 		url: 'presence/validate_room',
 		minTimeout: 5000,
@@ -104,6 +121,18 @@ jQuery(document).ready(function($) {
 			}
 		}
 	);
+	
+	function reloadEvent() {
+		$("#hand-cards img").click(function(event) {
+			event.preventDefault();
+
+			if (!active) return;
+			console.log('current: '+this);
+			$("#hand-cards img").removeClass('selected');
+			$(this).addClass('selected');
+			state = CARD_CHOSEN;
+		});
+	}
 	
 	var grid_x_count = 11;
 	var grid_y_count = 7;

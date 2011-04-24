@@ -59,6 +59,15 @@ class Game extends Server_Controller {
 		$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
 		$this->_respond();
 	}
+	
+	/**
+	 * Submits a move
+	 * @param int $card_id
+	 * @param string $target 
+	 */
+	public function move($card_id, $target = 'discard') {
+		
+	}
 
 	/**
 	 * Starts a new game
