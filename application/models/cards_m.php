@@ -34,7 +34,7 @@ class Cards_m extends MY_Model {
 			return $this->get_all();
 		} else {
 			$cards = $this->db
-				->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, c.quantity, t.name')
+				->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, c.quantity, t.name as type_name')
 				->join('card_types t', 't.id = c.type', 'right')
 				->where('t.name', $type)
 				->get($this->_table.' c')
@@ -57,19 +57,19 @@ class Cards_m extends MY_Model {
 			->get('card_types')
 			->row_array();
 		$card['effect'] = unserialize($card['effect']);
-		$card['photo'] = unserialize($card['photo']);
+//		$card['photo'] = unserialize($card['photo']);
 		return $card;
 	}
 	
 	public function get_all() {
 		$cards = $this->db
-			->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, t.name')
-			->join('card_types t', 't.id = cards.type', 'right')
+			->select('c.id, c.name, c.slug, c.effect, c.description, c.photo, t.name as type_name')
+			->join('card_types t', 't.id = c.type', 'right')
 			->get($this->_table.' c')
 			->result_array();
 		foreach ($cards as &$card) {
 			$card['effect'] = unserialize($card['effect']);
-			$card['photo'] = unserialize($card['photo']);
+//			$card['photo'] = unserialize($card['photo']);
 		}
 		return $cards;
 	}

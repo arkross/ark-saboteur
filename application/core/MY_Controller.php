@@ -30,6 +30,7 @@
  * @property Rooms_m $rooms_m
  * @property Roles_m $roles_m
  * @property Cards_m $cards_m
+ * @property Boards_m $boards_m
  * 
  * @property Card $card
  * @property Board $board

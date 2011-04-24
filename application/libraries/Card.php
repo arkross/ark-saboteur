@@ -20,6 +20,7 @@
  */
 class Card {
 	protected $rules;
+	var $distribution;
 
 	public function __construct() {
 		$this->ci =& get_instance();

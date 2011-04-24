@@ -124,6 +124,9 @@ class Rooms_m extends MY_Model {
 		$this->db
 			->where('room_id', $id)
 			->delete('events');
+		$this->db
+			->where('room_id', $id)
+			->delete('boards');
 		$this->delete($id);
 	}
 	

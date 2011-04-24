@@ -16,12 +16,12 @@
 <div id="messages"><?php if (isset($messages)) echo $messages; ?></div>
 <div class="col_7 col">
 	<form id="room-list" action="" method="POST">
-		<div class="tab-top background-grey col_6">Select a mine below and <a href="#">Join The Digging!</a></div>
+		<div class="tab-top background-grey col_6"><?php echo lang('rooms.select'); ?></div>
 		<select name="room_id" class="col_7" size="15" autofocus></select>
 	</form>
 
 	<form id="room-create" action="" method="POST">
-		<div class="tab-top background-grey col_5">or start digging your own mine</div>
+		<div class="tab-top background-grey col_5"><?php echo lang('rooms.create'); ?></div>
 			<input type="text" name="room_name" placeholder="Give it a name and press Enter" />
 	</form>
 </div>
@@ -34,9 +34,9 @@
 <div id="chatbox" class="right">
 	<nav id="switch">
 		<ul>
-			<li class="active">All</li>
-			<li>Event</li>
-			<li>Chat</li>
+			<li class="active"><?php echo lang('chat.all'); ?></li>
+			<li><?php echo lang('chat.events'); ?></li>
+			<li><?php echo lang('chat.chats'); ?></li>
 		</ul>
 	</nav>
 

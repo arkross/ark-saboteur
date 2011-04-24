@@ -44,11 +44,17 @@ jQuery(document).ready(function($) {
 	}
 	
 	function update_cards(data) {
-		// update hand cards
-		
 		// update deck count
 		if (data != undefined && data.deck_count != undefined) {
 			$("#deck-count").html(data.deck_count);
+		}
+		
+		// update hand cards
+		if (data != undefined && data.hand != undefined) {
+			$('#hand-cards').html('');
+			$.each(data.hand, function(i, v) {
+				$('img#card-'+v.card_id).clone(true).appendTo('#hand-cards');
+			});
 		}
 	}
 	

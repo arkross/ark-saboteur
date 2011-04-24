@@ -19,6 +19,12 @@ class Events_m extends MY_Model {
 		$this->_table = 'events';
 	}
 	
+	/**
+	 * Fires an event
+	 * @param String $type the event type, @see events_lang.php
+	 * @param String $details array of parameters passed to event
+	 * @return bool true if the event is successfully cast
+	 */
 	public function fire_event($type, $details = array()) {
 		$user_id = $this->session->userdata('user_id');
 		$room_id = $this->session->userdata('room_id');
@@ -32,6 +38,12 @@ class Events_m extends MY_Model {
 		return $this->insert($data);
 	}
 	
+	/**
+	 * Gets all chat and event updates
+	 * @param int $from_chat_id starting from chat id
+	 * @param int $from_event_id starting from event id
+	 * @return Mixed array of update records
+	 */
 	public function get_all_updates($from_chat_id, $from_event_id) {
 		$this->load->model('chat_packets_m');
 		$chats = $this->chat_packets_m->get_updates($from_chat_id);
@@ -66,6 +78,11 @@ class Events_m extends MY_Model {
 		return $result;
 	}
 	
+	/**
+	 * Generates event string
+	 * @param Array $record the event record from the database
+	 * @return String the event, parsed to string
+	 */
 	function _generate_string(&$record) {
 		$args = array(
 			$record['sender'],

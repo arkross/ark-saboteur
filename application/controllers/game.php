@@ -19,6 +19,10 @@
  * @property Board $board
  */
 class Game extends Server_Controller {
+	/**
+	 * The array of responses to send to client
+	 * @var Array
+	 */
 	var $response = array();
 	
 	public function __construct() {
@@ -50,16 +54,20 @@ class Game extends Server_Controller {
 		}
 		
 		$this->response['cards']['deck_count'] = count($this->board->deck);
+		$this->response['cards']['hand'] = $this->board->hand;
 		
 		$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
 		$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
 		$this->_respond();
 	}
 
+	/**
+	 * Starts a new game
+	 * @return void
+	 */
 	public function start_game() {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
-		
 		
 		$this->_shuffle_players();
 		
@@ -71,11 +79,18 @@ class Game extends Server_Controller {
 		$this->start_round();
 	}
 
+	/**
+	 * Starts a new round
+	 */
 	public function start_round() {
 		$this->rooms_m->set_round($this->rooms_m->get_round() + 1);
 		$this->board->prepare();
 	}
 
+	/**
+	 * Shuffles the players' positions
+	 * @return void
+	 */
 	public function _shuffle_players() {
 		$players = $this->roles_m->get_current_room_players();
 		$this->board->players = $players;
@@ -90,7 +105,7 @@ class Game extends Server_Controller {
 		}
 		shuffle($players);
 		foreach($players as $key => $value) {
-			$this->roles_m->add_status($value, array('turn' => $key));
+			$this->roles_m->add_status($value, array('turn' => $key, 'gold' => 0));
 		}
 	}
 	

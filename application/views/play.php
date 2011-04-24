@@ -19,15 +19,25 @@
 	var lantern_off_img = '<?php echo image('lampoff.png'); ?>';
 	var wagon_off_img = '<?php echo image('cartoff.png'); ?>';
 </script>
+<div id="all-cards" class="hide">
+	<?php 
+	$cards = all_cards();
+	foreach($cards as $card) {
+		echo '<img src="'.base_url().$card['photo'].'" id="card-'.$card['id'];
+		echo '" title="'.$card['name'].'" />';
+	}
+	unset($cards);
+	?>
+</div>
 <div id="board-game" class="left"></div>
 <div id="round" class="left"><?php echo $room->title; ?> - <span id="playing">Start Game</span></div>
 
 <div id="chatbox" class="right">
 	<nav id="switch">
 		<ul>
-			<li class="active">All</li>
-			<li>Event</li>
-			<li>Chat</li>
+			<li class="active"><?php echo lang('chat.all'); ?></li>
+			<li><?php echo lang('chat.events'); ?></li>
+			<li><?php echo lang('chat.chats'); ?></li>
 		</ul>
 	</nav>
 
@@ -67,14 +77,7 @@
 </div>
 <br class="clear"/>
 <div id="cards" class="left">
-	<div id="hand-cards" class="left">
-		<?php echo image('card-path-straight.png'); ?>
-		<?php echo image('card-path-straight.png'); ?>
-		<?php echo image('card-path-straight.png'); ?>
-		<?php echo image('card-path-straight.png'); ?>
-		<?php echo image('card-path-straight.png'); ?>
-		<?php echo image('card-path-straight.png'); ?>
-	</div>
+	<div id="hand-cards" class="left"></div>
 	<div id="discard-pile" class="left">
 		<div id="discard-cards"><?php echo image('discard-pile.png'); ?></div>
 	</div>

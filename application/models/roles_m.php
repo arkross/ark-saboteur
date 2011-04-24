@@ -22,6 +22,11 @@ class Roles_m extends MY_Model {
 		$this->_table = 'roles';
 	}
 	
+	/**
+	 * Sets the role field of a player, overrides the current.
+	 * @param Array $role array of role and details
+	 * @return boolean true if succeeded
+	 */
 	public function set_role($role) {
 		$user = $this->users_m->get_user();
 		$room = $this->rooms_m->get_current();
@@ -37,6 +42,12 @@ class Roles_m extends MY_Model {
 		}
 	}
 
+	/**
+	 * Adds a status to the role field. Overrides if the current key already exists.
+	 * @param int $user_id the player id inflicted
+	 * @param array $status the array of statuses
+	 * @return boolean true if status updated
+	 */
 	public function add_status($user_id, $status = array()) {
 		$role = $this->db
 			->where('player_id', $user_id)
@@ -48,6 +59,11 @@ class Roles_m extends MY_Model {
 		return $this->update($role['id'], $role);
 	}
 
+	/**
+	 * Gets the current status of a player
+	 * @param int $user_id the player id
+	 * @return Array the status
+	 */
 	public function get_status($user_id) {
 		$role = $this->db
 			->select('role')
@@ -84,6 +100,10 @@ class Roles_m extends MY_Model {
 		return $players;
 	}
 	
+	/**
+	 * Checks if the current player is the creator of the current room.
+	 * @return boolean true if the player is creator, false otherwise.
+	 */
 	public function is_creator() {
 		$player_id = $this->session->userdata('user_id');
 		$role = $this->db

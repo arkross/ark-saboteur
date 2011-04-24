@@ -20,6 +20,7 @@
  */
 class Board {
 	var $deck = array();
+	var $hand = array();
 	var $discard = array();
 	var $roles = array();
 
@@ -49,9 +50,19 @@ class Board {
 		// Builds deck cards
 		$this->deck = $this->ci->card->build_deck();
 		$this->ci->boards_m->set_deck($this->deck);
+		
+		// Distributes hand cards
+		$dist = $this->ci->card->distribution;
+		foreach($this->players as $player) {
+			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['id']);
+		}
 	}
 	
+	/**
+	 * Called everytime the ajax wants to update.
+	 */
 	public function update() {
 		$this->deck = $this->ci->boards_m->get_deck();
+		$this->hand = $this->ci->boards_m->get_hand();
 	}
 }

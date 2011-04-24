@@ -13,3 +13,5 @@
  * Company : http://mimicreative.net
  */
 $lang['players.logged_in'] = 'Logged-in Miners';
+$lang['rooms.select'] = 'Select a mine below and <a href="#">Join the digging!</a>';
+$lang['rooms.create'] = 'or, start digging your own mine.';

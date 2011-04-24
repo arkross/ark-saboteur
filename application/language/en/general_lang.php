@@ -24,3 +24,7 @@ $lang['user.logged_in'] = 'You are logged in as %s';
 $lang['user.logout'] = 'Logout';
 
 $lang['foot.original'] = 'Original Work by';
+
+$lang['chat.all'] = 'All';
+$lang['chat.events'] = 'Events';
+$lang['chat.chats'] = 'Chats';
