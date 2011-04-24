@@ -34,9 +34,8 @@ class Game extends Server_Controller {
 	 * All game updates should be requested here
 	 */
 	public function update() {
-		$this->response['players'] = $this->roles_m->get_current_room_players();
-		
 		$this->board->update();
+		$this->response['players'] = $this->board->players;
 		
 		// Prevents other players' roles for being broadcast
 		foreach($this->response['players'] as &$player) {
@@ -105,7 +104,15 @@ class Game extends Server_Controller {
 		}
 		shuffle($players);
 		foreach($players as $key => $value) {
-			$this->roles_m->add_status($value, array('turn' => $key, 'gold' => 0));
+			$this->roles_m->add_status($value, 
+				array(
+					'turn' => $key, 
+					'gold' => 0,
+					'active' => 0,
+					'pick_off' => 0,
+					'wagon_off' => 0,
+					'lantern_off' => 0
+				));
 		}
 	}
 	

@@ -28,15 +28,15 @@ jQuery(document).ready(function($) {
 		var str = '';
 		$.each(data, function(i, v) {
 			str += '<li';
-			if (v.role.active != undefined && v.player.role.active == 1) str += ' class="active"'
+			if (v.role.active != undefined && v.role.active == 1) str += ' class="active"'
 			str += '><span class="player-name">'+v.player+'</span>';
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
 			}
 			if (v.role.status != undefined) {
-				if (v.player.status.pick_off == 1) str += pick_off_img;
-				if (v.player.status.lantern_off == 1) str += lantern_off_img;
-				if (v.player.status.wagon_off == 1) str += wagon_off_img;
+				if (v.status.pick_off == 1) str += pick_off_img;
+				if (v.status.lantern_off == 1) str += lantern_off_img;
+				if (v.status.wagon_off == 1) str += wagon_off_img;
 			}
 			str += '</li>';
 		});

@@ -56,12 +56,16 @@ class Board {
 		foreach($this->players as $player) {
 			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['id']);
 		}
+		
+		// Activate the first player
+		$this->ci->roles_m->next_turn();
 	}
 	
 	/**
 	 * Called everytime the ajax wants to update.
 	 */
 	public function update() {
+		$this->players = $this->ci->roles_m->get_current_room_players();
 		$this->deck = $this->ci->boards_m->get_deck();
 		$this->hand = $this->ci->boards_m->get_hand();
 	}

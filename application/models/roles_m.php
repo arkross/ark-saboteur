@@ -117,6 +117,24 @@ class Roles_m extends MY_Model {
 		return false;
 	}
 	
+	/**
+	 * Changes turn to the next player
+	 */
+	public function next_turn() {
+		$players = $this->get_current_room_players();
+		$next = 0;
+		for($i = 0; $i < count($players); $i++) {
+			if ($players[$i]['role']['active'] == 1) {
+				$this->add_status($players[$i]['id'], array('active' => 0));
+				$next = $i+1;
+				break;
+			}
+		}
+		if ($next == count($players)) $next = 0;
+		$next = $players[$next]['id'];
+		return $this->add_status($next, array('active' => 1));
+	}
+	
 	public function _create() {
 		$query = "CREATE TABLE IF NOT EXISTS `roles` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
