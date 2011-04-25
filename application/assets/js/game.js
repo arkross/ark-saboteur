@@ -37,7 +37,7 @@ jQuery(document).ready(function($) {
 		var str = '';
 		active = false;
 		$.each(data, function(i, v) {
-			str += '<li';
+			str += '<li id="player-'+v.id+'"';
 			if (v.role.active != undefined && v.role.active == 1) {
 				str += ' class="active"';
 				if (v.id == user_id) {
@@ -73,7 +73,6 @@ jQuery(document).ready(function($) {
 				cloned.attr('id', 'deck-' + v.id);
 				cloned.appendTo('#hand-cards');
 			});
-			reloadHandEvent();
 		}
 	}
 	
@@ -126,33 +125,47 @@ jQuery(document).ready(function($) {
 		}
 	);
 	
-	function reloadHandEvent() {
-		$("#hand-cards img").click(function(event) {
-			event.preventDefault();
+	$("#hand-cards img").live('click', function(event) {
+		event.preventDefault();
 
-			if (!active) return;
-			$("#hand-cards img").removeClass('selected');
-			$(this).addClass('selected');
-			state = CARD_CHOSEN;
-			playing_card = $(this).attr('id');
-			reloadTargetEvent();
-		});
-	}
+		if (!active) return;
+		$("#hand-cards img").removeClass('selected');
+		$(this).addClass('selected');
+		state = CARD_CHOSEN;
+		playing_card = $(this).attr('id');
+		reloadTargetEvent();
+	});
 	
-	function reloadTargetEvent() {
-		$("#discard-cards").click(function(event) {
-			event.preventDefault();
-			if (state != CARD_CHOSEN) return;
-			var card = playing_card.substr(5);
-			$.post('game/move', {
-				'deck_id': card,
-				'target':'discard'
-			},
-			function(data) {
-				
-			}, 'json');
-		});
-	}
+	$("#discard-cards").live('click', function(event) {
+		event.preventDefault();
+		if (state != CARD_CHOSEN) return;
+		var card = playing_card.substr(5);
+		$.post('game/move', {
+			'deck_id': card,
+			'target':'discard'
+		}, function(data) {
+			if (data != '0') {
+				messages(data);
+			}
+		}, 'json');
+	});
+	
+	$("#player-list li").live('click', function(event) {
+		event.preventDefault();
+		if(state != CARD_CHOSEN) return;
+		if (!$("img#"+playing_card).hasClass('target-player')) return;
+		var card = playing_card.substr(5);
+		var target = $(this).attr('id');
+		target = target.substr(7);
+		$.post('game/move', {
+			'deck_id': card,
+			'target': target
+		}, function(data) {
+			if (data != '0') {
+				messages(data);
+			}
+		}, 'json');
+	});
 	
 	var grid_x_count = 11;
 	var grid_y_count = 7;

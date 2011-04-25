@@ -24,6 +24,7 @@
 	$cards = all_cards();
 	foreach($cards as $card) {
 		echo '<img src="'.base_url().$card['photo'].'" class="card-'.$card['id'];
+		echo ' target-'.$card['effect']['target'];
 		echo '" title="'.$card['name'].'" />';
 	}
 	unset($cards);

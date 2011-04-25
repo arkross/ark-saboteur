@@ -48,12 +48,9 @@ class Cards_m extends MY_Model {
 	}
 	
 	public function get($primary_value) {
-		$card = $this->db
-			->where('id', $primary_value)
-			->get($this->_table)
-			->row_array();
+		$card = (array)parent::get($primary_value);
 		$card['type'] = $this->db
-			->where('id', $card->type)
+			->where('id', $card['type'])
 			->get('card_types')
 			->row_array();
 		$card['effect'] = unserialize($card['effect']);
@@ -210,6 +207,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'dest/31-Start',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11111]'
 				),
 				'description' => 'The start path card'
@@ -220,6 +218,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'dest/32-DestUpLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11001]'
 				),
 				'description' => 'A fake goal card'
@@ -230,6 +229,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'dest/32-DestUpRight',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11100]'
 				),
 				'description' => 'A fake goal card'
@@ -240,6 +240,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'dest/32-DestUpRightDownLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11111]'
 				),
 				'description' => 'The true goal card'
@@ -386,6 +387,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathRightLeft-x4',
 				'quantity' => 3,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[10101]'
 				)
 			),
@@ -395,6 +397,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpDown-x4',
 				'quantity' => 4,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11010]'
 				)
 			),
@@ -404,6 +407,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpLeft-x5',
 				'quantity' => 4,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11001]'
 				)
 			),
@@ -413,6 +417,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpRight-x5',
 				'quantity' => 5,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11100]'
 				)
 			),
@@ -422,6 +427,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpRightDown-x3',
 				'quantity' => 5,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11110]'
 				)
 			),
@@ -431,6 +437,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpRightLeft-x5',
 				'quantity' => 5,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11101]'
 				)
 			),
@@ -440,6 +447,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/41-PathUpRightDownLeft-x5',
 				'quantity' => 5,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[11111]'
 				)
 			),
@@ -451,6 +459,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedRight',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[00100]'
 				)
 			),
@@ -460,6 +469,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUp',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01000]'
 				)
 			),
@@ -469,6 +479,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedRightLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[00101]'
 				)
 			),
@@ -478,6 +489,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpDown',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01010]'
 				)
 			),
@@ -487,6 +499,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpRight',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01100]'
 				)
 			),
@@ -496,6 +509,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01001]'
 				)
 			),
@@ -505,6 +519,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpRightDown',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01110]'
 				)
 			),
@@ -514,6 +529,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpRightLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01101]'
 				)
 			),
@@ -523,6 +539,7 @@ class Cards_m extends MY_Model {
 				'photo' => 'deck/42-BlockedUpRightDownLeft',
 				'quantity' => 1,
 				'effect' => array(
+					'target' => 'maze',
 					'rules' => 'adj[01111]'
 				)
 			)

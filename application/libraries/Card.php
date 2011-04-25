@@ -19,24 +19,26 @@
  * @property Cards_m $cards_m
  */
 class Card {
-	protected $rules;
+	protected $rules = array();
 	var $distribution;
 
 	public function __construct() {
 		$this->ci =& get_instance();
 
 		$this->ci->load->config('card');
-		$this->rules = $this->ci->config->item('default_rules');
+//		$this->rules = $this->ci->config->item('default_rules');
 		$this->distribution = $this->ci->config->item('distribution');
 		$this->ci->load->model('cards_m');
+		$this->ci->load->model('roles_m');
 	}
 
 	public function play($card, $options = array()) {
 		$this->_parse_rules($card);
+		return $this->_run_rules($options);
 	}
 
 	private function _parse_rules($card) {
-		$type = $card['type'];
+		$type = $card['type']['name'];
 		
 		if (array_key_exists($type, $this->rules)) {
 			$this->rules = explode('|', $this->rules[$type]);
@@ -44,18 +46,20 @@ class Card {
 
 		$card_rule = explode('|', $card['effect']['rules']);
 		$this->rules = array_merge($this->rules, $card_rule);
-
+		$parsed = array();
 		foreach ($this->rules as &$rule) {
-			if (preg_match('/\[[a-zA-Z0-9]+\]/', $rule, $matches)) {
+			if (preg_match('/\[[a-zA-Z0-9_,]+\]/', $rule, $matches)) {
 			  $key = str_replace($matches[0], '', $rule);
 				$value = str_replace($key, '', $rule);
 				$value = str_replace('[', '', $value);
 				$value = str_replace(']', '', $value);
-				$rule[$key] = explode(',', $value);
+				$value = explode(',', $value);
+				$parsed = array_merge($parsed, array($key => $value));
 			} else {
 				$rule[$value] = '';
 			}
 		}
+		$this->rules = $parsed;
 	}
 
 	private function _run_rules($args = array()) {
@@ -64,6 +68,53 @@ class Card {
 			$success = ($success && $this->{$key}($value, $args));
 		}
 		return $success;
+	}
+	
+	private function not($args, $details = array()) {
+		if (is_array($args)) {
+			$success = false;
+			foreach($args as $arg) {
+				$success = $success || $this->not($arg, $details);
+			}
+			return $success;
+		}
+		if (!method_exists(__CLASS__, $args)) {
+			return !$this->has($args, $details);
+		}
+		return !$this->{$args}($details);
+	}
+	
+	private function has($args, $details = array()) {
+		if (is_array($args)) {
+			$success = false;
+			foreach($args as $arg) {
+				$success = $success || $this->has($arg, $details);
+			}
+			return $success;
+		}
+		$status = (array)$this->ci->roles_m->get_status($details['target']);
+		return (isset($status[$args]) && $status[$args]);
+	}
+	
+	private function add($args, $details = array()) {
+		if (is_array($args)) {
+			$success = false;
+			foreach($args as $arg) {
+				$success = $success || $this->add($arg, $details);
+			}
+			return $success;
+		}
+		$status = (array)$this->ci->roles_m->get_status($details['target']);
+		$status[$args] = 1;
+		return $this->ci->roles_m->add_status($details['target'], $status);
+	}
+	
+	private function remove($args) {
+		
+	}
+	
+	private function path($args) {
+		
 	}
 
 	public function build_deck() {

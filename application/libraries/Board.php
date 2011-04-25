@@ -71,8 +71,12 @@ class Board {
 	}
 	
 	public function move($deck_id, $options = array()) {
-		$card = (array)$this->ci->cards_m->get($deck_id);
-		return $this->ci->card->play($card, $options);
+		$deck = (array)$this->ci->boards_m->get($deck_id);
+		$card = $this->ci->cards_m->get($deck['card_id']);
+		if ($this->ci->card->play($card, $options)) {
+			$this->discard($deck_id);
+			return true;
+		}
 	}
 	
 	public function discard($deck_id) {
