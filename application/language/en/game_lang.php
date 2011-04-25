@@ -19,3 +19,6 @@ $lang['game.wait'] = 'Waiting';
 $lang['game.leave'] = 'Leave Game';
 $lang['game.start'] = 'Start';
 $lang['game.round'] = 'Round %s';
+
+$lang['game.discard'] = '%s discards a card';
+$lang['game.play_card'] = '%s plays a card';

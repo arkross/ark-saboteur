@@ -69,4 +69,20 @@ class Board {
 		$this->deck = $this->ci->boards_m->get_deck();
 		$this->hand = $this->ci->boards_m->get_hand();
 	}
+	
+	public function move($deck_id, $options = array()) {
+		$card = (array)$this->ci->cards_m->get($deck_id);
+		return $this->ci->card->play($card, $options);
+	}
+	
+	public function discard($deck_id) {
+		$card = (array)$this->ci->boards_m->get($deck_id);
+		$card['place'] = serialize(array('type' => 'discard'));
+		return $this->ci->boards_m->update($card['id'], $card);
+	}
+	
+	public function end_turn() {
+		$this->ci->boards_m->draw();
+		$this->ci->roles_m->next_turn();
+	}
 }

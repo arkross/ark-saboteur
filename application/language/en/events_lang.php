@@ -14,3 +14,6 @@
  */
 $lang['enter_room'] = '%s has entered %s';
 $lang['leave_room'] = '%s has left the room "%s"';
+
+$lang['start_game'] = 'Game started';
+$lang['start_round'] = 'Round %s begins';

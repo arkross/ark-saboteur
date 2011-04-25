@@ -62,11 +62,21 @@ class Game extends Server_Controller {
 	
 	/**
 	 * Submits a move
-	 * @param int $card_id
-	 * @param string $target 
 	 */
-	public function move($card_id, $target = 'discard') {
-		
+	public function move() {
+		if (empty($_POST)) return;
+		$deck_id = $this->input->post('deck_id');
+		$target = $this->input->post('target');
+		if ($target == 'discard') {
+			$success = $this->board->discard($deck_id);
+			$this->events_m->fire_event('game.discard', array($this->users_m->get_user()->name));
+		} else {
+			$success = $this->board->move();
+		}
+		if ($success) {
+			$this->board->end_turn();
+			echo '1';
+		}
 	}
 
 	/**
@@ -84,6 +94,7 @@ class Game extends Server_Controller {
 			$this->respond();
 			return;
 		}
+		$this->events_m->fire_event('start_game');
 		$this->start_round();
 	}
 
@@ -92,6 +103,7 @@ class Game extends Server_Controller {
 	 */
 	public function start_round() {
 		$this->rooms_m->set_round($this->rooms_m->get_round() + 1);
+		$this->events_m->fire_event('start_round', array($this->rooms_m->get_round()));
 		$this->board->prepare();
 	}
 

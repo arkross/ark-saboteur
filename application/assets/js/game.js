@@ -21,6 +21,8 @@ jQuery(document).ready(function($) {
 	const TARGET_CHOSEN = 3;
 	var state = WAITING;
 	
+	var playing_card;
+	
 	function update_actions(data) {
 		if (data != undefined && data != false) {
 			$("#role").html(data);
@@ -67,9 +69,11 @@ jQuery(document).ready(function($) {
 		if (data != undefined && data.hand != undefined) {
 			$('#hand-cards').html('');
 			$.each(data.hand, function(i, v) {
-				$('#all-cards img#card-'+v.card_id).clone(true).appendTo('#hand-cards');
+				var cloned = $('#all-cards img.card-'+v.card_id).clone(true);
+				cloned.attr('id', 'deck-' + v.id);
+				cloned.appendTo('#hand-cards');
 			});
-			reloadEvent();
+			reloadHandEvent();
 		}
 	}
 	
@@ -122,15 +126,31 @@ jQuery(document).ready(function($) {
 		}
 	);
 	
-	function reloadEvent() {
+	function reloadHandEvent() {
 		$("#hand-cards img").click(function(event) {
 			event.preventDefault();
 
 			if (!active) return;
-			console.log('current: '+this);
 			$("#hand-cards img").removeClass('selected');
 			$(this).addClass('selected');
 			state = CARD_CHOSEN;
+			playing_card = $(this).attr('id');
+			reloadTargetEvent();
+		});
+	}
+	
+	function reloadTargetEvent() {
+		$("#discard-cards").click(function(event) {
+			event.preventDefault();
+			if (state != CARD_CHOSEN) return;
+			var card = playing_card.substr(5);
+			$.post('game/move', {
+				'deck_id': card,
+				'target':'discard'
+			},
+			function(data) {
+				
+			}, 'json');
 		});
 	}
 	
