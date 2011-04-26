@@ -49,10 +49,10 @@ jQuery(document).ready(function($) {
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
 			}
-			if (v.role.status != undefined) {
-				if (v.status.pick_off == 1) str += pick_off_img;
-				if (v.status.lantern_off == 1) str += lantern_off_img;
-				if (v.status.wagon_off == 1) str += wagon_off_img;
+			if (v.role != undefined) {
+				if (v.role.pick_off == '1') str += pick_off_img;
+				if (v.role.lantern_off == '1') str += lantern_off_img;
+				if (v.role.wagon_off == '1') str += wagon_off_img;
 			}
 			str += '</li>';
 		});
@@ -133,7 +133,6 @@ jQuery(document).ready(function($) {
 		$(this).addClass('selected');
 		state = CARD_CHOSEN;
 		playing_card = $(this).attr('id');
-		reloadTargetEvent();
 	});
 	
 	$("#discard-cards").live('click', function(event) {

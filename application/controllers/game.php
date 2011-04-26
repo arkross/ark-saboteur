@@ -76,6 +76,7 @@ class Game extends Server_Controller {
 			$success = $this->board->move($deck_id, $args);
 		}
 		if ($success) {
+			$this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->name));
 			$this->board->end_turn();
 			echo '0';
 		} else {

@@ -20,6 +20,7 @@
  */
 class Card {
 	protected $rules = array();
+	protected $result = array();
 	var $distribution;
 
 	public function __construct() {
@@ -33,38 +34,42 @@ class Card {
 	}
 
 	public function play($card, $options = array()) {
-		$this->_parse_rules($card);
-		return $this->_run_rules($options);
+		$this->_parse($card, 'rules');
+		if ($this->_run($options, 'rules')) {
+			$this->_parse($card, 'result');
+			return $this->_run($options, 'result');
+		}
 	}
 
-	private function _parse_rules($card) {
+	private function _parse($card, $var = 'rules') {
 		$type = $card['type']['name'];
 		
-		if (array_key_exists($type, $this->rules)) {
-			$this->rules = explode('|', $this->rules[$type]);
+		if (array_key_exists($type, $this->$var)) {
+			$this->{$var} = explode('|', $this->{$var}[$type]);
 		}
 
-		$card_rule = explode('|', $card['effect']['rules']);
-		$this->rules = array_merge($this->rules, $card_rule);
+		$card_rule = explode('|', $card['effect'][$var]);
+		$this->{$var} = array_merge($this->{$var}, $card_rule);
 		$parsed = array();
-		foreach ($this->rules as &$rule) {
-			if (preg_match('/\[[a-zA-Z0-9_,]+\]/', $rule, $matches)) {
-			  $key = str_replace($matches[0], '', $rule);
-				$value = str_replace($key, '', $rule);
+		foreach ($this->{$var} as &$v) {
+			if (preg_match('/\[[a-zA-Z0-9_,]+\]/', $v, $matches)) {
+			  $key = str_replace($matches[0], '', $v);
+				$value = str_replace($key, '', $v);
 				$value = str_replace('[', '', $value);
 				$value = str_replace(']', '', $value);
 				$value = explode(',', $value);
 				$parsed = array_merge($parsed, array($key => $value));
 			} else {
-				$rule[$value] = '';
+				$v[$value] = '';
 			}
 		}
-		$this->rules = $parsed;
+		$this->{$var} = $parsed;
 	}
 
-	private function _run_rules($args = array()) {
+	private function _run($args = array(), $var = 'rules') {
 		$success = true;
-		foreach ($this->rules as $key => $value) {
+		print_r($this->{$var});
+		foreach ($this->{$var} as $key => $value) {
 			$success = ($success && $this->{$key}($value, $args));
 		}
 		return $success;
@@ -106,11 +111,16 @@ class Card {
 		}
 		$status = (array)$this->ci->roles_m->get_status($details['target']);
 		$status[$args] = 1;
+		echo 'adding status: '.$args;
 		return $this->ci->roles_m->add_status($details['target'], $status);
 	}
 	
-	private function remove($args) {
-		
+	private function remove($args, $details = array()) {
+		if (isset($args['target_status']))
+			$args = $args['target_status'];
+		$status = (array)$this->ci->roles_m->get_status($details['target']);
+		$status[$args] = 0;
+		return $this->ci->roles_m->add_status($details['target'], $status);
 	}
 	
 	private function path($args) {
