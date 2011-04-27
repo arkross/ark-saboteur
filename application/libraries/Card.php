@@ -116,9 +116,10 @@ class Card {
 	}
 	
 	private function remove($args, $details = array()) {
-		if (isset($args['target_status']))
-			$args = $args['target_status'];
-		if (is_array($args)) $args = $args[0];
+		print_r($details);
+		if (isset($details['target_status']))
+			$args = $details['target_status'];
+		elseif (is_array($args)) $args = $args[0];
 		$status = (array)$this->ci->roles_m->get_status($details['target']);
 		echo 'removing: '.$args;
 		$status[$args] = 0;

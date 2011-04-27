@@ -22,6 +22,54 @@ jQuery(document).ready(function($) {
 	var state = WAITING;
 	
 	var playing_card;
+	var target_status;
+	var card, target;
+	
+	$("#confirm-heal li").addClass('ui-widget-content');
+	$("#confirm-heal li img").live('click', function(event) {
+		event.preventDefault();
+		target_status = $(this).attr("title");
+		$.post('game/move', {
+				'deck_id': card,
+				'target': target,
+				'target_status': target_status
+			}, function(data) {
+				if (data != '0') {
+					messages(data);
+				}
+			}, 'json');
+		$("#confirm-heal").dialog("close");
+	});
+	
+	function showConfirmHeal(slug, target) {
+		$("#confirm-heal li").hide();
+		var heals = slug.split("-", 2);
+		var statuses = new Array();
+		$("li#player-"+target+" img").each(function(i, el) {
+			if ($(el).attr('title') != "") {
+				statuses.push($(el).attr('title').split("_", 1)[0]);
+			}
+		});
+		var inference = new Array();
+		$.each(statuses, function(i, v){
+			if (heals.indexOf(v) > -1) {
+				inference.push(v);
+			}
+		});
+		$.each(inference, function(i, v){
+			$("#confirm-heal li img[title=\""+v+"_off\"]").parent("li").show();
+		});
+		$("#confirm-heal").dialog({
+			modal: true
+		});
+	}
+
+	function get_slug(el) {
+		var classes = $(el).attr("class");
+		classes = classes.split(" ");
+		var slug = classes[2];
+		return slug.substr(5);
+	}
 	
 	function update_actions(data) {
 		if (data != undefined && data != false) {
@@ -30,7 +78,7 @@ jQuery(document).ready(function($) {
 	}
 	
 	function update_board(data) {
-		
+	  
 	}
 	
 	function update_players(data) {
@@ -153,17 +201,24 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		if(state != CARD_CHOSEN) return;
 		if (!$("img#"+playing_card).hasClass('target-player')) return;
-		var card = playing_card.substr(5);
-		var target = $(this).attr('id');
+		var slug = get_slug($("img#"+playing_card));
+		card = playing_card.substr(5);
+		target = $(this).attr('id');
 		target = target.substr(7);
-		$.post('game/move', {
-			'deck_id': card,
-			'target': target
-		}, function(data) {
-			if (data != '0') {
-				messages(data);
-			}
-		}, 'json');
+		if (slug == "pick-wagon-on" || 
+			slug == "pick-lantern-on" || 
+			slug == "wagon-lantern-on") {
+			showConfirmHeal(slug, target);
+		} else {
+			$.post('game/move', {
+				'deck_id': card,
+				'target': target
+			}, function(data) {
+				if (data != '0') {
+					messages(data);
+				}
+			}, 'json');
+		}
 	});
 	
 	var grid_x_count = 11;

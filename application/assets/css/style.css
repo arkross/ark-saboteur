@@ -319,6 +319,11 @@ footer {
 	cursor: pointer;
 }
 
+#confirm-heal li {
+	display: inline-block;
+	cursor: pointer;
+}
+
 /*  Chatbox  */
 #chatbox {
 	width: 173px;
