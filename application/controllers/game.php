@@ -71,12 +71,12 @@ class Game extends Server_Controller {
 		unset($args['deck_id']);
 		if ($target == 'discard') {
 			$success = $this->board->discard($deck_id);
-			$this->events_m->fire_event('game.discard', array($this->users_m->get_user()->name));
+			$this->events_m->fire_event('game.discard', array($this->users_m->get_user()->username));
 		} else {
 			$success = $this->board->move($deck_id, $args);
+			$this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->username));
 		}
 		if ($success) {
-			$this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->name));
 			$this->board->end_turn();
 			echo '0';
 		} else {

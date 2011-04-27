@@ -88,8 +88,10 @@ class Events_m extends MY_Model {
 			$record['sender'],
 			$record['room_title']
 		);
-		$type = unserialize($record['details']);
-		$type = $type['type'];
+		$other = unserialize($record['details']);
+		$type = $other['type'];
+		unset($other['type']);
+		$args = array_merge($args, $other);
 		return vsprintf(lang($type), $args);
 	}
 	
