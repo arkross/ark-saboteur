@@ -32,7 +32,7 @@ class Events_m extends MY_Model {
 		$data = array(
 			'sender_id' => $user_id,
 			'room_id' => $room_id,
-			'details' => serialize($details),
+			'details' => $details,
 			'created_at' => now()
 		);
 		return $this->insert($data);

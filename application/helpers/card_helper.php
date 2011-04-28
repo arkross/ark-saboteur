@@ -39,3 +39,12 @@ if (! function_exists('all_cards')) {
 		return $cards;
 	}
 }
+
+if (! function_exists('card_types')) {
+	function card_types() {
+		$ci =& get_instance();
+		$ci->load->model('cards_m');
+		$cards = (array)$ci->cards_m->card_types();
+		return $cards;
+	}
+}

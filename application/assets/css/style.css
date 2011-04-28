@@ -205,16 +205,18 @@ footer {
 	border: 2px solid white;
 	width: 473px;
 	height: 405px;
-	overflow: auto;
+	overflow: scroll;
+	white-space: nowrap;
 }
 
 .grid {
 	width: 42px;
 	height: 57px;
-	position: absolute;
+	display: inline-block;
 	border: 1px solid #808080;
 	margin-top: -1px;
 	margin-left: -1px;
+	margin-bottom: -3px;
 }
 
 #player-list ul {

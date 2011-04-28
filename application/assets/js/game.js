@@ -78,7 +78,42 @@ jQuery(document).ready(function($) {
 	}
 	
 	function update_board(data) {
-	  
+	  if (data == undefined) return;
+		var min = {x: 100, y: 100};
+		var max = {x: 0, y: 0};
+		$.each(data, function(i, c){
+			if (min.x > c.place.coords.x) {min.x = c.place.coords.x;}
+			if (min.y > c.place.coords.y) {min.y = c.place.coords.y;}
+			if (max.x < c.place.coords.x) {max.x = c.place.coords.x;}
+			if (max.y < c.place.coords.y) {max.y = c.place.coords.y;}
+		});
+		min.x = min.x -1;
+		min.y = min.y -1;
+		max.x = max.x +1;
+		max.y = max.y +1;
+		var grid_x_count = max.x - min.x;
+		var grid_y_count = max.y - min.y;
+		$("#board-game").html('');
+		for (var i = min.y; i <= max.y; i++) {
+			for (var j = min.x; j <= max.x; j++) {
+				$("#board-game").append('<div id="coord-'+j+'-'+i+'" class="grid"></div>');
+			}
+			$("#board-game").append('<div class="clear-both"></div>');
+		}
+		$.each(data, function(i, c){
+			var img = '';
+			if (c.place.face_down == '1') {
+				img = $("#card-types img.cardtype-"+c.type_name).clone();
+				img = img.attr('class', '');
+			} else {
+				img = $("#all-cards img.card-"+c.card_id).clone();
+			}
+			img.css('width', 42);
+			img.css('height', 57);
+			img.css('margin-bottom', '-2px');
+			console.log("placing "+img.attr('src')+" on "+c.place.coords.x+","+c.place.coords.y)
+			$("#coord-"+c.place.coords.x+"-"+c.place.coords.y).html(img);
+		});
 	}
 	
 	function update_players(data) {
@@ -148,6 +183,7 @@ jQuery(document).ready(function($) {
 		update_actions(data.actions);
 		update_players(data.players);
 		update_cards(data.cards);
+		update_board(data.maze);
 	});
 	
 	// Leave link click event
@@ -220,28 +256,4 @@ jQuery(document).ready(function($) {
 			}, 'json');
 		}
 	});
-	
-	var grid_x_count = 11;
-	var grid_y_count = 7;
-	var grid_width = 42;
-	var grid_height = 57;
-
-	for (var i = 0; i < grid_y_count; i++) {
-		for (var j = 0; j < grid_x_count; j++) {
-			$("#board-game").append('<div class="grid"></div>');
-		}
-	}
-
-	function setPosition() {
-		$("#board-game").children("div").each(function(index, el) {
-			var offset = $("#board-game").offset();
-			var left = index % grid_x_count;
-			var top = (index - left )/ grid_x_count;
-			$(this).css('top', top*(grid_height+1) + offset.top + 2);
-			$(this).css('left', left*(grid_width+1) + offset.left	+2);
-		});
-	}
-
-	$(window).resize(setPosition());
-	setPosition();
 });

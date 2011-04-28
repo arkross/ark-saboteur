@@ -33,7 +33,7 @@ class Roles_m extends MY_Model {
 		$data = array(
 			'player_id' => $user->id,
 			'room_id' => $room->id,
-			'role' => serialize($role)
+			'role' => $role
 		);
 		if (!$existing_role = $this->get_by('player_id', $user->id)) {
 			return $this->insert($data);
@@ -55,7 +55,6 @@ class Roles_m extends MY_Model {
 			->get($this->_table)
 			->row_array();
 		$role['role'] = array_merge(unserialize($role['role']), $status);
-		$role['role'] = serialize($role['role']);
 		return $this->update($role['id'], $role);
 	}
 

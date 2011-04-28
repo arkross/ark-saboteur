@@ -23,6 +23,7 @@ class Board {
 	var $hand = array();
 	var $discard = array();
 	var $roles = array();
+	var $maze = array();
 
 	var $players = array();
 	
@@ -57,6 +58,9 @@ class Board {
 			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['id']);
 		}
 		
+		// Prepares maze
+		$this->ci->boards_m->prepare_maze($this->ci->card->build_goal_cards());
+		
 		// Activate the first player
 		$this->ci->roles_m->next_turn();
 	}
@@ -68,6 +72,7 @@ class Board {
 		$this->players = $this->ci->roles_m->get_current_room_players();
 		$this->deck = $this->ci->boards_m->get_deck();
 		$this->hand = $this->ci->boards_m->get_hand();
+		$this->maze = $this->ci->boards_m->get_maze();
 	}
 	
 	public function move($deck_id, $options = array()) {

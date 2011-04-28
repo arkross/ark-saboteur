@@ -55,6 +55,8 @@ class Game extends Server_Controller {
 		$this->response['cards']['deck_count'] = count($this->board->deck);
 		$this->response['cards']['hand'] = $this->board->hand;
 		
+		$this->response['maze'] = $this->board->maze;
+		
 		$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
 		$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
 		$this->_respond();

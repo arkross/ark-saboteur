@@ -37,9 +37,57 @@ class Boards_m extends MY_Model {
 			$v['place']['type'] = 'player';
 			$v['place']['id'] = $player_id;
 			$v['place']['value'] = 'hand';
-			$v['place'] = serialize($v['place']);
 			$this->update($v['id'], $v);
 		}
+	}
+	
+	public function prepare_maze($cards) {
+		$data = array(
+			'room_id' => $this->session->userdata('room_id'),
+			'place' => array('type' => 'maze')
+		);
+		$goals = array(
+			array('x' => 48, 'y' => 40),
+			array('x' => 48, 'y' => 38),
+			array('x' => 48, 'y' => 42)
+		);
+
+		foreach($cards as $card) {
+			$data['card_id'] = $card['id'];
+			if ($card['type_name'] == 'start') {
+				$data['place']['coords'] = array('x' => 40, 'y' => 40);
+				$data['place']['face_down'] = 0;
+			} else {
+				$coord = array_pop($goals);
+				$data['place']['coords'] = $coord;
+				$data['place']['face_down'] = 1;
+			}
+			$this->insert($data);
+		}
+	}
+	
+	public function get_maze() {
+		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
+		$maze = array();
+		foreach ($all as &$card) {
+			$card = (array)$card;
+			$card['place'] = unserialize($card['place']);
+			if ($card['place']['type'] == 'maze') {
+				$card_id = $this->db
+					->where('id', $card['card_id'])
+					->limit(1)
+					->get('cards')
+					->row_array();
+				$card_type = $this->db
+					->where('id', $card_id['type'])
+					->limit(1)
+					->get('card_types')
+					->row_array();
+				$card['type_name'] = $card_type['name'];
+				array_push($maze, $card);
+			}
+		}
+		return $maze;
 	}
 	
 	/**
@@ -85,7 +133,7 @@ class Boards_m extends MY_Model {
 	public function set_deck($deck) {
 		$data = array(
 			'room_id' => $this->session->userdata('room_id'),
-			'place' => serialize(array('type' => 'deck'))
+			'place' => array('type' => 'deck')
 		);
 		foreach($deck as $card_id) {
 			$data['card_id'] = $card_id;

@@ -53,7 +53,7 @@ class Cards_m extends MY_Model {
 			->where('id', $card['type'])
 			->get('card_types')
 			->row_array();
-		$card['effect'] = unserialize($card['effect']);
+//		$card['effect'] = unserialize($card['effect']);
 //		$card['photo'] = unserialize($card['photo']);
 		return $card;
 	}
@@ -77,11 +77,13 @@ class Cards_m extends MY_Model {
 		$slug = preg_replace('/[^a-zA-Z0-9 ]/', '', $data['name']);
 		$data['slug'] = str_replace(' ', '-', strtolower($slug));
 		$data['photo'] = $this->root_path.$data['photo'].'.'.$this->pic_ext;
-		if (isset($data['effect']))
-			$data['effect'] = serialize($data['effect']);
 		$data['type'] = $type_id;
 		
 		return parent::insert($data);
+	}
+	
+	public function card_types() {
+		return $this->db->get('card_types')->result_array();
 	}
 	
 	public function _create() {
@@ -112,27 +114,27 @@ class Cards_m extends MY_Model {
 		$type = array(
 			array(
 				'name' => 'path',
-				'photo' => 'deck/40-BGOther'
+				'photo' => 'cards/deck/40-BGOther.jpg'
 			),
 			array(
 				'name' => 'action',
-				'photo' => 'deck/40-BGOther'
+				'photo' => 'cards/deck/40-BGOther.jpg'
 			),
 			array(
 				'name' => 'start',
-				'photo' => 'dest/30-BGStarDest'
+				'photo' => 'cards/dest/30-BGStarDest.jpg'
 			),
 			array(
 				'name' => 'goal',
-				'photo' => 'dest/30-BGStarDest'
+				'photo' => 'cards/dest/30-BGStarDest.jpg'
 			),
 			array(
 				'name' => 'gold',
-				'photo' => 'gold/gold-BG'
+				'photo' => 'cards/gold/gold-BG.jpg'
 			),
 			array(
 				'name' => 'role',
-				'photo' => 'char/20-BGCharacter'
+				'photo' => 'cards/char/20-BGCharacter.jpg'
 			)
 		);
 

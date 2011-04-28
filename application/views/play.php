@@ -26,9 +26,18 @@
 		echo '<img src="'.base_url().$card['photo'].'" class="card-'.$card['id'];
 		echo ' target-'.$card['effect']['target'];
 		echo ' slug-'.$card['slug'];
+		echo ' type-'.$card['type_name'];
 		echo '" title="'.$card['name'].'" />';
 	}
 	unset($cards);
+	?>
+</div>
+<div id="card-types" class="hide">
+	<?php
+	$cards = card_types();
+	foreach($cards as $card) {
+		echo '<img src="'.base_url().$card['photo'].'" class="cardtype-'.$card['name'].'" />';
+	}
 	?>
 </div>
 <div id="confirm-heal" class="hide" title="Select the status you want to heal">

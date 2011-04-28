@@ -157,4 +157,18 @@ class Card {
 		shuffle($rolecards);
 		return $rolecards;
 	}
+	
+	public function build_goal_cards() {
+		$cards = $this->ci->cards_m->get_cards('start');
+		$goals = $this->ci->cards_m->get_cards('goal');
+		shuffle($goals);
+		$cards = array_merge($cards, $goals);
+		$deck = array();
+		foreach($cards as $card) {
+			for ($i = 0; $i < $card['quantity']; ++$i) {
+				array_push($deck, $card);
+			}
+		}
+		return $deck;
+	}
 }
