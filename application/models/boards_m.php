@@ -41,6 +41,29 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
+	public function set_tile($deck_id, $coords, $optional = array()) {
+		$card = (array)$this->get($deck_id);
+		$card['place'] = array(
+			'type' => 'maze',
+			'coords' => $coords,
+			'face_down' => 0,
+		);
+		if (isset($optional['reversed']) && $optional['reversed']) {
+			$card['place']['reversed'] = 1;
+		}
+		return $this->update($card['id'], $card);
+	}
+	
+	public function get_tile($coords) {
+		$maze = $this->get_maze();
+		foreach($maze as $m) {
+			if ($m['place']['coords'] == $coords) {
+				return $m;
+			}
+		}
+		return false;
+	}
+	
 	public function prepare_maze($cards) {
 		$data = array(
 			'room_id' => $this->session->userdata('room_id'),

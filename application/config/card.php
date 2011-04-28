@@ -17,6 +17,11 @@ $config['default_rules'] = array(
 	'path' => 'not[occupied]'
 );
 
+$config['default_result'] = array(
+	'path' => 'occupy',
+	'action' => 'discard'
+);
+
 $config['distribution'] = array(
 	3 => array(
 		'saboteur' => 1,

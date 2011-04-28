@@ -104,3 +104,4 @@
 		<div id="deck-count">0</div>
 	</div>
 </div>
+<div id="peek" class="hide" title="Peek"></div>

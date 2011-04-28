@@ -96,7 +96,7 @@ jQuery(document).ready(function($) {
 		$("#board-game").html('');
 		for (var i = min.y; i <= max.y; i++) {
 			for (var j = min.x; j <= max.x; j++) {
-				$("#board-game").append('<div id="coord-'+j+'-'+i+'" class="grid"></div>');
+				$("#board-game").append('<div id="tile-'+j+'-'+i+'" class="grid"></div>');
 			}
 			$("#board-game").append('<div class="clear-both"></div>');
 		}
@@ -111,8 +111,7 @@ jQuery(document).ready(function($) {
 			img.css('width', 42);
 			img.css('height', 57);
 			img.css('margin-bottom', '-2px');
-			console.log("placing "+img.attr('src')+" on "+c.place.coords.x+","+c.place.coords.y)
-			$("#coord-"+c.place.coords.x+"-"+c.place.coords.y).html(img);
+			$("#tile-"+c.place.coords.x+"-"+c.place.coords.y).html(img);
 		});
 	}
 	
@@ -173,7 +172,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// Requests update for the whole game
-	$("#board-game").smartupdater({
+	$("#deck").smartupdater({
 		url: 'game/update',
 		minTimeout: 5000,
 		httpCache: true,
@@ -208,6 +207,17 @@ jQuery(document).ready(function($) {
 			}
 		}
 	);
+		
+	$("#hand-cards img").live('dblclick', function(event) {
+		event.preventDefault();
+		if ($(this).attr('reversed') == '1') {
+			$(this).rotate({angle:180, animateTo:360});
+			$(this).attr('reversed', '0');
+		} else {
+			$(this).rotate({angle:0, animateTo: 180});
+			$(this).attr('reversed', '1');
+		}
+	});
 	
 	$("#hand-cards img").live('click', function(event) {
 		event.preventDefault();
@@ -229,6 +239,31 @@ jQuery(document).ready(function($) {
 		}, function(data) {
 			if (data != '0') {
 				messages(data);
+			}
+		}, 'json');
+	});
+	
+	$("#board-game div").live('click', function(event){
+		event.preventDefault();
+		if (state != CARD_CHOSEN) return;
+		if (!$("img#"+playing_card).hasClass('target-maze')) return;
+		var slug = get_slug($("img#"+playing_card));
+		var reversed = $("img#"+playing_card).attr("reversed");
+		if (reversed == undefined) reversed = 0;
+		card = playing_card.substr(5);
+		target = $(this).attr('id');
+		target = target.substr(5);
+		
+		$.post('game/move', {
+			'deck_id': card,
+			'target': target,
+			'reversed': reversed
+		}, function(data) {
+			if (slug == "map") {
+				$("#peek").html(data);
+				$("#peek").dialog({
+					modal:true
+				});
 			}
 		}, 'json');
 	});

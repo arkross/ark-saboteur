@@ -21,13 +21,16 @@
 class Card {
 	protected $rules = array();
 	protected $result = array();
+	protected $default_rules = array();
+	protected $default_result = array();
 	var $distribution;
 
 	public function __construct() {
 		$this->ci =& get_instance();
 
 		$this->ci->load->config('card');
-//		$this->rules = $this->ci->config->item('default_rules');
+		$this->default_rules = $this->ci->config->item('default_rules');
+		$this->default_result = $this->ci->config->item('default_result');
 		$this->distribution = $this->ci->config->item('distribution');
 		$this->ci->load->model('cards_m');
 		$this->ci->load->model('roles_m');
@@ -43,12 +46,13 @@ class Card {
 
 	private function _parse($card, $var = 'rules') {
 		$type = $card['type']['name'];
-		
-		if (array_key_exists($type, $this->$var)) {
-			$this->{$var} = explode('|', $this->{$var}[$type]);
+		$default = 'default_'.$var;
+		if (array_key_exists($type, $this->{$default})) {
+			$this->{$var} = explode('|', $this->{$default}[$type]);
 		}
-
-		$card_rule = explode('|', $card['effect'][$var]);
+		$card_rule = array();
+		if (isset($card['effect'][$var]))
+			$card_rule = explode('|', $card['effect'][$var]);
 		$this->{$var} = array_merge($this->{$var}, $card_rule);
 		$parsed = array();
 		foreach ($this->{$var} as &$v) {
@@ -60,7 +64,7 @@ class Card {
 				$value = explode(',', $value);
 				$parsed = array_merge($parsed, array($key => $value));
 			} else {
-				$v[$value] = '';
+				$parsed = array_merge($parsed, array($v => ''));
 			}
 		}
 		$this->{$var} = $parsed;
@@ -68,9 +72,10 @@ class Card {
 
 	private function _run($args = array(), $var = 'rules') {
 		$success = true;
-		print_r($this->{$var});
+//		print_r($this->{$var});
 		foreach ($this->{$var} as $key => $value) {
 			$success = ($success && $this->{$key}($value, $args));
+			if (!$success) break;
 		}
 		return $success;
 	}
@@ -116,14 +121,62 @@ class Card {
 	}
 	
 	private function remove($args, $details = array()) {
-		print_r($details);
 		if (isset($details['target_status']))
 			$args = $details['target_status'];
 		elseif (is_array($args)) $args = $args[0];
 		$status = (array)$this->ci->roles_m->get_status($details['target']);
-		echo 'removing: '.$args;
 		$status[$args] = 0;
 		return $this->ci->roles_m->add_status($details['target'], $status);
+	}
+	
+	private function maze_not($args, $details = array()) {
+		return !$this->maze_is($args, $details);
+	}
+	
+	private function maze_is($args, $details = array()) {
+		$coords = explode('-', $args['target']);
+		$coords = array(
+			'x' => $coords[0],
+			'y' => $coords[1]
+		);
+		unset($coords[0]);
+		unset($coords[1]);
+		$tile = $this->ci->boards_m->get_tile($coords);
+		if (isset($tile)) return $tile['place']['type_name'];
+		else return false;
+	}
+	
+	private function occupied($args, $details = array()) {
+		if ($this->maze_is($args, $details)) return true;
+		return false;
+	}
+	
+	private function adj($args, $details = array()) {
+		$adj = str_split($args[0]);
+		
+		return true;
+	}
+	
+	private function occupy($args, $details = array()) {
+		$coords = explode('-', $details['target']);
+		$coords = array(
+			'x' => $coords[0],
+			'y' => $coords[1]
+		);
+		unset($coords[0]);
+		unset($coords[1]);
+		print_r($details);
+		return $this->ci->boards_m->set_tile($details['deck_id'], $coords, $details);
+	}
+	
+	private function peek($args, $details = array()) {
+		
+	}
+	
+	private function discard($args, $details) {
+		$card = (array)$this->ci->boards_m->get($details['deck_id']);
+		$card['place'] = array('type' => 'discard');
+		return $this->ci->boards_m->update($card['id'], $card);
 	}
 	
 	private function path($args) {

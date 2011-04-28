@@ -78,15 +78,12 @@ class Board {
 	public function move($deck_id, $options = array()) {
 		$deck = (array)$this->ci->boards_m->get($deck_id);
 		$card = $this->ci->cards_m->get($deck['card_id']);
-		if ($this->ci->card->play($card, $options)) {
-			$this->discard($deck_id);
-			return true;
-		}
+		return $this->ci->card->play($card, $options);
 	}
 	
 	public function discard($deck_id) {
 		$card = (array)$this->ci->boards_m->get($deck_id);
-		$card['place'] = serialize(array('type' => 'discard'));
+		$card['place'] = array('type' => 'discard');
 		return $this->ci->boards_m->update($card['id'], $card);
 	}
 	
