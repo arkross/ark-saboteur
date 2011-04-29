@@ -152,7 +152,43 @@ class Card {
 	}
 	
 	private function adj($args, $details = array()) {
+		$coords = explode('-', $details['target']);
+		$coords = array(
+			'x' => $coords[0],
+			'y' => $coords[1]
+		);
+		unset($coords[0]);
+		unset($coords[1]);
+		
+		// Takes the target's adj map
 		$adj = str_split($args[0]);
+		$adj = array_slice($adj, 1);
+		if (isset($details['reversed']) && $details['reversed']) {
+			array_push($adj, array_shift($adj));
+			array_push($adj, array_shift($adj));
+		}
+		
+		// Takes all neighboring cards
+		$neighbors = $this->ci->boards_m->get_adj($coords);
+		foreach($neighbors as &$n) {
+			if ($n === false) continue;
+			$n_adj = $n['card']['effect']['rules'];
+			$n_adj = str_replace('adj[', '', $n_adj);
+			$n_adj = str_replace(']', '', $n_adj);
+			$n_adj = str_split($n_adj);
+			$n_adj = array_slice($n_adj, 1);
+			if (isset($n['place']['reversed']) && $n['place']['reversed']) {
+				array_push($n_adj, array_shift($n_adj));
+				array_push($n_adj, array_shift($n_adj));
+			}
+			$n = $n_adj;
+		}
+		
+		// Match the adjacency
+		for ($i = 0; $i < count($adj); $i++) {
+			if ($neighbors[$i] === false) continue;
+			if ($adj[$i] !== $neighbors[$i][($i + 2) % 4]) return false;
+		}
 		
 		return true;
 	}

@@ -41,6 +41,13 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
+	/**
+	 * Sets tile at the specified coordinate
+	 * @param int $deck_id
+	 * @param Array $coords
+	 * @param Array $optional
+	 * @return true if tile set successfully
+	 */
 	public function set_tile($deck_id, $coords, $optional = array()) {
 		$card = (array)$this->get($deck_id);
 		$card['place'] = array(
@@ -54,6 +61,11 @@ class Boards_m extends MY_Model {
 		return $this->update($card['id'], $card);
 	}
 	
+	/**
+	 * Gets a tile at the specified coordinate
+	 * @param Array $coords
+	 * @return Mixed if exists, false otherwise 
+	 */
 	public function get_tile($coords) {
 		$maze = $this->get_maze();
 		foreach($maze as $m) {
@@ -64,6 +76,27 @@ class Boards_m extends MY_Model {
 		return false;
 	}
 	
+	/**
+	 * Gets current tile's neighbors
+	 * @param type $coords 
+	 */
+	public function get_adj($coords) {
+		$adjs = array();
+		array_push($adjs, $this->get_tile(array('x' => $coords['x'], 'y' => $coords['y']-1)));
+		array_push($adjs, $this->get_tile(array('x' => $coords['x']+1, 'y' => $coords['y'])));
+		array_push($adjs, $this->get_tile(array('x' => $coords['x'], 'y' => $coords['y']+1)));
+		array_push($adjs, $this->get_tile(array('x' => $coords['x']-1, 'y' => $coords['y'])));
+		foreach ($adjs as &$a) {
+			if ($a == false) continue;
+			$card = (array)$this->cards_m->get($a['card_id']);
+			$a['card'] = $card;
+		}
+		return $adjs;
+	}
+	
+	/*
+	 * Prepares maze, attaching start and goal cards
+	 */
 	public function prepare_maze($cards) {
 		$data = array(
 			'room_id' => $this->session->userdata('room_id'),
@@ -89,6 +122,10 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
+	/**
+	 * Gets the entire maze cards
+	 * @return array 
+	 */
 	public function get_maze() {
 		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
 		$maze = array();

@@ -105,3 +105,4 @@
 	</div>
 </div>
 <div id="peek" class="hide" title="Peek"></div>
+<div id="message" class="hide" title="Attention"></div>

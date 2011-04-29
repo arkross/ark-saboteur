@@ -21,6 +21,8 @@ jQuery(document).ready(function($) {
 	const TARGET_CHOSEN = 3;
 	var state = WAITING;
 	
+	var disabled = false;
+	
 	var playing_card;
 	var target_status;
 	var card, target;
@@ -111,6 +113,9 @@ jQuery(document).ready(function($) {
 			img.css('width', 42);
 			img.css('height', 57);
 			img.css('margin-bottom', '-2px');
+			if (c.place.reversed != undefined && c.place.reversed == '1') {
+				$(img).rotate(180);
+			}
 			$("#tile-"+c.place.coords.x+"-"+c.place.coords.y).html(img);
 		});
 	}
@@ -118,6 +123,7 @@ jQuery(document).ready(function($) {
 	function update_players(data) {
 		var str = '';
 		active = false;
+		disabled = false;
 		$.each(data, function(i, v) {
 			str += '<li id="player-'+v.id+'"';
 			if (v.role.active != undefined && v.role.active == 1) {
@@ -132,9 +138,18 @@ jQuery(document).ready(function($) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
 			}
 			if (v.role != undefined) {
-				if (v.role.pick_off == '1') str += pick_off_img;
-				if (v.role.lantern_off == '1') str += lantern_off_img;
-				if (v.role.wagon_off == '1') str += wagon_off_img;
+				if (v.role.pick_off == '1') {
+					str += pick_off_img;
+					if (v.id == user_id) disabled = true;
+				}
+				if (v.role.lantern_off == '1') {
+					str += lantern_off_img;
+					if (v.id == user_id) disabled = true;
+				}
+				if (v.role.wagon_off == '1') {
+					str += wagon_off_img;
+					if (v.id == user_id) disabled = true;
+				}
 			}
 			str += '</li>';
 		});
@@ -207,7 +222,8 @@ jQuery(document).ready(function($) {
 			}
 		}
 	);
-		
+	
+	// Rotate hand cards
 	$("#hand-cards img").live('dblclick', function(event) {
 		event.preventDefault();
 		if ($(this).attr('reversed') == '1') {
@@ -219,6 +235,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 	
+	// Select hand cards
 	$("#hand-cards img").live('click', function(event) {
 		event.preventDefault();
 
@@ -229,6 +246,7 @@ jQuery(document).ready(function($) {
 		playing_card = $(this).attr('id');
 	});
 	
+	// Targets Discard pile
 	$("#discard-cards").live('click', function(event) {
 		event.preventDefault();
 		if (state != CARD_CHOSEN) return;
@@ -243,11 +261,17 @@ jQuery(document).ready(function($) {
 		}, 'json');
 	});
 	
+	// Targets Maze
 	$("#board-game div").live('click', function(event){
 		event.preventDefault();
 		if (state != CARD_CHOSEN) return;
 		if (!$("img#"+playing_card).hasClass('target-maze')) return;
 		var slug = get_slug($("img#"+playing_card));
+		if (disabled && slug != 'map' && slug != 'road-off') {
+			$("#message").html("You are currently disabled.");
+			$("#message").dialog({modal: true});
+			return;
+		}
 		var reversed = $("img#"+playing_card).attr("reversed");
 		if (reversed == undefined) reversed = 0;
 		card = playing_card.substr(5);
@@ -268,6 +292,7 @@ jQuery(document).ready(function($) {
 		}, 'json');
 	});
 	
+	// Targets player
 	$("#player-list li").live('click', function(event) {
 		event.preventDefault();
 		if(state != CARD_CHOSEN) return;
