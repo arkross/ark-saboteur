@@ -103,7 +103,7 @@ class Card {
 		if (!method_exists(__CLASS__, $args)) {
 			return !$this->has($args, $details);
 		}
-		return !$this->{$args}($details);
+		return !$this->{$args}(array(), $details);
 	}
 	
 	private function has($args, $details = array()) {
@@ -183,6 +183,13 @@ class Card {
 		$neighbors = $this->ci->boards_m->get_adj($coords);
 		foreach($neighbors as &$n) {
 			if ($n === false) continue;
+			
+			// If it's neighboring face down goal card, don't count it as adjacent.
+			if ($n['place']['face_down']) {
+				$n = false;
+				continue;
+			}
+			
 			$n_adj = $n['card']['effect']['rules'];
 			$n_adj = str_replace('adj[', '', $n_adj);
 			$n_adj = str_replace(']', '', $n_adj);
@@ -211,7 +218,6 @@ class Card {
 		$coords = array('x' => $coords[0], 'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
-		print_r($details);
 		return $this->ci->boards_m->set_tile($details['deck_id'], $coords, $details);
 	}
 	
@@ -239,10 +245,6 @@ class Card {
 		$card = (array)$this->ci->boards_m->get($details['deck_id']);
 		$card['place'] = array('type' => 'discard');
 		return $this->ci->boards_m->update($card['id'], $card);
-	}
-	
-	private function path($args) {
-		
 	}
 
 	public function build_deck() {

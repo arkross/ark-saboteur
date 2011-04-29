@@ -144,6 +144,7 @@ class Boards_m extends MY_Model {
 					->get('card_types')
 					->row_array();
 				$card['type_name'] = $card_type['name'];
+				$card['card_detail'] = $card_id;
 				array_push($maze, $card);
 			}
 		}

@@ -34,6 +34,7 @@
  * 
  * @property Card $card
  * @property Board $board
+ * @property Sabo_Tile $sabo_tile
  */
 class MY_Controller extends CI_Controller {
 	

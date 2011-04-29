@@ -78,7 +78,9 @@ class Board {
 	public function move($deck_id, $options = array()) {
 		$deck = (array)$this->ci->boards_m->get($deck_id);
 		$card = $this->ci->cards_m->get($deck['card_id']);
-		return $this->ci->card->play($card, $options);
+		$return = $this->ci->card->play($card, $options);
+		$this->check_path();
+		return $return;
 	}
 	
 	public function discard($deck_id) {
@@ -90,5 +92,35 @@ class Board {
 	public function end_turn() {
 		$this->ci->boards_m->draw();
 		$this->ci->roles_m->next_turn();
+	}
+	
+	private function check_path() {
+		$maze = $this->ci->boards_m->get_maze();
+		$mdata = array();
+		$limit = array(
+			'min' => array('x' => 100, 'y' => 100),
+			'max' => array('x' => 0, 'y' => 0)
+		);
+		foreach($maze as $m) {
+			$m['card_detail']['effect'] = unserialize($m['card_detail']['effect']);
+			$adj = $m['card_detail']['effect']['rules'];
+			$adj = str_replace('adj[', '', $adj);
+			$adj = str_replace(']', '', $adj);
+			$adj = str_split($adj);
+			if ($limit['min']['x'] > $m['place']['coords']['x']) $limit['min']['x'] = $m['place']['coords']['x'];
+			if ($limit['min']['y'] > $m['place']['coords']['y']) $limit['min']['y'] = $m['place']['coords']['y'];
+			if ($limit['max']['x'] < $m['place']['coords']['x']) $limit['max']['x'] = $m['place']['coords']['x'];
+			if ($limit['max']['y'] < $m['place']['coords']['y']) $limit['max']['y'] = $m['place']['coords']['y'];
+			$data = array(
+				'card_id' => $m['card_id'],
+				'card_type' => $m['type_name'],
+				'adj' => $adj,
+				'coords' => $m['place']['coords'],
+				'reversed' => isset($m['place']['reversed']) ? $m['place']['reversed']: 0,
+				'face_down' => isset($m['place']['face_down']) ? $m['place']['face_down']: 0
+			);
+			array_push($mdata, $data);
+		}
+		$tree = new Sabo_Tree($mdata);
 	}
 }

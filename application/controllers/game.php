@@ -77,7 +77,8 @@ class Game extends Server_Controller {
 			$success = $this->board->move($deck_id, $args);
 		}
 		if ($success['response'] == true) {
-			if ($target != 'discard') $this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->username));
+			if ($target != 'discard')
+				$this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->username));
 			$this->board->end_turn();
 		}
 		echo json_encode($success);
