@@ -34,8 +34,9 @@ jQuery(document).ready(function($) {
 				'target': target,
 				'target_status': target_status
 			}, function(data) {
-				if (data != '0') {
-					messages(data);
+				if (data.response != true) {
+					$("#message").html("Failed to discard!" + data.error);
+					$("#message").dialog({modal:true});
 				}
 			}, 'json');
 		$("#confirm-heal").dialog("close");
@@ -280,9 +281,8 @@ jQuery(document).ready(function($) {
 			'target': target,
 			'reversed': reversed
 		}, function(data) {
-			
 			if (slug == "map") {
-				$("#peek").html(data);
+				$("#peek").html('<img src="'+data.error+'" />');
 				$("#peek").dialog({modal:true});
 			} else {
 				if (data.response != true) {

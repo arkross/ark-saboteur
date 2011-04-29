@@ -146,17 +146,22 @@ class Card {
 	}
 	
 	private function maze_is($args, $details = array()) {
-		$coords = explode('-', $args['target']);
+		$coords = explode('-', $details['target']);
 		$coords = array('x' => $coords[0],	'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
 		$tile = $this->ci->boards_m->get_tile($coords);
-		if (isset($tile)) return $tile['place']['type_name'];
+		if (isset($tile) && $tile['type_name'] == $args[0]) return true;
 		else return false;
 	}
 	
 	private function occupied($args, $details = array()) {
-		if ($this->maze_is($args, $details)) return true;
+		$coords = explode('-', $details['target']);
+		$coords = array('x' => $coords[0],	'y' => $coords[1]);
+		unset($coords[0]);
+		unset($coords[1]);
+		$tile = $this->ci->boards_m->get_tile($coords);
+		if ($tile) return true;
 		return false;
 	}
 	
@@ -211,8 +216,23 @@ class Card {
 	}
 	
 	private function peek($args, $details = array()) {
-		$target = $details['target'];
-		
+		$coords = explode('-', $details['target']);
+		$coords = array('x' => $coords[0],	'y' => $coords[1]);
+		unset($coords[0]);
+		unset($coords[1]);
+		$card = $this->ci->boards_m->get_tile($coords);
+		$card = $this->ci->cards_m->get($card['card_id']);
+		$this->error = base_url().$card['photo'];
+		return true;
+	}
+	
+	private function maze_remove($args, $details = array()) {
+		$coords = explode('-', $details['target']);
+		$coords = array('x' => $coords[0],	'y' => $coords[1]);
+		unset($coords[0]);
+		unset($coords[1]);
+		$card = $this->ci->boards_m->get_tile($coords);
+		return $this->discard($args, array('deck_id' => $card['id']));
 	}
 	
 	private function discard($args, $details) {
