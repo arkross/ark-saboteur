@@ -23,6 +23,9 @@ class Card {
 	protected $result = array();
 	protected $default_rules = array();
 	protected $default_result = array();
+	
+	var $error = '';
+	var $response = true;
 	var $distribution;
 
 	public function __construct() {
@@ -38,9 +41,11 @@ class Card {
 
 	public function play($card, $options = array()) {
 		$this->_parse($card, 'rules');
-		if ($this->_run($options, 'rules')) {
+		if (($this->response = $this->_run($options, 'rules')) === true) {
 			$this->_parse($card, 'result');
-			return $this->_run($options, 'result');
+			return array('response'=>$this->_run($options, 'result'), 'error' => $this->error);
+		} else {
+			return array('response' => $this->response, 'error' => $this->error);
 		}
 	}
 
@@ -75,7 +80,14 @@ class Card {
 //		print_r($this->{$var});
 		foreach ($this->{$var} as $key => $value) {
 			$success = ($success && $this->{$key}($value, $args));
-			if (!$success) break;
+			if (!$success) {
+				if ($key == 'not') {
+					$this->error = lang('error.not.'.$value[0]);
+				} else {
+					$this->error = lang('error.'.$key);
+				}
+				break;
+			}
 		}
 		return $success;
 	}
@@ -135,10 +147,7 @@ class Card {
 	
 	private function maze_is($args, $details = array()) {
 		$coords = explode('-', $args['target']);
-		$coords = array(
-			'x' => $coords[0],
-			'y' => $coords[1]
-		);
+		$coords = array('x' => $coords[0],	'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
 		$tile = $this->ci->boards_m->get_tile($coords);
@@ -153,10 +162,7 @@ class Card {
 	
 	private function adj($args, $details = array()) {
 		$coords = explode('-', $details['target']);
-		$coords = array(
-			'x' => $coords[0],
-			'y' => $coords[1]
-		);
+		$coords = array('x' => $coords[0],	'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
 		
@@ -185,20 +191,19 @@ class Card {
 		}
 		
 		// Match the adjacency
+		$success = false;
 		for ($i = 0; $i < count($adj); $i++) {
 			if ($neighbors[$i] === false) continue;
 			if ($adj[$i] !== $neighbors[$i][($i + 2) % 4]) return false;
+			elseif($adj[$i] == 1) $success = true;
 		}
 		
-		return true;
+		return $success;
 	}
 	
 	private function occupy($args, $details = array()) {
 		$coords = explode('-', $details['target']);
-		$coords = array(
-			'x' => $coords[0],
-			'y' => $coords[1]
-		);
+		$coords = array('x' => $coords[0], 'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
 		print_r($details);
@@ -206,6 +211,7 @@ class Card {
 	}
 	
 	private function peek($args, $details = array()) {
+		$target = $details['target'];
 		
 	}
 	

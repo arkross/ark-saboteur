@@ -84,7 +84,7 @@ class Board {
 	public function discard($deck_id) {
 		$card = (array)$this->ci->boards_m->get($deck_id);
 		$card['place'] = array('type' => 'discard');
-		return $this->ci->boards_m->update($card['id'], $card);
+		return array('response' => $this->ci->boards_m->update($card['id'], $card), 'error' => '');
 	}
 	
 	public function end_turn() {

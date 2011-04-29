@@ -13,8 +13,6 @@
  */
 
 jQuery(document).ready(function($) {
-	var active = false;
-	
 	const WAITING = 0;
 	const READY = 1;
 	const CARD_CHOSEN = 2;
@@ -93,8 +91,6 @@ jQuery(document).ready(function($) {
 		min.y = min.y -1;
 		max.x = max.x +1;
 		max.y = max.y +1;
-		var grid_x_count = max.x - min.x;
-		var grid_y_count = max.y - min.y;
 		$("#board-game").html('');
 		for (var i = min.y; i <= max.y; i++) {
 			for (var j = min.x; j <= max.x; j++) {
@@ -122,14 +118,13 @@ jQuery(document).ready(function($) {
 	
 	function update_players(data) {
 		var str = '';
-		active = false;
+		state = WAITING;
 		disabled = false;
 		$.each(data, function(i, v) {
 			str += '<li id="player-'+v.id+'"';
 			if (v.role.active != undefined && v.role.active == 1) {
 				str += ' class="active"';
 				if (v.id == user_id) {
-					active = true;
 					state = READY;
 				}
 			}
@@ -238,8 +233,8 @@ jQuery(document).ready(function($) {
 	// Select hand cards
 	$("#hand-cards img").live('click', function(event) {
 		event.preventDefault();
-
-		if (!active) return;
+		console.log(state);	
+		if (state == WAITING) return;
 		$("#hand-cards img").removeClass('selected');
 		$(this).addClass('selected');
 		state = CARD_CHOSEN;
@@ -251,12 +246,14 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		if (state != CARD_CHOSEN) return;
 		var card = playing_card.substr(5);
+		state = TARGET_CHOSEN;
 		$.post('game/move', {
 			'deck_id': card,
 			'target':'discard'
 		}, function(data) {
-			if (data != '0') {
-				messages(data);
+			if (data.response != true) {
+				$("#message").html("Failed to discard!" + data.error);
+				$("#message").dialog({modal:true});
 			}
 		}, 'json');
 	});
@@ -277,17 +274,21 @@ jQuery(document).ready(function($) {
 		card = playing_card.substr(5);
 		target = $(this).attr('id');
 		target = target.substr(5);
-		
+		state = TARGET_CHOSEN;
 		$.post('game/move', {
 			'deck_id': card,
 			'target': target,
 			'reversed': reversed
 		}, function(data) {
+			
 			if (slug == "map") {
 				$("#peek").html(data);
-				$("#peek").dialog({
-					modal:true
-				});
+				$("#peek").dialog({modal:true});
+			} else {
+				if (data.response != true) {
+					$("#message").html("Failed to Move! "+data.error);
+					$("#message").dialog({modal:true});
+				}
 			}
 		}, 'json');
 	});
@@ -301,6 +302,7 @@ jQuery(document).ready(function($) {
 		card = playing_card.substr(5);
 		target = $(this).attr('id');
 		target = target.substr(7);
+		state = TARGET_CHOSEN;
 		if (slug == "pick-wagon-on" || 
 			slug == "pick-lantern-on" || 
 			slug == "wagon-lantern-on") {
@@ -310,8 +312,9 @@ jQuery(document).ready(function($) {
 				'deck_id': card,
 				'target': target
 			}, function(data) {
-				if (data != '0') {
-					messages(data);
+				if (data.response != true) {
+					$("#message").html("Failed to Disable / Heal! "+data.error);
+					$("#message").dialog({modal:true});
 				}
 			}, 'json');
 		}
