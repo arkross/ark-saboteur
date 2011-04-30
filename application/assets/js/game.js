@@ -174,12 +174,20 @@ jQuery(document).ready(function($) {
 			$("#playing").html(data);
 		}
 	}
+	
+	function update_winner(data) {
+		if (data == undefined) return;
+		$("#message").html(data);
+		$("#message").dialog({modal:true});
+	}
 
 	$("#playing").click(function(event) {
 		event.preventDefault();
-		$.post('game/start_game', '', function(data){
-			$("#board-game").smartupdaterRestart();
-		}, 'json');
+		if (is_creator) {
+			$.post('game/start_game', '', function(data){
+				$("#board-game").smartupdaterRestart();
+			}, 'json');
+		}
 	});
 	
 	// Requests update for the whole game
@@ -194,6 +202,7 @@ jQuery(document).ready(function($) {
 		update_players(data.players);
 		update_cards(data.cards);
 		update_board(data.maze);
+		update_winner(data.winner);
 	});
 	
 	// Leave link click event

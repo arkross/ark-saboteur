@@ -19,3 +19,6 @@ $lang['start_game'] = 'Game started';
 $lang['start_round'] = '%s in %s begins round %s';
 $lang['game.discard'] = '%s in %s discards a card';
 $lang['game.play_card'] = '%s in %s plays a card';
+
+$lang['game.saboteur_win'] = 'Saboteurs have won the round!';
+$lang['game.gold-digger_win'] = 'Gold Diggers have won the round!!';

@@ -47,6 +47,17 @@ class Boards_m extends MY_Model {
 		return $this->update($card['id'], $card);
 	}
 	
+	public function goal_opened($slug = 'gold-goal') {
+		$card = $this->cards_m->get_by('slug', $slug);
+		$ingame_card = $this->db
+			->where('room_id', $this->session->userdata('room_id'))
+			->where('card_id', $card->id)
+			->get($this->_table)
+			->row_array();
+		$ingame_card['place'] = unserialize($ingame_card['place']);
+		return $ingame_card['place']['face_down'] == 0;
+	}
+	
 	/**
 	 * Sets tile at the specified coordinate
 	 * @param int $deck_id
@@ -161,7 +172,8 @@ class Boards_m extends MY_Model {
 	 * Gets hand cards of the current player
 	 * @return Mixed array of card records
 	 */
-	public function get_hand() {
+	public function get_hand($player_id = null) {
+		if ($player_id === null) $player_id = $this->session->userdata('user_id');
 		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
 		$hand = array();
 		foreach ($all as $card) {
@@ -169,7 +181,7 @@ class Boards_m extends MY_Model {
 			$card['place'] = unserialize($card['place']);
 			if (isset($card['place']['value']) && 
 				$card['place']['value'] == 'hand' &&
-				$card['place']['id'] == $this->session->userdata('user_id')) {
+				$card['place']['id'] == $player_id) {
 				array_push($hand, $card);
 			}
 		}

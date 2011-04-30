@@ -14,6 +14,7 @@
  */
 ?>
 <script type="text/javascript">
+	var is_creator =  <?php echo $is_creator; ?>;
 	var gold_img = '<?php echo image('gold.png'); ?>';
 	var pick_off_img = '<?php echo image('hoeoff.png', null, array('title' => 'pick_off')); ?>';
 	var lantern_off_img = '<?php echo image('lampoff.png', null, array('title' => 'lantern_off')); ?>';

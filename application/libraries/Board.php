@@ -26,6 +26,7 @@ class Board {
 	var $maze = array();
 
 	var $players = array();
+	var $win = '';
 	
 	public function __construct() {
 		$this->ci =& get_instance();
@@ -71,8 +72,25 @@ class Board {
 	public function update() {
 		$this->players = $this->ci->roles_m->get_current_room_players();
 		$this->deck = $this->ci->boards_m->get_deck();
-		$this->hand = $this->ci->boards_m->get_hand();
+		
+		// Checks whether hand cards of all players have been depleted
+		$hands = array();
+		$sabo_win = false && (count($this->deck) ? true : false);
+		foreach($this->players as $player) {
+			$hands[$player['id']] = $this->ci->boards_m->get_hand($player['id']);
+			$sabo_win = $sabo_win && (count($hands[$player['id']]) ? true : false);
+		}
+		if ($sabo_win) {
+			$this->win = 'saboteur';
+		}
+		
+		// Checks whether the goal card has been reached
 		$this->maze = $this->ci->boards_m->get_maze();
+		if (count($this->maze) && $this->ci->boards_m->goal_opened()) {
+			$this->win = 'gold-digger';
+		}
+		
+		$this->hand = $this->ci->boards_m->get_hand();
 	}
 	
 	public function move($deck_id, $options = array()) {

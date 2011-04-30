@@ -29,6 +29,7 @@ class Play extends Client_Controller {
 	}
 
 	function index() {
+		$this->data['is_creator'] = $this->roles_m->is_creator() ? 'true' : 'false';
 		$this->template
 			->append_metadata(js('jquery/smartupdater-3.0.02beta.js'))
 			->append_metadata(js('jquery/jQueryRotateCompressed.js'))
