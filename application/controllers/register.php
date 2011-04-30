@@ -66,9 +66,13 @@ class Register extends Client_Controller {
 				$body .= '<br /><br />If you receive this email by mistake, please ignore and delete this message.';
 				$this->email->message($body);
 				if ($this->email->send()) {
-					$this->template->build('register', $this->data);
+					$this->template
+						->title('Registration')
+						->build('register', $this->data);
 				} else {
-					$this->template->build('register_failed', $this->data);
+					$this->template
+						->title('Registration Failure')
+						->build('register_failed', $this->data);
 				}
 			}
 		} else {

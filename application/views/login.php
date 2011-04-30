@@ -33,9 +33,25 @@ if (isset($messages)) echo $messages;
 	</fieldset>
 </form>
 </div>
-<article class="col_7 col">
+<article class="col_10 col">
 	<h2>About Saboteur Card Game</h2>
 	<p>Saboteur is a mining-themed card game, designed by Frederic Moyersoen and published in 2004 by Z-Man Games.</p>
 	<p>I can't say much about the rules. If you're new to Saboteur Card Game, you can read all about the rules <?php echo anchor(base_url().'Saboteur_US_Rules.pdf', 'here'); ?>.</p>
+</article>
+<article class="col_10 col">
+	<h2>What the players say</h2>
+	<?php
+if (isset($comments) && count($comments)) :
+	foreach($comments as $c) :
+?>
+<div class="comment-block">
+	<p class="comment-prefix"><span class="comment-author"><?php echo $c['username']; ?></span> said:</p>
+	<p class="comment-content"><?php echo $c['content']; ?></p>
+	<address><?php echo standard_date('DATE_RFC850', $c['created_at']); ?></address>
+</div>
+<?php
+	endforeach;
+endif;
+?>
 </article>
 <br class="clear" />

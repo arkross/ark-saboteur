@@ -15,10 +15,10 @@
 ?>
 <nav id="menu" class="left">
 	<ul>
-		<li><?php echo anchor(base_url(), lang('menu.home')); ?></li>
-		<li><a href="#"><?php echo lang('menu.comments'); ?></a></li>
-		<li><?php echo anchor('http://fredericmoyersoen.blogspot.com/', lang('menu.author')); ?></li>
-		<li><?php echo anchor('http://www.arkross.com', lang('menu.developer')); ?></li>
-		<li><?php echo anchor(base_url().'Saboteur_US_Rules.pdf', lang('menu.help')); ?></li>
+		<li><?php echo anchor(base_url(), lang('menu.home'), array('rel'=>'index')); ?></li>
+		<li><?php echo anchor(base_url().'comments', lang('menu.comments'), array('target' => '_blank', 'rel' => 'archives')); ?></li>
+		<li><?php echo anchor('http://fredericmoyersoen.blogspot.com/', lang('menu.author'), array('target' => '_blank', 'rel' => 'external')); ?></li>
+		<li><?php echo anchor('http://www.arkross.com', lang('menu.developer'), array('target' => '_blank', 'rel' => 'author')); ?></li>
+		<li><?php echo anchor(base_url().'Saboteur_US_Rules.pdf', lang('menu.help'), array('target' => '_blank', 'rel' => 'external')); ?></li>
 	</ul>
 </nav>

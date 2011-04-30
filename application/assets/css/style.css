@@ -426,3 +426,30 @@ footer {
 	display: block;
 	font-weight: bold;
 }
+
+/* Comments Page */
+.comment-block {
+	border-bottom: 1px solid white;
+}
+
+.comment-block address {
+	margin: 0px 0px 5px 0px;
+}
+
+.comment-block, .comment-content, .comment-prefix {
+	margin: 0px;
+	padding: 0px;
+	margin-top: 5px;
+}
+
+.comment-author {
+	color: #f6c709;
+}
+
+.comment-content {
+	margin-bottom: 5px;
+}
+
+#comment-form {
+	margin-top: 10px;
+}

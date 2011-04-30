@@ -57,7 +57,7 @@ class Client_Controller extends MY_Controller {
   }
 
 	function _check_access() {
-		$ignored_pages = array('login', 'register');
+		$ignored_pages = array('login', 'register', 'comments');
 
 		$current_page = $this->uri->segment(1, 'login');
 
