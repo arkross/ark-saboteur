@@ -30,11 +30,15 @@ class Sabo_Tile {
 	
 	var $coords = array();
 	var $type = '';
+	var $deck_id = 0;
+	var $face_down = false;
 	
 	function __construct($data) {
 		$adj = $data['adj'];
 		$this->coords = $data['coords'];
 		$this->type = $data['card_type'];
+		$this->deck_id = $data['deck_id'];
+		$this->face_down = $data['face_down'];
 		$this->_core = $adj[0];
 		$adj = array_slice($adj, 1);
 		if (isset($data['reversed']) && $data['reversed']) {
@@ -45,6 +49,24 @@ class Sabo_Tile {
 		$this->_right = $adj[1];
 		$this->_down = $adj[2];
 		$this->_left = $adj[3];
+	}
+	
+	function is_deadend() {
+		return $this->_core == 0;
+	}
+	
+	function is_goal() {
+		return $this->type == 'goal';
+	}
+	
+	function allowed_dir() {
+		$dir = array('up', 'right', 'down', 'left');
+		$allowed = array();
+		foreach ($dir as $d) {
+			$allow = '_'.$d;
+			if ($this->{$allow}) array_push($allowed, $d);
+		}
+		return $allowed;
 	}
 	
 	function str_coord($optional = 'current') {
@@ -59,10 +81,4 @@ class Sabo_Tile {
 		if ($optional == 'left')
 			return ($this->coords['x']-1).','.$this->coords['y'];
 	}
-	
-//	function __set($name, &$value) {
-//		if ($this->_{$name}) {
-//			$this->{$name} = $value;
-//		}
-//	}
 }

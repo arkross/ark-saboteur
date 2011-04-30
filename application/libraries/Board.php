@@ -112,6 +112,7 @@ class Board {
 			if ($limit['max']['x'] < $m['place']['coords']['x']) $limit['max']['x'] = $m['place']['coords']['x'];
 			if ($limit['max']['y'] < $m['place']['coords']['y']) $limit['max']['y'] = $m['place']['coords']['y'];
 			$data = array(
+				'deck_id' => $m['id'],
 				'card_id' => $m['card_id'],
 				'card_type' => $m['type_name'],
 				'adj' => $adj,
@@ -122,5 +123,8 @@ class Board {
 			array_push($mdata, $data);
 		}
 		$tree = new Sabo_Tree($mdata);
+		foreach ($tree->goal as $goal) {
+			$this->ci->boards_m->flip_up($goal);
+		}
 	}
 }

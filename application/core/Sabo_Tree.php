@@ -21,6 +21,8 @@ class Sabo_Tree {
 	var $head;
 	var $tiles;
 	
+	var $goal = array();
+	
 	function __construct($data) {
 		$this->tiles = array();
 		foreach($data as $d) {
@@ -30,18 +32,39 @@ class Sabo_Tree {
 		}
 		$this->head = $this->tiles['40,40'];
 		$this->expand($this->head);
+		unset($this->tiles);
+		$this->traverse($this->head);
 	}
 	
-	function expand(&$node, $visited = array()) {
+	function expand(Sabo_Tile &$node, $visited = array()) {
 		if (in_array($node->str_coord(), $visited)) return;
 		array_push($visited, $node->str_coord());
-		$dir = array('up', 'right', 'down', 'left');
+		$dir = $node->allowed_dir();
 		
 		foreach ($dir as $d) {
 			if (array_key_exists($node->str_coord($d), $this->tiles)) {
-				$node->up = $this->tiles[$node->str_coord($d)];
-				$this->expand($node->up, $visited);
+				$node->{$d} = $this->tiles[$node->str_coord($d)];
+				$this->expand($node->{$d}, $visited);
 			}
+		}
+	}
+	
+	function traverse($node, $visited = array()) {
+		if ($node == false) return;
+		if (in_array($node->str_coord(), $visited)) return;
+		if ($node->is_deadend()) return;
+		if ($node->is_goal()) {
+			if ($node->face_down) {
+				array_push($this->goal, $node->deck_id);
+				return;
+			}
+		}
+		
+		array_push($visited, $node->str_coord());
+		$dir = $node->allowed_dir();
+		
+		foreach ($dir as $d) {
+			$this->traverse($node->{$d}, $visited);
 		}
 	}
 }

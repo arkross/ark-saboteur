@@ -41,6 +41,12 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
+	public function flip_up($deck_id) {
+		$card = (array)$this->get($deck_id);
+		$card['place']['face_down'] = 0;
+		return $this->update($card['id'], $card);
+	}
+	
 	/**
 	 * Sets tile at the specified coordinate
 	 * @param int $deck_id
