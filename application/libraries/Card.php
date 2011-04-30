@@ -62,7 +62,7 @@ class Card {
 		$parsed = array();
 		foreach ($this->{$var} as &$v) {
 			if (preg_match('/\[[a-zA-Z0-9_,]+\]/', $v, $matches)) {
-			  $key = str_replace($matches[0], '', $v);
+				$key = str_replace($matches[0], '', $v);
 				$value = str_replace($key, '', $v);
 				$value = str_replace('[', '', $value);
 				$value = str_replace(']', '', $value);
@@ -146,12 +146,19 @@ class Card {
 	}
 	
 	private function maze_is($args, $details = array()) {
+		if (is_array($args)) {
+			$success = false;
+			foreach($args as $arg) {
+				$success = $success || $this->maze_is($arg, $details);
+			}
+			return $success;
+		}
 		$coords = explode('-', $details['target']);
 		$coords = array('x' => $coords[0],	'y' => $coords[1]);
 		unset($coords[0]);
 		unset($coords[1]);
 		$tile = $this->ci->boards_m->get_tile($coords);
-		if (isset($tile) && $tile['type_name'] == $args[0]) return true;
+		if (isset($tile) && $tile['type_name'] == $args) return true;
 		else return false;
 	}
 	

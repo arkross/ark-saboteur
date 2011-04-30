@@ -75,12 +75,12 @@ class Board {
 		
 		// Checks whether hand cards of all players have been depleted
 		$hands = array();
-		$sabo_win = false && (count($this->deck) ? true : false);
+		$sabo_win = false || (count($this->deck) ? true : false);
 		foreach($this->players as $player) {
 			$hands[$player['id']] = $this->ci->boards_m->get_hand($player['id']);
-			$sabo_win = $sabo_win && (count($hands[$player['id']]) ? true : false);
+			$sabo_win = $sabo_win || (count($hands[$player['id']]) ? true : false);
 		}
-		if ($sabo_win) {
+		if (!$sabo_win && $this->ci->rooms_m->get_round()) {
 			$this->win = 'saboteur';
 		}
 		

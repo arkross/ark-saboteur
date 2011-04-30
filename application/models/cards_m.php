@@ -364,7 +364,7 @@ class Cards_m extends MY_Model {
 				'quantity' => 3,
 				'effect' => array(
 					'target' => 'maze',
-					'rules' => 'occupied|maze_not[goal]|maze_not[start]',
+					'rules' => 'occupied|maze_not[goal,start]',
 					'result' => 'maze_remove'
 				),
 				'description' => 'Destroys a path card, removing it from the maze.'

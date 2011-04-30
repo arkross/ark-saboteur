@@ -90,8 +90,8 @@ jQuery(document).ready(function($) {
 		});
 		min.x = min.x -1;
 		min.y = min.y -1;
-		max.x = max.x +1;
-		max.y = max.y +1;
+		max.x++;
+		max.y++;
 		$("#board-game").html('');
 		for (var i = min.y; i <= max.y; i++) {
 			for (var j = min.x; j <= max.x; j++) {
