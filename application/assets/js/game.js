@@ -130,9 +130,9 @@ jQuery(document).ready(function($) {
 				}
 			}
 			str += '><span class="player-name">'+v.player+'</span>';
-			if (v.role.gold != undefined) {
-				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
-			}
+//			if (v.role.gold != undefined) {
+//				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
+//			}
 			if (v.role != undefined) {
 				if (v.role.pick_off == '1') {
 					str += pick_off_img;

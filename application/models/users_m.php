@@ -101,6 +101,19 @@ class Users_m extends MY_Model {
 		}
 		return FALSE;
 	}
+	
+	public function activate($hash) {
+		$user = $this->db
+			->where('sha1(`email`)', $hash)
+			->get($this->_table)
+			->row_array();
+		if ($user) {
+			$user['active'] = 1;
+			return $this->update($user['id'], $user);
+		} else {
+			return false;
+		}
+	}
 
 	public function _create() {
 		$query = "CREATE  TABLE IF NOT EXISTS `users` (
@@ -115,6 +128,12 @@ class Users_m extends MY_Model {
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB
 		COMMENT = 'A user is registered via email. Every user has reputation, represented by treasure.'";
-		return $this->db->query($query);
+		
+		$insert = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `avatar`, `treasure`, `active`, `last_seen`) VALUES
+		(1, 'arkross', '85ec7356ea22f8b27867e8fc810525103d7942f3', 'nikolas.l.alexander@gmail.com', NULL, 0, 1, 1304157642),
+		(2, 'arkyrion', 'c7629f8beed289cb9f40d97a58806a4d9f8efddd', 'nikolas.alexander@live.jp', NULL, 0, 1, 1304157638),
+		(3, 'arkyria', '85ec7356ea22f8b27867e8fc810525103d7942f3', 'nikolas_alexander@ymail.com', NULL, NULL, 1, 0);";
+		
+		return ($this->db->query($query) && $this->db->query($insert));
 	}
 }

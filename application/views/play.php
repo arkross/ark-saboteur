@@ -49,7 +49,7 @@
 	</ul>
 </div>
 <div id="board-game" class="left"></div>
-<div id="round" class="left"><?php echo $room->title; ?> - <span id="playing">Start Game</span></div>
+<div id="round" class="left"><?php echo $room->title; ?> | <span id="playing">Start Game</span></div>
 
 <div id="chatbox" class="right">
 	<nav id="switch">
@@ -68,7 +68,7 @@
 
 <div id="actions" class="left">
 	<div id="role"></div>
-	<div id="leave"><?php echo lang('game.leave'); ?></div>
+	<div id="leave" title="If you leave, the game will be disbanded as well."><?php echo lang('game.leave'); ?></div>
 </div>
 
 <br /><br /><br />
@@ -99,6 +99,7 @@
 	<div id="hand-cards" class="left"></div>
 	<div id="discard-pile" class="left">
 		<div id="discard-cards"><?php echo image('discard-pile.png'); ?></div>
+		<div id="discard-count">Discard Here</div>
 	</div>
 	<div id="deck" class="left">
 		<div id="deck-cards"><?php echo image('deck-pile.png'); ?></div>

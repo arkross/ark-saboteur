@@ -23,7 +23,8 @@ class Login extends Client_Controller {
   //put your code here
   function __construct() {
     parent::__construct();
-		$this->load->library('form_validation');
+	$this->load->library('form_validation');
+	$this->data['messages'] = $this->session->flashdata('messages');	
   }
 
   function index() {

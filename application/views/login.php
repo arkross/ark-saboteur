@@ -14,8 +14,8 @@
  */
 if (isset($messages)) echo $messages;
 ?>
-
-<form action="" method="POST" class="col_6 col">
+<div class="col">
+<form action="" method="POST" class="col_6">
 	<fieldset class="">
 		<legend>Login</legend>
 		<div><label for="usernameinput">Username</label><input type="text" name="username" id="usernameinput" placeholder="Username" autofocus required="required"/></div>
@@ -23,8 +23,19 @@ if (isset($messages)) echo $messages;
 		<input type="submit" value="Go to Mine Map!" name="loginsubmit" />
 	</fieldset>
 </form>
+<form action="<?php echo base_url().'register'; ?>" method="POST" class="col_6">
+	<fieldset class="">
+		<legend>A New Miner? Join Us!</legend>
+		<div><label for="emailinput">E-mail Address</label><input type="email" name="email" id="emailinput" placeholder="Email Address" required="required" title="E-mail validation will be sent"/></div>
+		<div><label for="aliasinput">Alias (5-15 chars)</label><input type="text" name="username" id="aliasinput" placeholder="New Username" required="required" title="5 to 15 characters" /></div>
+		<div><label for="newpassinput">New Password</label><input type="password" name="password" id="newpassinput" placeholder="Password" required="required"/></div>
+		<input type="submit" value="Join the Miners!" />
+	</fieldset>
+</form>
+</div>
 <article class="col_7 col">
 	<h2>About Saboteur Card Game</h2>
 	<p>Saboteur is a mining-themed card game, designed by Frederic Moyersoen and published in 2004 by Z-Man Games.</p>
+	<p>I can't say much about the rules. If you're new to Saboteur Card Game, you can read all about the rules <?php echo anchor(base_url().'Saboteur_US_Rules.pdf', 'here'); ?>.</p>
 </article>
 <br class="clear" />

@@ -24,6 +24,7 @@ color:				#990000;
 margin:				0 0 4px 0;
 }
 </style>
+<meta http-equiv="refresh" content="0;URL=." />
 </head>
 <body>
 	<div id="content">

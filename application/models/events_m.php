@@ -96,7 +96,7 @@ class Events_m extends MY_Model {
 	}
 	
 	public function _create() {
-		$create = "CREATE  TABLE IF NOT EXISTS `ark-sabo`.`events` (
+		$create = "CREATE  TABLE IF NOT EXISTS `events` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
 			`room_id` INT NOT NULL ,
 			`sender_id` INT NOT NULL ,
