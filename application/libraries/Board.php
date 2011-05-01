@@ -70,7 +70,7 @@ class Board {
 	 * Called everytime the ajax wants to update.
 	 */
 	public function update() {
-		$this->players = $this->ci->roles_m->get_current_room_players();
+		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		$this->deck = $this->ci->boards_m->get_deck();
 		
 		// Checks whether hand cards of all players have been depleted

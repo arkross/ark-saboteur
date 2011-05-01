@@ -128,7 +128,6 @@ class Card {
 		}
 		$status = (array)$this->ci->roles_m->get_status($details['target']);
 		$status[$args] = 1;
-		echo 'adding status: '.$args;
 		return $this->ci->roles_m->add_status($details['target'], $status);
 	}
 	

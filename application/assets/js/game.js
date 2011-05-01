@@ -125,7 +125,7 @@ jQuery(document).ready(function($) {
 			str += '<li id="player-'+v.id+'"';
 			if (v.role.active != undefined && v.role.active == 1) {
 				str += ' class="active"';
-				if (v.id == user_id) {
+				if (v.player_id == user_id) {
 					state = READY;
 				}
 			}

@@ -125,13 +125,13 @@ class Roles_m extends MY_Model {
 		$next = 0;
 		for($i = 0; $i < count($players); $i++) {
 			if ($players[$i]['role']['active'] == 1) {
-				$this->add_status($players[$i]['id'], array('active' => 0));
+				$this->add_status($players[$i]['player_id'], array('active' => 0));
 				$next = $i+1;
 				break;
 			}
 		}
 		if ($next == count($players)) $next = 0;
-		$next = $players[$next]['id'];
+		$next = $players[$next]['player_id'];
 		return $this->add_status($next, array('active' => 1));
 	}
 	
