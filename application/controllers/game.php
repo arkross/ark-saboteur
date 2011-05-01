@@ -34,6 +34,7 @@ class Game extends Server_Controller {
 	 * All game updates should be requested here
 	 */
 	public function update() {
+		$counter = 5;
 		do {
 			$this->users_m->ping($this->session->userdata('user_id'));
 			$this->response['valid_room'] = $this->db->where('id', $this->session->userdata('room_id'))
@@ -68,7 +69,7 @@ class Game extends Server_Controller {
 				// Automatically skips the player's turn if he/she has no card at hand.
 				if (isset($player['role']['active'])
 					&& $player['role']['active']
-					&& $player['id'] == $this->session->userdata('user_id')
+					&& $player['player_id'] == $this->session->userdata('user_id')
 					&& count($this->response['cards']['hand']) == 0) {
 					$this->board->end_turn();
 				}
@@ -81,7 +82,8 @@ class Game extends Server_Controller {
 			$checksum = md5($this->response);
 			header('ETag:'.$checksum);
 			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
-		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+			$counter --;
+		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
 		if (is_array($this->response)) $this->response = json_encode($this->response);
 		echo $this->response;
 		unset($this->response);
@@ -122,7 +124,7 @@ class Game extends Server_Controller {
 		
 		// If it's not successful, return immediately and do nothing
 		if (!$this->response['success']) {
-			$this->respond();
+			echo json_encode($this->response);
 			return;
 		}
 		$this->events_m->fire_event('start_game');
@@ -143,7 +145,7 @@ class Game extends Server_Controller {
 	 * @return void
 	 */
 	public function _shuffle_players() {
-		$players = $this->roles_m->get_current_room_players();
+		$players = $this->roles_m->get_current_room_players(false);
 		$this->board->players = $players;
 		if (count($players) < 3 || count($players) > 10) {
 			$this->response = array_merge(array('success' => '0'), $this->response);
@@ -152,7 +154,7 @@ class Game extends Server_Controller {
 			$this->response = array_merge(array('success' => '1'), $this->response);
 		}
 		foreach($players as $key => $value) {
-			$players[$key] = $value['id'];
+			$players[$key] = $value['player_id'];
 		}
 		shuffle($players);
 		foreach($players as $key => $value) {

@@ -46,7 +46,7 @@ class Board {
 		// Applies roles to players
 		$this->roles = $this->ci->card->build_role_cards(count($this->players));
 		for ($i = 0; $i < count($this->players); $i++) {
-			$this->ci->roles_m->add_status($this->players[$i]['id'], array('role' => $this->roles[$i]));
+			$this->ci->roles_m->add_status($this->players[$i]['player_id'], array('role' => $this->roles[$i]));
 		}
 		
 		// Builds deck cards
@@ -56,7 +56,7 @@ class Board {
 		// Distributes hand cards
 		$dist = $this->ci->card->distribution;
 		foreach($this->players as $player) {
-			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['id']);
+			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['player_id']);
 		}
 		
 		// Prepares maze
@@ -77,8 +77,8 @@ class Board {
 		$hands = array();
 		$sabo_win = false || (count($this->deck) ? true : false);
 		foreach($this->players as $player) {
-			$hands[$player['id']] = $this->ci->boards_m->get_hand($player['id']);
-			$sabo_win = $sabo_win || (count($hands[$player['id']]) ? true : false);
+			$hands[$player['player_id']] = $this->ci->boards_m->get_hand($player['player_id']);
+			$sabo_win = $sabo_win || (count($hands[$player['player_id']]) ? true : false);
 		}
 		if (!$sabo_win && $this->ci->rooms_m->get_round()) {
 			$this->win = 'saboteur';

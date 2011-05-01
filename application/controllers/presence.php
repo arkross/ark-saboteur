@@ -29,6 +29,7 @@ class Presence extends Server_Controller {
 	 * All updates for the lobby, using long polling
 	 */
 	function lobbyupdate() {
+		$counter = 5;
 		do {
 			$this->users_m->ping($this->session->userdata('user_id'));
 			$response = array();
@@ -38,7 +39,8 @@ class Presence extends Server_Controller {
 			$checksum = md5($response);
 			header('ETag:'.$checksum);
 			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
-		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+			$counter--;
+		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
 		echo $response;
 	}
 	

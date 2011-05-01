@@ -27,6 +27,7 @@ class Chat extends Server_Controller {
 	
 	public function log() {
 		if ($_POST) {
+			$counter = 5;
 			$chat_rev = $this->input->post('chat_rev');
 			$event_rev = $this->input->post('event_rev');
 			do {
@@ -34,8 +35,9 @@ class Chat extends Server_Controller {
 				$logs = json_encode($logs);
 				$checksum = md5($logs);
 				header('ETag:'.$checksum);
-				usleep(1000000);
-			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+				if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
+				$counter --;
+			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
 			echo $logs;
 		}
 	}

@@ -65,7 +65,6 @@ class Roles_m extends MY_Model {
 	 */
 	public function get_status($user_id) {
 		$role = $this->db
-			->select('role')
 			->where('room_id', $this->session->userdata('room_id'))
 			->where('player_id', $user_id)
 			->get($this->_table)
