@@ -180,6 +180,14 @@ jQuery(document).ready(function($) {
 		$("#message").html(data);
 		$("#message").dialog({modal:true});
 	}
+	
+	function update_valid_room(data) {
+		if (data == undefined) return;
+		console.log(data);
+		if (data != '1') {
+			$("#leave").click();
+		}
+	}
 
 	$("#playing").click(function(event) {
 		event.preventDefault();
@@ -193,10 +201,11 @@ jQuery(document).ready(function($) {
 	// Requests update for the whole game
 	$("#deck").smartupdater({
 		url: 'game/update',
-		minTimeout: 5000,
+		minTimeout: 1000,
 		httpCache: true,
 		dataType: 'json'
 	}, function(data){
+		update_valid_room(data.valid_room);
 		update_round(data.round);
 		update_actions(data.actions);
 		update_players(data.players);
@@ -214,19 +223,6 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
-	// Validates room
-	$("#round").smartupdater({
-		url: 'presence/validate_room',
-		minTimeout: 5000,
-		httpCache: true},
-		function(data) {
-			// room no longer exists
-			if (data == '1') {
-				$("#leave").click();
-			}
-		}
-	);
 	
 	// Rotate hand cards
 	$("#hand-cards img").live('dblclick', function(event) {

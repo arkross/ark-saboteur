@@ -22,40 +22,71 @@ jQuery(document).ready(function($) {
 		$("#room-list").submit();
 	});
 	
-	/**
-	 * Refreshes Game room list
-	 * ルームのリストを更新する
-	 */
-	$("#room-list select").smartupdater({
-		url: 'presence/rooms',
+	function updatePlayerList(data) {
+		if (data == undefined) return;
+		var str = '';
+		$.each(data, function(i, v) {
+			str += '<li>'+v.player+'</li>';
+		});
+		$("#login-list ul").html(str);
+		$("#login-list div span").html(data.length);
+	}
+	
+	function updateRoomList(data) {
+		if (data == undefined) return;
+		var str = '';
+		$.each(data, function(i, v) {
+			str += '<option value="'+i+'">'+v+'</option>';
+		});
+		$("#room-list select").html(str);	
+	}
+	
+	$("#room-list").smartupdater({
+		url: 'presence/lobbyupdate',
 		dataType: 'json',
 		httpCache: true,
-		minTimeout: 5000},
+		minTimeout: 1000},
 		function(data) {
-			var str = '';
-			$.each(data, function(i, v) {
-				str += '<option value="'+i+'">'+v+'</option>';
-			});
-			$("#room-list select").html(str);
+			console.log(data);
+			updatePlayerList(data.users);
+			updateRoomList(data.rooms);
 		}
 	);
 	
 	/**
-	 * Refreshes Logged in player list
-	 * ログインしているプレヤーのリストを更新する
+	 * Refreshes Game room list
+	 * ルームのリストを更新する
 	 */
-	$("#login-list ul").smartupdater({
-		url: 'presence/players',
-		dataType: 'json',
-		httpCache: true,
-		minTimeout: 5000},
-		function(data) {
-			var str = '';
-			$.each(data, function(i, v) {
-				str += '<li>'+v.player+'</li>';
-			});
-			$("#login-list ul").html(str);
-			$("#login-list div span").html(data.length);
-		}
-	);
+//	$("#room-list select").smartupdater({
+//		url: 'presence/rooms',
+//		dataType: 'json',
+//		httpCache: true,
+//		minTimeout: 5000},
+//		function(data) {
+//			var str = '';
+//			$.each(data, function(i, v) {
+//				str += '<option value="'+i+'">'+v+'</option>';
+//			});
+//			$("#room-list select").html(str);
+//		}
+//	);
+//	
+//	/**
+//	 * Refreshes Logged in player list
+//	 * ログインしているプレヤーのリストを更新する
+//	 */
+//	$("#login-list ul").smartupdater({
+//		url: 'presence/players',
+//		dataType: 'json',
+//		httpCache: true,
+//		minTimeout: 5000},
+//		function(data) {
+//			var str = '';
+//			$.each(data, function(i, v) {
+//				str += '<li>'+v.player+'</li>';
+//			});
+//			$("#login-list ul").html(str);
+//			$("#login-list div span").html(data.length);
+//		}
+//	);
 });

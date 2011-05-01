@@ -27,7 +27,6 @@ class Room extends Client_Controller {
 		
 		$this->template
 			->append_metadata(js('jquery/smartupdater-3.0.02beta.js'))
-			->append_metadata(js('general.js'))
 			->append_metadata(js('chat.js'))
 			->append_metadata(js('room.js'));
 	}

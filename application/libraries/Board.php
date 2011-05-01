@@ -41,7 +41,7 @@ class Board {
 	 * Prepares everything for a new round
 	 */
 	public function prepare() {
-		$this->players = $this->ci->roles_m->get_current_room_players();
+		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		
 		// Applies roles to players
 		$this->roles = $this->ci->card->build_role_cards(count($this->players));

@@ -29,8 +29,14 @@ class Chat extends Server_Controller {
 		if ($_POST) {
 			$chat_rev = $this->input->post('chat_rev');
 			$event_rev = $this->input->post('event_rev');
-			$logs = $this->events_m->get_all_updates($chat_rev, $event_rev);
-			$this->_respond(json_encode($logs));
+			do {
+				$logs = $this->events_m->get_all_updates($chat_rev, $event_rev);
+				$logs = json_encode($logs);
+				$checksum = md5($logs);
+				header('ETag:'.$checksum);
+				usleep(1000000);
+			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+			echo $logs;
 		}
 	}
 	

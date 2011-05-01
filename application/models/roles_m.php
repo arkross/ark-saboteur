@@ -77,12 +77,14 @@ class Roles_m extends MY_Model {
 	 * Gets all players on the current room
 	 * @return Mixed Players records
 	 */
-	public function get_current_room_players() {
+	public function get_current_room_players($lobby = true) {
+		$timeout = now() - 5;
+		if ($lobby) $timeout + 3;
 		$players = $this->db
 			->select('users.username as player, roles.*')
 			->join('users', 'users.id = roles.player_id', 'LEFT')
 			->where('room_id', $this->session->userdata('room_id'))
-			->where('users.last_seen >=', now() - 5)
+			->where('users.last_seen >=', $timeout)
 			->get($this->_table)
 			->result_array();
 		foreach($players as &$value) {

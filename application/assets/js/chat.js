@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
 		$(box).smartupdater({
 			url: "chat",
 			data: {chat_rev: chat_id, event_rev: event_id},
-			minTimeout: 2000,
+			minTimeout: 1000,
 			httpCache: true,
 			type: 'POST',
 			dataType: 'json'

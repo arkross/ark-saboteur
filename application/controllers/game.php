@@ -34,45 +34,58 @@ class Game extends Server_Controller {
 	 * All game updates should be requested here
 	 */
 	public function update() {
-		$this->board->update();
-		$this->response['players'] = $this->board->players;
-		
-		$this->response['round'] = $this->rooms_m->get_round();
-		if ($this->response['round'] == 0) {
-			if ($this->roles_m->is_creator())
-				$this->response['round'] = lang('game.start');
-			else
-				$this->response['round'] = lang('game.wait');
-		} else {
-			$this->response['round'] = sprintf(lang('game.round'), $this->response['round']);
-		}
-		
-		$this->response['cards']['deck_count'] = count($this->board->deck);
-		$this->response['cards']['hand'] = $this->board->hand;
-		
-		$this->response['maze'] = $this->board->maze;
-		
-		$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
-		$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
-		
-		// Prevents other players' roles for being broadcast
-		foreach($this->response['players'] as &$player) {
-			unset($player['role']['role']);
-			
-			// Automatically skips the player's turn if he/she has no card at hand.
-			if (isset($player['role']['active'])
-				&& $player['role']['active']
-				&& $player['id'] == $this->session->userdata('user_id')
-				&& count($this->response['cards']['hand']) == 0) {
-				$this->board->end_turn();
+		do {
+			$this->users_m->ping($this->session->userdata('user_id'));
+			$this->response['valid_room'] = $this->db->where('id', $this->session->userdata('room_id'))
+				->count_all_results('rooms');
+			if ($this->response['valid_room'] < 1) break;
+			$this->board->update();
+			$this->response = array();
+			$this->response['players'] = $this->board->players;
+
+			$this->response['round'] = $this->rooms_m->get_round();
+			if ($this->response['round'] == 0) {
+				if ($this->roles_m->is_creator())
+					$this->response['round'] = lang('game.start');
+				else
+					$this->response['round'] = lang('game.wait');
+			} else {
+				$this->response['round'] = sprintf(lang('game.round'), $this->response['round']);
 			}
-		}
-		
-		if ($this->board->win != '') {
-			$this->response['winner'] = lang('game.'.$this->board->win.'_win');
-		}
-		
-		$this->_respond();
+
+			$this->response['cards']['deck_count'] = count($this->board->deck);
+			$this->response['cards']['hand'] = $this->board->hand;
+
+			$this->response['maze'] = $this->board->maze;
+
+			$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
+			$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
+
+			// Prevents other players' roles for being broadcast
+			foreach($this->response['players'] as &$player) {
+				unset($player['role']['role']);
+
+				// Automatically skips the player's turn if he/she has no card at hand.
+				if (isset($player['role']['active'])
+					&& $player['role']['active']
+					&& $player['id'] == $this->session->userdata('user_id')
+					&& count($this->response['cards']['hand']) == 0) {
+					$this->board->end_turn();
+				}
+			}
+
+			if ($this->board->win != '') {
+				$this->response['winner'] = lang('game.'.$this->board->win.'_win');
+			}
+			$this->response = json_encode($this->response);
+			$checksum = md5($this->response);
+			header('ETag:'.$checksum);
+			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
+		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+		if (is_array($this->response)) $this->response = json_encode($this->response);
+		echo $this->response;
+		unset($this->response);
+//		$this->_respond();
 	}
 	
 	/**

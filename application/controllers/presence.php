@@ -26,43 +26,20 @@ class Presence extends Server_Controller {
 	}
 	
 	/**
-	 * Indicates that the user is still online
+	 * All updates for the lobby, using long polling
 	 */
-	function ping() {
-		if ($this->users_m->ping($this->session->userdata('user_id'))) {
-			$this->_respond('1');
-		} else {
-			$this->_respond('0');
-		}
-	}
-	
-	/**
-	 * Checks if the current room has not been closed.
-	 */
-	function validate_room() {
-		$room = $this->db->where('id', $this->session->userdata('room_id'))
-			->count_all_results('rooms');
-		if ($room < 1) {
-			$this->_respond('1');
-		} else {
-			$this->_respond('0');
-		}
-	}
-	
-	/**
-	 * Updates players list for the current room
-	 */
-	function players() {
-		$users = $this->roles_m->get_current_room_players();
-		$this->_respond(json_encode($users));
-	}
-	
-	/**
-	 * Updates rooms list
-	 */
-	function rooms() {
-		$rooms = $this->rooms_m->dropdown();
-		$this->_respond(json_encode($rooms));
+	function lobbyupdate() {
+		do {
+			$this->users_m->ping($this->session->userdata('user_id'));
+			$response = array();
+			$response['users'] = $this->roles_m->get_current_room_players();
+			$response['rooms'] = $this->rooms_m->dropdown();
+			$response = json_encode($response);
+			$checksum = md5($response);
+			header('ETag:'.$checksum);
+			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
+		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']);
+		echo $response;
 	}
 	
 	/**
