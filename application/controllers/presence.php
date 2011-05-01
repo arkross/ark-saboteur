@@ -22,7 +22,7 @@ class Presence extends Server_Controller {
 	}
 	
 	function index() {
-		$this->ping();
+		$this->lobbyupdate();
 	}
 	
 	/**
@@ -41,7 +41,11 @@ class Presence extends Server_Controller {
 			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
 			$counter--;
 		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
-		echo $response;
+		if ($counter == 0 && $checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
+			$this->_respond_304();
+		} else {
+			echo $response;
+		}
 	}
 	
 	/**

@@ -252,6 +252,14 @@ class Card {
 		$card['place'] = array('type' => 'discard');
 		return $this->ci->boards_m->update($card['id'], $card);
 	}
+	
+	private function gold($args, $details) {
+		$args = $args[0];
+		$target = $details['target'];
+		$status = $this->ci->roles_m->get_status($target);
+		$status['gold'] = $status['gold'] + $args;
+		return $this->ci->roles_m->add_status($target, $status);
+	}
 
 	public function build_deck() {
 		$cards = $this->ci->cards_m->get_cards('action');
@@ -262,7 +270,6 @@ class Card {
 				array_push($deck, $card['id']);
 			}
 		}
-		
 		shuffle($deck);
 		return $deck;
 	}
@@ -293,5 +300,17 @@ class Card {
 			}
 		}
 		return $deck;
+	}
+	
+	public function build_gold_cards() {
+		$cards = $this->ci->cards_m->get_cards('gold');
+		$bank = array();
+		foreach($cards as $card) {
+			for ($i = 0; $i < $card['quantity']; ++$i) {
+				array_push($bank, $card['id']);
+			}
+		}
+		shuffle($bank);
+		return $bank;
 	}
 }

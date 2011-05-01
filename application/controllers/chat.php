@@ -38,7 +38,11 @@ class Chat extends Server_Controller {
 				if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
 				$counter --;
 			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
-			echo $logs;
+			if ($counter == 0 && $checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
+				$this->_respond_304();
+			} else {
+				echo $logs;
+			}
 		}
 	}
 	

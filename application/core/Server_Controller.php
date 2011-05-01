@@ -60,5 +60,12 @@ class Server_Controller extends MY_Controller {
 				header('HTTP/1.1 204 No Content');
 		}
 	}
+	
+	protected function _respond_304() {
+		if ($this->agent->browser() != 'Firefox')
+			header('HTTP/1.1 304 Not Modified');
+		else
+			header('HTTP/1.1 204 No Content');
+	}
 }
 ?>

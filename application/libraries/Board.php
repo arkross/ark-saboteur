@@ -62,6 +62,10 @@ class Board {
 		// Prepares maze
 		$this->ci->boards_m->prepare_maze($this->ci->card->build_goal_cards());
 		
+		// Prepares gold
+		if ($this->ci->rooms_m->get_round() <= 1)
+			$this->ci->boards_m->set_bank($this->ci->card->build_gold_cards());
+		
 		// Activate the first player
 		$this->ci->roles_m->next_turn();
 	}
@@ -71,8 +75,8 @@ class Board {
 	 */
 	public function update() {
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
-		$this->deck = $this->ci->boards_m->get_deck();
 		
+		$this->deck = $this->ci->boards_m->get_deck();
 		// Checks whether hand cards of all players have been depleted
 		$hands = array();
 		$sabo_win = false || (count($this->deck) ? true : false);
@@ -91,6 +95,10 @@ class Board {
 		}
 		
 		$this->hand = $this->ci->boards_m->get_hand();
+		if ($this->win != "") {
+			$this->end_round();
+			$this->win = '';
+		}
 	}
 	
 	public function move($deck_id, $options = array()) {
@@ -110,6 +118,28 @@ class Board {
 	public function end_turn() {
 		$this->ci->boards_m->draw();
 		$this->ci->roles_m->next_turn();
+	}
+	
+	public function end_round() {
+		if ($this->ci->roles_m->is_creator()) {
+			foreach ($this->maze as $m){
+				$this->boards_m->delete($m['id']);
+			}
+			unset($this->maze);
+			$this->discard = $this->ci->boards_m->get_discard();
+			foreach($this->discard as $d) {
+				$this->boards_m->delete($d['id']);
+			}
+			unset($this->discard);
+		}
+		foreach($this->deck as $d) {
+			$this->ci->boards_m->delete($d['id']);
+		}
+		unset($this->deck);
+		foreach($this->hand as $h) {
+			$this->ci->boards_m->delete($h['id']);
+		}
+		unset($this->hand);
 	}
 	
 	private function check_path() {

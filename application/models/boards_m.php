@@ -41,12 +41,47 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
-	public function flip_up($deck_id) {
-		$card = (array)$this->get($deck_id);
+	public function set_bank($bank) {
+		$data = array(
+			'room_id' => $this->session->userdata('room_id'),
+			'place' => array('type' => 'bank')
+		);
+		foreach($bank as $card_id) {
+			$data['card_id'] = $card_id;
+			$this->insert($data);
+		}
+	}
+	
+	public function get_bank() {
+		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
+		$bank = array();
+		foreach ($all as $card) {
+			$card = (array)$card;
+			$card['place'] = unserialize($card['place']);
+			if ($card['place']['type'] == 'bank') {
+				array_push($bank, $card);
+			}
+		}
+		return $bank;
+	}
+	
+	/**
+	 * Flips a goal card face-up
+	 * @param type $deck_id
+	 * @return type 
+	 */
+	public function flip_up($goal) {
+		$card = (array)$this->get($goal['id']);
 		$card['place']['face_down'] = 0;
+		$card['place']['reversed'] = ($goal['reverse'] ? 1 : 0);
 		return $this->update($card['id'], $card);
 	}
 	
+	/**
+	 * Checks whether a goal card is already face up
+	 * @param String $slug the card slug
+	 * @return boolean true if opened
+	 */
 	public function goal_opened($slug = 'gold-goal') {
 		$card = $this->cards_m->get_by('slug', $slug);
 		$ingame_card = $this->db
@@ -186,6 +221,19 @@ class Boards_m extends MY_Model {
 			}
 		}
 		return $hand;
+	}
+	
+	public function get_discard() {
+		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
+		$discard = array();
+		foreach ($all as $card) {
+			$card = (array)$card;
+			$card['place'] = unserialize($card['place']);
+			if ($card['place']['type'] == 'discard') {
+				array_push($discard, $card);
+			}
+		}
+		return $discard;
 	}
 	
 	/**

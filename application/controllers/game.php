@@ -77,17 +77,30 @@ class Game extends Server_Controller {
 
 			if ($this->board->win != '') {
 				$this->response['winner'] = lang('game.'.$this->board->win.'_win');
+				$round = $this->rooms_m->get_round();
 			}
+			
 			$this->response = json_encode($this->response);
 			$checksum = md5($this->response);
 			header('ETag:'.$checksum);
 			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
 			$counter --;
 		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
-		if (is_array($this->response)) $this->response = json_encode($this->response);
-		echo $this->response;
+		
+		if (is_array($this->response))
+			$this->response = json_encode($this->response);
+		if ($counter == 0 && $checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
+			$this->_respond_304();
+		} else {
+			echo $this->response;
+		}
 		unset($this->response);
 //		$this->_respond();
+		if (isset($round) && $round < 3) {
+			$this->start_round();
+		} elseif (isset($round) && $round >= 3){
+			$this->rooms_m->quit();
+		}
 	}
 	
 	/**

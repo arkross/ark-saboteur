@@ -49,13 +49,17 @@ class Sabo_Tree {
 		}
 	}
 	
-	function traverse($node, $visited = array()) {
+	function traverse($node, $visited = array(), $prev = null, $from = '') {
 		if ($node == false) return;
 		if (in_array($node->str_coord(), $visited)) return;
 		if ($node->is_deadend()) return;
 		if ($node->is_goal()) {
 			if ($node->face_down) {
-				array_push($this->goal, $node->deck_id);
+				$reverse = false;
+				if (!$this->is_connected($node, $prev, $from)) {
+					$reverse = true;
+				}
+				array_push($this->goal, array('id' => $node->deck_id, 'reverse' =>$reverse));
 				return;
 			}
 		}
@@ -64,7 +68,24 @@ class Sabo_Tree {
 		$dir = $node->allowed_dir();
 		
 		foreach ($dir as $d) {
-			$this->traverse($node->{$d}, $visited);
+			$this->traverse($node->{$d}, $visited, $node, $d);
 		}
+	}
+	
+	function is_connected(Sabo_Tile $node_a, Sabo_Tile $node_b, $from = '') {
+		$allowed_a = $node_a->allowed_dir();
+		if ($from == 'up' && in_array('down', $allowed_a)) {
+			return true;
+		}
+		if ($from == 'down' && in_array('up', $allowed_a)) {
+			return true;
+		}
+		if ($from == 'left' && in_array('right', $allowed_a)) {
+			return true;
+		}
+		if ($from == 'right' && in_array('left', $allowed_a)) {
+			return true;
+		}
+		return false;
 	}
 }

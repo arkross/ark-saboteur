@@ -21,3 +21,4 @@ $lang['error.not.occupied'] = 'The tile is already occupied';
 $lang['error.adj'] = 'Neighboring tiles does not match';
 $lang['error.maze_not'] = 'The selected tile cannot be selected as target';
 $lang['error.maze_is'] = 'The selected tile cannot be selected as target';
+$lang['error.gold'] = 'Gold cannot be distributed';

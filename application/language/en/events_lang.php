@@ -17,6 +17,7 @@ $lang['leave_room'] = '%s has left the room "%s"';
 
 $lang['start_game'] = 'Game started';
 $lang['start_round'] = '%s[%s] begins round %s';
+$lang['end_round'] = '%s[%s] ends the round';
 $lang['game.discard'] = '%s[%s] discards a card';
 $lang['game.play_card'] = '%s[%s] plays a card';
 
