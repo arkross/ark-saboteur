@@ -24,6 +24,7 @@ class Board {
 	var $discard = array();
 	var $roles = array();
 	var $maze = array();
+	var $bank = array();
 
 	var $players = array();
 	var $win = '';
@@ -139,6 +140,41 @@ class Board {
 			$this->ci->boards_m->delete($h['id']);
 		}
 		$this->hand = array();
+		
+		if ($this->ci->roles_m->is_creator()) {
+			$this->bank = $this->ci->boards_m->get_bank();
+			if ($this->win == 'gold-digger') {
+				$reversed = array_reverse($this->players);
+				$active = $this->ci->roles_m->get_active_player();
+
+				do {
+					array_push($reversed, array_shift($reversed));
+					reset($reversed);
+					$current = current($reversed);
+				} while($current['player_id'] != $active['player_id']);
+
+				$take = array_slice($this->bank, 0, count($this->players));
+				$current = current($take);
+				$this->ci->boards_m->receive_gold($current['id'], $active['player_id']);
+				next($take);
+				foreach($take as $t) {
+					while($current = current($this->players)) {
+						if (next($this->players) === false) reset($this->players);
+						if ($current['role']['role'] == 'gold-digger') {
+							$this->ci->boards_m->receive_gold($t['id'], 
+								$current['player_id']);
+							$card = $this->ci->cards_m->get($t['card_id']);
+							$this->ci->card->play($card, 
+								array('target' => $current['player_id']));
+							break;
+						}
+					}
+				}
+			} else {
+
+			}
+		}
+		
 	}
 	
 	private function check_path() {

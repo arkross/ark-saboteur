@@ -22,6 +22,15 @@ class Roles_m extends MY_Model {
 		$this->_table = 'roles';
 	}
 	
+	public function get_active_player() {
+		$all = $this->get_current_room_players(false);
+		foreach($all as $a) {
+			if (isset($a['role']['active']) && $a['role']['active'] == 1) {
+				return $a;
+			}
+		}
+	}
+	
 	/**
 	 * Sets the role field of a player, overrides the current.
 	 * @param Array $role array of role and details

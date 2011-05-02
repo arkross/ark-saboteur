@@ -41,6 +41,28 @@ class Boards_m extends MY_Model {
 		}
 	}
 	
+	public function get_player_gold($player_id) {
+		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
+		$gold = array();
+		foreach ($all as $c) {
+			if ($c['place']['value'] == 'gold' &&
+				$c['place']['id'] == $player_id) {
+				$gold[] = $c;
+			}
+		}
+		return $gold;
+	}
+	
+	public function receive_gold($deck_id, $player_id) {
+		$card = (array)$this->get($deck_id);
+		$card['place'] = array(
+			'type' => 'player',
+			'id' => $player_id,
+			'value' => 'gold'
+		);
+		return $this->update($card['id'], $card);
+	}
+	
 	public function set_bank($bank) {
 		$data = array(
 			'room_id' => $this->session->userdata('room_id'),

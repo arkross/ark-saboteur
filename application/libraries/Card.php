@@ -256,6 +256,7 @@ class Card {
 	private function gold($args, $details) {
 		$args = $args[0];
 		$target = $details['target'];
+		echo 'Player '.$target.' got: '.$args;
 		$status = $this->ci->roles_m->get_status($target);
 		$status['gold'] = $status['gold'] + $args;
 		return $this->ci->roles_m->add_status($target, $status);
