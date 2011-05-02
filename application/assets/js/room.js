@@ -47,7 +47,6 @@ jQuery(document).ready(function($) {
 		httpCache: true,
 		minTimeout: 1000},
 		function(data) {
-			console.log(data);
 			updatePlayerList(data.users);
 			updateRoomList(data.rooms);
 		}

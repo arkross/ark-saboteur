@@ -94,13 +94,17 @@ class Game extends Server_Controller {
 		} else {
 			echo $this->response;
 		}
-		unset($this->response);
-//		$this->_respond();
 		if (isset($round) && $round < 3) {
-			$this->start_round();
+			if ($this->roles_m->is_creator()) {
+				header('Connection: close');
+				ob_end_flush();
+				flush();
+				$this->start_round();
+			}
 		} elseif (isset($round) && $round >= 3){
 			$this->rooms_m->quit();
 		}
+		$this->response = array();
 	}
 	
 	/**

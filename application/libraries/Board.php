@@ -97,7 +97,6 @@ class Board {
 		$this->hand = $this->ci->boards_m->get_hand();
 		if ($this->win != "") {
 			$this->end_round();
-			$this->win = '';
 		}
 	}
 	
@@ -123,23 +122,23 @@ class Board {
 	public function end_round() {
 		if ($this->ci->roles_m->is_creator()) {
 			foreach ($this->maze as $m){
-				$this->boards_m->delete($m['id']);
+				$this->ci->boards_m->delete($m['id']);
 			}
-			unset($this->maze);
+			$this->maze = array();
 			$this->discard = $this->ci->boards_m->get_discard();
 			foreach($this->discard as $d) {
-				$this->boards_m->delete($d['id']);
+				$this->ci->boards_m->delete($d['id']);
 			}
-			unset($this->discard);
+			$this->discard = array();
 		}
 		foreach($this->deck as $d) {
 			$this->ci->boards_m->delete($d['id']);
 		}
-		unset($this->deck);
+		$this->deck = array();
 		foreach($this->hand as $h) {
 			$this->ci->boards_m->delete($h['id']);
 		}
-		unset($this->hand);
+		$this->hand = array();
 	}
 	
 	private function check_path() {
