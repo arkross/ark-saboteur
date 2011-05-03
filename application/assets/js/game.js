@@ -122,7 +122,7 @@ jQuery(document).ready(function($) {
 		state = WAITING;
 		disabled = false;
 		$.each(data, function(i, v) {
-			str += '<li id="player-'+v.id+'"';
+			str += '<li id="player-'+v.player_id+'"';
 			if (v.role.active != undefined && v.role.active == 1) {
 				str += ' class="active"';
 				if (v.player_id == user_id) {
@@ -136,15 +136,15 @@ jQuery(document).ready(function($) {
 			if (v.role != undefined) {
 				if (v.role.pick_off == '1') {
 					str += pick_off_img;
-					if (v.id == user_id) disabled = true;
+					if (v.player_id == user_id) disabled = true;
 				}
 				if (v.role.lantern_off == '1') {
 					str += lantern_off_img;
-					if (v.id == user_id) disabled = true;
+					if (v.player_id == user_id) disabled = true;
 				}
 				if (v.role.wagon_off == '1') {
 					str += wagon_off_img;
-					if (v.id == user_id) disabled = true;
+					if (v.player_id == user_id) disabled = true;
 				}
 			}
 			str += '</li>';
