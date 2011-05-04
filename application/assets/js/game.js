@@ -184,7 +184,6 @@ jQuery(document).ready(function($) {
 	
 	function update_valid_room(data) {
 		if (data == undefined) return;
-		console.log(data);
 		if (data != '1') {
 			$("#leave").click();
 		}
@@ -192,10 +191,13 @@ jQuery(document).ready(function($) {
 
 	$("#playing").click(function(event) {
 		event.preventDefault();
+		if (is_playing == '1') return;
 		if (is_creator) {
+			$("#deck").smartupdaterStop();
 			$.post('game/start_game', '', function(data){
-				$("#board-game").smartupdaterRestart();
-			}, 'json');
+				console.log(data);
+				$("#deck").smartupdaterRestart();
+			});
 		}
 	});
 	
@@ -241,7 +243,6 @@ jQuery(document).ready(function($) {
 	// Select hand cards
 	$("#hand-cards img").live('click', function(event) {
 		event.preventDefault();
-		console.log(state);	
 		if (state == WAITING) return;
 		$("#hand-cards img").removeClass('selected');
 		$(this).addClass('selected');

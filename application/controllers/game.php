@@ -56,29 +56,32 @@ class Game extends Server_Controller {
 				$this->response['round'] = sprintf(lang('game.round'), $this->response['round']);
 			}
 
-			$this->response['cards']['deck_count'] = count($this->board->deck);
-			$this->response['cards']['hand'] = $this->board->hand;
+			if ($this->rooms_m->is_playing()) {
+				$this->response['cards']['deck_count'] = count($this->board->deck);
+				$this->response['cards']['hand'] = $this->board->hand;
 
-			$this->response['maze'] = $this->board->maze;
+				$this->response['maze'] = $this->board->maze;
 
-			$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
-			$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
+				$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
+				$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
+			
 
-			// Prevents other players' roles for being broadcast
-			foreach($this->response['players'] as &$player) {
-				unset($player['role']['role']);
+				// Prevents other players' roles for being broadcast
+				foreach($this->response['players'] as &$player) {
+					unset($player['role']['role']);
 
-				// Automatically skips the player's turn if he/she has no card at hand.
-				if (isset($player['role']['active'])
-					&& $player['role']['active']
-					&& $player['player_id'] == $this->session->userdata('user_id')
-					&& count($this->response['cards']['hand']) == 0) {
-					$this->board->end_turn();
+					// Automatically skips the player's turn if he/she has no card at hand.
+					if (isset($player['role']['active'])
+						&& $player['role']['active']
+						&& $player['player_id'] == $this->session->userdata('user_id')
+						&& count($this->response['cards']['hand']) == 0) {
+						$this->board->end_turn();
+					}
 				}
 			}
 
-			if ($this->board->win != '' && $this->response['is_playing']) {
-				$this->response['winner'] = lang('game.'.$this->board->win.'_win');
+			if ($this->board->win != '') {
+				if (!$this->rooms_m->is_playing()) $this->response['winner'] = lang('game.'.$this->board->win.'_win');
 				$round = $this->rooms_m->get_round();
 			}
 			
@@ -96,11 +99,12 @@ class Game extends Server_Controller {
 		} else {
 			echo $this->response;
 		}
-		if (isset($round) && $round < 3) {
-			if ($this->roles_m->is_creator()) {
+		if (isset($round) && $round <= 3) {
+			if ($this->roles_m->is_creator() && $this->rooms_m->is_playing()) {
+				$this->events_m->fire_event('end_round');
 				$this->rooms_m->set_round($this->rooms_m->get_round() + 1, false);
 			}
-		} elseif (isset($round) && $round >= 3){
+		} elseif (isset($round) && $round > 3){
 			$this->rooms_m->quit();
 		}
 		$this->response = array();
@@ -136,8 +140,8 @@ class Game extends Server_Controller {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
 		$round = $this->rooms_m->get_round();
-		
-		if ($round === 1) {
+		echo 'round:'.$round;
+		if ($round == 1) {
 			$this->_shuffle_players();
 			// If it's not successful, return immediately and do nothing
 			if (!$this->response['success']) {
@@ -154,9 +158,11 @@ class Game extends Server_Controller {
 	 * Starts a new round
 	 */
 	public function start_round() {
+		$this->boards_m->db->trans_start();
 		$this->events_m->fire_event('start_round', array($this->rooms_m->get_round()));
 		$this->board->prepare();
 		$this->rooms_m->set_round($this->rooms_m->get_round());
+		$this->boards_m->db->trans_complete();
 	}
 	
 	/**

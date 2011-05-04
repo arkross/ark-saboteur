@@ -42,48 +42,63 @@ class Board {
 	 * Prepares everything for a new round
 	 */
 	public function prepare() {
+		
 		if ($this->ci->rooms_m->get_round() > 1) {
-			$this->_clean();
+			if ($this->_clean()) echo 'Cleaning successful';
 		}
 		
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		
 		// Applies roles to players
 		$this->roles = $this->ci->card->build_role_cards(count($this->players));
+		echo 'Roles applied to:'."\n";
 		for ($i = 0; $i < count($this->players); $i++) {
+			echo 'player: '.$this->players[$i]['player']."\n";
 			$this->ci->roles_m->add_status($this->players[$i]['player_id'], array('role' => $this->roles[$i]));
 		}
 		
 		// Builds deck cards
+		echo 'Setting deck'."\n";
 		$this->deck = $this->ci->card->build_deck();
 		$this->ci->boards_m->set_deck($this->deck);
 		
 		// Distributes hand cards
+		echo 'Handing out cards:'."\n";
 		$dist = $this->ci->card->distribution;
+		$count = count($this->players);
 		foreach($this->players as $player) {
-			$this->ci->boards_m->draw($dist[count($this->players)]['hand'], $player['player_id']);
+			echo 'player: '.$player['player'].' draws '.$dist[$count]['hand']."\n";
+			$this->ci->boards_m->draw($dist[$count]['hand'], $player['player_id']);
 		}
 		
 		// Prepares maze
+		echo 'Preparing maze'."\n";
 		$this->ci->boards_m->prepare_maze($this->ci->card->build_goal_cards());
 		
 		// Prepares gold
+		echo "Preparing gold\n";
 		if ($this->ci->rooms_m->get_round() <= 1) {
 			$this->ci->boards_m->set_bank($this->ci->card->build_gold_cards());
 		}
 		
 		// Activate the first player
-		if ($this->ci->rooms_m->get_round() <= 1)
-		$this->ci->roles_m->next_turn();
+		if ($this->ci->rooms_m->get_round() <= 1) {
+			echo 'Activate player'."\n";
+			$this->ci->roles_m->next_turn();
+		}
 	}
 	
 	/**
 	 * Called everytime the ajax wants to update.
 	 */
 	public function update() {
+		$this->ci->boards_m->db->trans_start();
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		
 		$this->deck = $this->ci->boards_m->get_deck();
+		$this->maze = $this->ci->boards_m->get_maze();
+		$this->hand = $this->ci->boards_m->get_hand();
+		
 		// Checks whether hand cards of all players have been depleted
 		$hands = array();
 		$sabo_win = false || (count($this->deck) ? true : false);
@@ -91,17 +106,20 @@ class Board {
 			$hands[$player['player_id']] = $this->ci->boards_m->get_hand($player['player_id']);
 			$sabo_win = $sabo_win || (count($hands[$player['player_id']]) ? true : false);
 		}
-		if (!$sabo_win && $this->ci->rooms_m->is_playing()) {
+		if (!$sabo_win && 
+			$this->ci->rooms_m->get_round() > 1) {
 			$this->win = 'saboteur';
 		}
 		
 		// Checks whether the goal card has been reached
-		$this->maze = $this->ci->boards_m->get_maze();
-		if (count($this->maze) && $this->ci->boards_m->goal_opened()) {
+		
+		if (count($this->maze)
+			&& $this->ci->boards_m->goal_opened()) {
 			$this->win = 'gold-digger';
 		}
 		
-		$this->hand = $this->ci->boards_m->get_hand();
+		
+		$this->ci->boards_m->db->trans_complete();
 		if ($this->win != "") {
 //			$this->end_round();
 		}
@@ -165,29 +183,31 @@ class Board {
 	
 	public function _clean() {
 		$hands = $this->ci->boards_m->get_hands();
+		$ids = array();
 		foreach($hands as $h) {
-			$this->ci->boards_m->delete($h['id']);
+			$ids[] = $h['id'];
 		}
 		unset($hands);
 		$this->hand = array();
 		
 		$this->deck = $this->ci->boards_m->get_deck();
 		foreach($this->deck as $d) {
-			$this->ci->boards_m->delete($d['id']);
+			$ids[] = $d['id'];
 		}
 		$this->deck = array();
 		
 		$this->maze = $this->ci->boards_m->get_maze();
 		foreach ($this->maze as $m){
-			$this->ci->boards_m->delete($m['id']);
+			$ids[] = $m['id'];
 		}
 		$this->maze = array();
 		
 		$this->discard = $this->ci->boards_m->get_discard();
 		foreach($this->discard as $d) {
-			$this->ci->boards_m->delete($d['id']);
+			$ids[] = $d['id'];
 		}
 		$this->discard = array();
+		return $this->ci->boards_m->delete_many($ids);
 	}
 	
 	private function check_path() {

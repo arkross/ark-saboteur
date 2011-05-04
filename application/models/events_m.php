@@ -68,7 +68,7 @@ class Events_m extends MY_Model {
 			->join('rooms', 'rooms.id = events.room_id', 'right')
 			->where('room_id', $room_id)
 			->where('events.id >', $from_id)
-			->order_by('created_at')
+			->order_by('events.id')
 			->get($this->_table)
 			->result_array();
 		
@@ -92,6 +92,9 @@ class Events_m extends MY_Model {
 		$type = $other['type'];
 		unset($other['type']);
 		$args = array_merge($args, $other);
+		if (!lang($type)) {
+			return $type;
+		}
 		return vsprintf(lang($type), $args);
 	}
 	

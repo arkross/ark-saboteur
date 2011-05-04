@@ -63,9 +63,9 @@ jQuery(document).ready(function($) {
 					chat_id = v.id;
 				} else {
 					str += '<span class="event-entry">'+v.string+"</span>";
-					event_id = v.id
+					if (event_id < v.id) event_id = v.id
 				}
-				$(box).smartupdaterAlterUrl('chat/log', {chat_rev: chat_id, event_rev: event_id});
+				$(box).smartupdaterAlterUrl('chat', {chat_rev: chat_id, event_rev: event_id});
 			});
 			$(box).append(str);
 			$(box).animate({ scrollTop: $(box).attr("scrollHeight") - $(box).height() });
