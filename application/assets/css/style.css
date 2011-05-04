@@ -206,7 +206,7 @@ footer {
 	border: 2px solid white;
 	width: 473px;
 	height: 405px;
-	overflow: scroll;
+	overflow: auto;
 	white-space: nowrap;
 }
 

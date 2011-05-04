@@ -31,19 +31,31 @@ class Rooms_m extends MY_Model {
 	 * @param int $round 1/2/3 if playing, 0 if standby
 	 * @return bool true if successful
 	 */
-	public function set_round($round) {
+	public function set_round($round, $playing = true) {
 		$room = (array)$this->get_current();
-		$room['is_playing'] = $round;
+		$room['is_playing'] = ($round -1) * 2 + ($playing ? 1 : 0);
 		return $this->update($room['id'], $room);
 	}
 
 	/**
 	 * Gets the current round
-	 * @return int 1/2/3 if playing, 0 if standby
+	 * @return int 1/2/3
 	 */
 	public function get_round() {
 		$room = $this->get_current();
-		return $room->is_playing;
+		$int = $room->is_playing;
+		if ($int % 2 == 0) return ($int + 1) / 2 + 0.5;
+		else return ($int + 1) / 2;
+	}
+	
+	/**
+	 * Checks whether the room is playing or not
+	 * @return type 
+	 */
+	public function is_playing() {
+		$room = $this->get_current();
+		$int = $room->is_playing;
+		return $int % 2 != 0;
 	}
 
 	/**
@@ -52,7 +64,7 @@ class Rooms_m extends MY_Model {
 	 * @return Record current room
 	 */
 	public function get_current() {
-		return $this->get($this->session->userdata('room_id'));
+		return $this-> room = $this->get($this->session->userdata('room_id'));
 	}
 	
 	/**

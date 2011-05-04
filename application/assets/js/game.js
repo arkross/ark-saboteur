@@ -20,6 +20,7 @@ jQuery(document).ready(function($) {
 	var state = WAITING;
 	
 	var disabled = false;
+	var is_playing = false;
 	
 	var playing_card;
 	var target_status;
@@ -212,6 +213,7 @@ jQuery(document).ready(function($) {
 		update_cards(data.cards);
 		update_board(data.maze);
 		update_winner(data.winner);
+		is_playing = data.is_playing;
 	});
 	
 	// Leave link click event

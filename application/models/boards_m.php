@@ -34,6 +34,7 @@ class Boards_m extends MY_Model {
 		}
 		unset($deck);
 		foreach ($draw as $v) {
+			if ($v == null) continue;
 			$v['place']['type'] = 'player';
 			$v['place']['id'] = $player_id;
 			$v['place']['value'] = 'hand';
@@ -55,6 +56,7 @@ class Boards_m extends MY_Model {
 	
 	public function receive_gold($deck_id, $player_id) {
 		$card = (array)$this->get($deck_id);
+		if (!$card) return false;
 		$card['place'] = array(
 			'type' => 'player',
 			'id' => $player_id,
@@ -223,6 +225,24 @@ class Boards_m extends MY_Model {
 			}
 		}
 		return $maze;
+	}
+	
+	/**
+	 * Gets all hand cards
+	 * @return array 
+	 */
+	public function get_hands() {
+		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
+		$hand = array();
+		foreach ($all as $card) {
+			$card = (array)$card;
+			$card['place'] = unserialize($card['place']);
+			if (isset($card['place']['value']) && 
+				$card['place']['value'] == 'hand') {
+				array_push($hand, $card);
+			}
+		}
+		return $hand;
 	}
 	
 	/**

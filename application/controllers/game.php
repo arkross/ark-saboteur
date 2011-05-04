@@ -37,7 +37,8 @@ class Game extends Server_Controller {
 		$counter = 5;
 		do {
 			$this->users_m->ping($this->session->userdata('user_id'));
-			$this->response['valid_room'] = $this->db->where('id', $this->session->userdata('room_id'))
+			$this->response['valid_room'] = $this->db
+				->where('id', $this->session->userdata('room_id'))
 				->count_all_results('rooms');
 			if ($this->response['valid_room'] < 1) break;
 			$this->board->update();
@@ -45,7 +46,8 @@ class Game extends Server_Controller {
 			$this->response['players'] = $this->board->players;
 
 			$this->response['round'] = $this->rooms_m->get_round();
-			if ($this->response['round'] == 0) {
+			$this->response['is_playing'] = ($this->rooms_m->is_playing() ? 1 : 0);
+			if ($this->response['is_playing'] == 0) {
 				if ($this->roles_m->is_creator())
 					$this->response['round'] = lang('game.start');
 				else
@@ -75,7 +77,7 @@ class Game extends Server_Controller {
 				}
 			}
 
-			if ($this->board->win != '') {
+			if ($this->board->win != '' && $this->response['is_playing']) {
 				$this->response['winner'] = lang('game.'.$this->board->win.'_win');
 				$round = $this->rooms_m->get_round();
 			}
@@ -96,10 +98,7 @@ class Game extends Server_Controller {
 		}
 		if (isset($round) && $round < 3) {
 			if ($this->roles_m->is_creator()) {
-				header('Connection: close');
-				ob_end_flush();
-				flush();
-				$this->start_round();
+				$this->rooms_m->set_round($this->rooms_m->get_round() + 1, false);
 			}
 		} elseif (isset($round) && $round >= 3){
 			$this->rooms_m->quit();
@@ -136,15 +135,18 @@ class Game extends Server_Controller {
 	public function start_game() {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
+		$round = $this->rooms_m->get_round();
 		
-		$this->_shuffle_players();
-		
-		// If it's not successful, return immediately and do nothing
-		if (!$this->response['success']) {
-			echo json_encode($this->response);
-			return;
+		if ($round === 1) {
+			$this->_shuffle_players();
+			// If it's not successful, return immediately and do nothing
+			if (!$this->response['success']) {
+				echo json_encode($this->response);
+				return;
+			}
+			$this->events_m->fire_event('start_game');
 		}
-		$this->events_m->fire_event('start_game');
+		
 		$this->start_round();
 	}
 
@@ -152,9 +154,9 @@ class Game extends Server_Controller {
 	 * Starts a new round
 	 */
 	public function start_round() {
-		$this->rooms_m->set_round($this->rooms_m->get_round() + 1);
 		$this->events_m->fire_event('start_round', array($this->rooms_m->get_round()));
 		$this->board->prepare();
+		$this->rooms_m->set_round($this->rooms_m->get_round());
 	}
 	
 	/**

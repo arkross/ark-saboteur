@@ -42,6 +42,10 @@ class Board {
 	 * Prepares everything for a new round
 	 */
 	public function prepare() {
+		if ($this->ci->rooms_m->get_round() > 1) {
+			$this->_clean();
+		}
+		
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		
 		// Applies roles to players
@@ -64,10 +68,12 @@ class Board {
 		$this->ci->boards_m->prepare_maze($this->ci->card->build_goal_cards());
 		
 		// Prepares gold
-		if ($this->ci->rooms_m->get_round() <= 1)
+		if ($this->ci->rooms_m->get_round() <= 1) {
 			$this->ci->boards_m->set_bank($this->ci->card->build_gold_cards());
+		}
 		
 		// Activate the first player
+		if ($this->ci->rooms_m->get_round() <= 1)
 		$this->ci->roles_m->next_turn();
 	}
 	
@@ -85,7 +91,7 @@ class Board {
 			$hands[$player['player_id']] = $this->ci->boards_m->get_hand($player['player_id']);
 			$sabo_win = $sabo_win || (count($hands[$player['player_id']]) ? true : false);
 		}
-		if (!$sabo_win && $this->ci->rooms_m->get_round()) {
+		if (!$sabo_win && $this->ci->rooms_m->is_playing()) {
 			$this->win = 'saboteur';
 		}
 		
@@ -97,7 +103,7 @@ class Board {
 		
 		$this->hand = $this->ci->boards_m->get_hand();
 		if ($this->win != "") {
-			$this->end_round();
+//			$this->end_round();
 		}
 	}
 	
@@ -121,26 +127,6 @@ class Board {
 	}
 	
 	public function end_round() {
-		if ($this->ci->roles_m->is_creator()) {
-			foreach ($this->maze as $m){
-				$this->ci->boards_m->delete($m['id']);
-			}
-			$this->maze = array();
-			$this->discard = $this->ci->boards_m->get_discard();
-			foreach($this->discard as $d) {
-				$this->ci->boards_m->delete($d['id']);
-			}
-			$this->discard = array();
-		}
-		foreach($this->deck as $d) {
-			$this->ci->boards_m->delete($d['id']);
-		}
-		$this->deck = array();
-		foreach($this->hand as $h) {
-			$this->ci->boards_m->delete($h['id']);
-		}
-		$this->hand = array();
-		
 		if ($this->ci->roles_m->is_creator()) {
 			$this->bank = $this->ci->boards_m->get_bank();
 			if ($this->win == 'gold-digger') {
@@ -175,6 +161,33 @@ class Board {
 			}
 		}
 		
+	}
+	
+	public function _clean() {
+		$hands = $this->ci->boards_m->get_hands();
+		foreach($hands as $h) {
+			$this->ci->boards_m->delete($h['id']);
+		}
+		unset($hands);
+		$this->hand = array();
+		
+		$this->deck = $this->ci->boards_m->get_deck();
+		foreach($this->deck as $d) {
+			$this->ci->boards_m->delete($d['id']);
+		}
+		$this->deck = array();
+		
+		$this->maze = $this->ci->boards_m->get_maze();
+		foreach ($this->maze as $m){
+			$this->ci->boards_m->delete($m['id']);
+		}
+		$this->maze = array();
+		
+		$this->discard = $this->ci->boards_m->get_discard();
+		foreach($this->discard as $d) {
+			$this->ci->boards_m->delete($d['id']);
+		}
+		$this->discard = array();
 	}
 	
 	private function check_path() {

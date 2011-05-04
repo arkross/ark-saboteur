@@ -78,7 +78,8 @@ class Roles_m extends MY_Model {
 			->where('player_id', $user_id)
 			->get($this->_table)
 			->row_array();
-		return unserialize($role['role']);
+		if ($role) return unserialize($role['role']);
+		else return false;
 	}
 	
 	/**
