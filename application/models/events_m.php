@@ -53,7 +53,11 @@ class Events_m extends MY_Model {
 			function mysort($a, $b) {
 				if ($a['created_at'] < $b['created_at']) return -1;
 				if ($a['created_at'] > $b['created_at']) return 1;
-				if ($a['created_at'] == $b['created_at']) return 0;
+				if ($a['created_at'] == $b['created_at']) {
+					if ($a['id'] < $b['id']) return -1;
+					if ($a['id'] > $b['id']) return 1;
+					if ($a['id'] == $b['id']) return 0;
+				}
 			}
 		}
 		usort($all, 'mysort');
@@ -68,7 +72,7 @@ class Events_m extends MY_Model {
 			->join('rooms', 'rooms.id = events.room_id', 'right')
 			->where('room_id', $room_id)
 			->where('events.id >', $from_id)
-			->order_by('events.id', 'asc')
+			->order_by('events.id', 'desc')
 			->get($this->_table)
 			->result_array();
 		

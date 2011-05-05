@@ -49,7 +49,7 @@
 	</ul>
 </div>
 <div id="board-game" class="left"></div>
-<div id="round" class="left"><?php echo $room->title; ?> | <span id="playing">Start Game</span></div>
+<div id="round" class="left"><span id="playing">Start Game</span> | <?php echo $room->title; ?></div>
 
 <div id="chatbox" class="right">
 	<nav id="switch">

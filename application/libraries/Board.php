@@ -44,7 +44,7 @@ class Board {
 	public function prepare() {
 		
 		if ($this->ci->rooms_m->get_round() > 1) {
-			if ($this->_clean()) echo 'Cleaning successful';
+			if ($this->_clean()) echo 'Cleaning successful'."\n";
 		}
 		
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
@@ -92,7 +92,7 @@ class Board {
 	 * Called everytime the ajax wants to update.
 	 */
 	public function update() {
-		$this->ci->boards_m->db->trans_start();
+		$this->win = '';
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
 		
 		$this->deck = $this->ci->boards_m->get_deck();
@@ -113,13 +113,12 @@ class Board {
 		
 		// Checks whether the goal card has been reached
 		
-		if (count($this->maze) > 3
+		if (count($this->maze) > 10
 			&& $this->ci->boards_m->goal_opened()) {
 			$this->win = 'gold-digger';
 		}
 		
 		
-		$this->ci->boards_m->db->trans_complete();
 		if ($this->win != "") {
 //			$this->end_round();
 		}

@@ -19,3 +19,4 @@ $lang['game.wait'] = 'Waiting';
 $lang['game.leave'] = 'Leave Game';
 $lang['game.start'] = 'Start';
 $lang['game.round'] = 'Round %s';
+$lang['game.quit'] = 'Close Game';
