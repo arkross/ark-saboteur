@@ -82,7 +82,7 @@ class Game extends Server_Controller {
 
 			if ($this->board->win != '') {
 				if (!$this->rooms_m->is_playing()) $this->response['winner'] = lang('game.'.$this->board->win.'_win');
-				$round = $this->rooms_m->get_round();
+				else $round = $this->rooms_m->get_round();
 			}
 			
 			$this->response = json_encode($this->response);
@@ -99,12 +99,12 @@ class Game extends Server_Controller {
 		} else {
 			echo $this->response;
 		}
-		if (isset($round) && $round <= 3) {
+		if (isset($round) && $round < 3) {
 			if ($this->roles_m->is_creator() && $this->rooms_m->is_playing()) {
 				$this->events_m->fire_event('end_round');
 				$this->rooms_m->set_round($this->rooms_m->get_round() + 1, false);
 			}
-		} elseif (isset($round) && $round > 3){
+		} elseif (isset($round) && $round >= 3){
 			$this->rooms_m->quit();
 		}
 		$this->response = array();

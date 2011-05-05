@@ -22,6 +22,9 @@ jQuery(document).ready(function($) {
 	var disabled = false;
 	var is_playing = false;
 	
+	var updating = true;
+	var go = false;
+	
 	var playing_card;
 	var target_status;
 	var card, target;

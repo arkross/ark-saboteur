@@ -113,7 +113,7 @@ class Board {
 		
 		// Checks whether the goal card has been reached
 		
-		if (count($this->maze)
+		if (count($this->maze) > 3
 			&& $this->ci->boards_m->goal_opened()) {
 			$this->win = 'gold-digger';
 		}

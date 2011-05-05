@@ -68,7 +68,7 @@ class Events_m extends MY_Model {
 			->join('rooms', 'rooms.id = events.room_id', 'right')
 			->where('room_id', $room_id)
 			->where('events.id >', $from_id)
-			->order_by('events.id')
+			->order_by('events.id', 'asc')
 			->get($this->_table)
 			->result_array();
 		
