@@ -106,8 +106,6 @@ class Game extends Server_Controller {
 		}
 		if (isset($round) && $round <= 3) {
 			if ($this->roles_m->is_creator() && $this->rooms_m->is_playing()) {
-				$this->events_m->fire_event($this->board->win.' wins');
-				$this->events_m->fire_event('Maze Count: '.count($this->board->maze));
 				$this->events_m->fire_event('end_round');
 				$this->rooms_m->set_round($this->rooms_m->get_round() + 1, false);
 			}
