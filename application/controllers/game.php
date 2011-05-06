@@ -72,6 +72,7 @@ class Game extends Server_Controller {
 
 
 				// Prevents other players' roles for being broadcast
+				if ($this->rooms_m->is_playing())
 				foreach($this->response['players'] as &$player) {
 					unset($player['role']['role']);
 
@@ -197,10 +198,7 @@ class Game extends Server_Controller {
 				array(
 					'turn' => $key, 
 					'gold' => 0,
-					'active' => 0,
-					'pick_off' => 0,
-					'wagon_off' => 0,
-					'lantern_off' => 0
+					'active' => 0
 				));
 		}
 	}

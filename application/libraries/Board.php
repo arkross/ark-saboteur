@@ -48,6 +48,13 @@ class Board {
 		}
 		
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
+		foreach($this->players as $player) {
+			$this->ci->roles_m->add_status($player['player_id'], array(
+				'pick_off' => 0,
+				'wagon_off' => 0,
+				'lantern_off' => 0
+			));
+		}
 		
 		// Applies roles to players
 		$this->roles = $this->ci->card->build_role_cards(count($this->players));
@@ -107,7 +114,8 @@ class Board {
 			$sabo_win = $sabo_win || (count($hands[$player['player_id']]) ? true : false);
 		}
 		if (!$sabo_win && 
-			$this->ci->rooms_m->get_round() > 1) {
+			(($this->ci->rooms_m->get_round() == 1 && $this->ci->rooms_m->is_playing())
+			|| $this->ci->rooms_m->get_round() > 1)) {
 			$this->win = 'saboteur';
 		}
 		
@@ -118,9 +126,8 @@ class Board {
 			$this->win = 'gold-digger';
 		}
 		
-		
-		if ($this->win != "") {
-//			$this->end_round();
+		if ($this->win != '' && $this->ci->rooms_m->is_playing()) {
+			$this->end_round();
 		}
 	}
 	
@@ -144,40 +151,79 @@ class Board {
 	}
 	
 	public function end_round() {
-		if ($this->ci->roles_m->is_creator()) {
-			$this->bank = $this->ci->boards_m->get_bank();
-			if ($this->win == 'gold-digger') {
-				$reversed = array_reverse($this->players);
-				$active = $this->ci->roles_m->get_active_player();
+		if (!$this->ci->roles_m->is_creator()) return;
+		
+		$this->bank = $this->ci->boards_m->get_bank();
 
-				do {
-					array_push($reversed, array_shift($reversed));
-					reset($reversed);
-					$current = current($reversed);
-				} while($current['player_id'] != $active['player_id']);
+		// If Gold digger wins
+		if ($this->win == 'gold-digger') {
+			$reversed = array_reverse($this->players);
+			$active = $this->ci->roles_m->get_active_player();
 
-				$take = array_slice($this->bank, 0, count($this->players));
-				$current = current($take);
-				$this->ci->boards_m->receive_gold($current['id'], $active['player_id']);
-				next($take);
-				foreach($take as $t) {
-					while($current = current($this->players)) {
-						if (next($this->players) === false) reset($this->players);
-						if ($current['role']['role'] == 'gold-digger') {
-							$this->ci->boards_m->receive_gold($t['id'], 
-								$current['player_id']);
-							$card = $this->ci->cards_m->get($t['card_id']);
-							$this->ci->card->play($card, 
-								array('target' => $current['player_id']));
-							break;
-						}
+			do {
+				array_push($reversed, array_shift($reversed));
+				reset($reversed);
+				$current = current($reversed);
+			} while($current['player_id'] != $active['player_id']);
+
+			$take = count($this->players);
+			if ($take > 9) $take = 9;
+			$take = array_slice($this->bank, 0, $take);
+			$current = current($take);
+
+			$this->ci->events_m->fire_event($active['player'].' gets gold first');
+			$this->ci->boards_m->receive_gold($current['id'], $active['player_id']);
+			next($take);
+			foreach($take as $t) {
+				while($current = current($reversed)) {
+					if (next($reversed) === false) reset($reversed);
+					if ($current['role']['role'] == 'gold-digger') {
+						$this->ci->events_m->fire_event($current['player'].' gets gold');
+						$this->ci->boards_m->receive_gold($t['id'], 
+							$current['player_id']);
+						$card = $this->ci->cards_m->get($t['card_id']);
+						$this->ci->card->play($card, 
+							array('target' => $current['player_id']));
+						break;
 					}
 				}
-			} else {
+			}
+		} 
 
+		// If Saboteur wins
+		else {
+			$saboteurs = $this->ci->roles_m->get_players_by_role('saboteur');
+			$quota = $this->ci->config->item('saboteur');
+			$quota = $quota[count($saboteurs)];
+			$bank = $this->bank;
+
+			function mygsort($a, $b) {
+				if ($a['gold'] < $b['gold']) return -1;
+				if ($a['gold'] > $b['gold']) return 1;
+				return 0;
+			}
+			usort($bank, 'mygsort');
+			$bank = array_reverse($bank);
+
+			foreach($saboteurs as $s) {
+				reset($bank);
+
+				// Greedy Algorithm
+				$temp = 0;
+				while ($temp != $quota) {
+					$try = each($bank);
+					if ($temp + $try['value']['gold'] > $quota) {
+						continue;
+					}
+					$this->ci->events_m->fire_event($s['player'].' gets gold');
+					$this->ci->boards_m->receive_gold($try['id'], $s['player_id']);
+					$card = $this->ci->cards_m->get($try['card_id']);
+					$this->ci->card->play($card, array('target' => $s['player_id']));
+					$temp += $try['value']['gold'];
+					unset($bank[$try['key']]);
+				}
 			}
 		}
-		
 	}
 	
 	public function _clean() {

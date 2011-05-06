@@ -363,6 +363,18 @@ footer {
 	cursor: pointer;
 }
 
+.ready {
+	background-color: lightblue;
+}
+
+.gold-digger {
+	background-color: yellow;
+}
+
+.saboteur {
+	background-color: red;
+}
+
 /*  Chatbox  */
 #chatbox {
 	width: 173px;

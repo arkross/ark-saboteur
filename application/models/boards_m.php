@@ -83,6 +83,9 @@ class Boards_m extends MY_Model {
 			$card = (array)$card;
 			$card['place'] = unserialize($card['place']);
 			if ($card['place']['type'] == 'bank') {
+				$card['gold'] = $card['effect']['result'];
+				$card['gold'] = str_replace('gold[', '', $card['gold']);
+				$card['gold'] = str_replace(']', '', $card['gold']);
 				array_push($bank, $card);
 			}
 		}

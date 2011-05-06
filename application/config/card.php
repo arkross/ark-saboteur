@@ -64,3 +64,10 @@ $config['distribution'] = array(
 		'hand' => 4
 	)
 );
+
+$config['saboteur'] = array(
+	1 => 4,
+	2 => 3,
+	3 => 3,
+	4 => 2
+);

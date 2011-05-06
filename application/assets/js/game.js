@@ -130,7 +130,14 @@ jQuery(document).ready(function($) {
 					state = READY;
 				}
 			}
-			str += '><span class="player-name">'+v.player+'</span>';
+			str += '><span class="player-name';
+			if (v.role.role != undefined) {
+				str += ' '+v.role.role + '"';
+				str += ' title="' + v.role.role + '"';
+			} else {
+				str += '"';
+			}
+			str += '>'+v.player+'</span>';
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
 			}

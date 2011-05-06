@@ -22,6 +22,17 @@ class Roles_m extends MY_Model {
 		$this->_table = 'roles';
 	}
 	
+	public function get_players_by_role($role = 'saboteur') {
+		$all = $this->get_current_room_players();
+		$selected = array();
+		foreach($all as $a) {
+			if (isset($a['role']['role']) && $a['role']['role'] == $role) {
+				$selected[] = $a;
+			}
+		}
+		return $selected;
+	}
+	
 	public function get_active_player() {
 		$all = $this->get_current_room_players(false);
 		foreach($all as $a) {
