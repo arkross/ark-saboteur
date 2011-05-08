@@ -59,6 +59,7 @@ class Game extends Server_Controller {
 					$this->response['round'] = lang('game.wait');
 			} else {
 				$this->response['round'] = sprintf(lang('game.round'), $this->response['round_count']);
+				$this->session->unset_userdata('got_notif');
 			}
 			
 			if ($this->rooms_m->get_round() <= 3) {
@@ -94,8 +95,15 @@ class Game extends Server_Controller {
 			}
 			
 			if ($this->board->win != '') {
-				if (!$this->rooms_m->is_playing()) $this->response['winner'] = lang('game.'.$this->board->win.'_win');
-				else $round = $this->rooms_m->get_round();
+				if (!$this->rooms_m->is_playing()) {
+					if (!$this->session->userdata('got_notif')) {
+						$this->response['winner'] = lang('game.'.$this->board->win.'_win');
+						$this->session->set_userdata('got_notif', 1);
+					}
+				}
+				else {
+					$round = $this->rooms_m->get_round();
+				}
 			}
 			
 			$this->response = json_encode($this->response);
@@ -103,11 +111,14 @@ class Game extends Server_Controller {
 			header('ETag:'.$checksum);
 			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
 			$counter --;
-		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
+		} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] 
+			&& $this->users_m->still_alive()
+			&& $this->roles_m->get_current_room() == $this->session->userdata('room_id')
+			&& $counter > 0);
 		
 		if (is_array($this->response))
 			$this->response = json_encode($this->response);
-		if ($counter == 0 && $checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
+		if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
 			$this->_respond_304();
 		} else {
 			echo $this->response;

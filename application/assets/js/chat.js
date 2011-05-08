@@ -22,11 +22,11 @@ jQuery(document).ready(function($) {
 		$("#switch li").removeClass("active");
 		$(this).addClass("active");
 		switch ($(this).html()) {
-			case "Event":
+			case "Events":
 				$(".chat-entry").hide();
 				$(".event-entry").show();
 				break;
-			case "Chat":
+			case "Chats":
 				$(".chat-entry").show();
 				$(".event-entry").hide();
 				break;

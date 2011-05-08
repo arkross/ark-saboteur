@@ -132,13 +132,14 @@ jQuery(document).ready(function($) {
 				}
 			}
 			str += '><span class="player-name';
-			if (v.role.role != undefined) {
-				str += ' '+v.role.role + '"';
-				str += ' title="' + v.role.role + '"';
-			} else {
-				str += '"';
+			if (v.role.lag != undefined && v.role.lag == 1) {
+				str += ' lag';
 			}
-			str += '>'+v.player+'</span>';
+			if (v.role.role != undefined) {
+				str += ' '+v.role.role;
+				str += '" title="' + v.role.role;
+			}
+			str += '">'+v.player+'</span>';
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
 			}
@@ -202,7 +203,9 @@ jQuery(document).ready(function($) {
 		if (is_playing == '1') return;
 		if (is_creator) {
 			if (parseInt(round_count) > 3) {
-				window.location = 'room';
+				$.get('presence/leave', '', function(data) {
+					window.location = 'room';
+				});
 				return;
 			}
 			$("#deck").smartupdaterStop();

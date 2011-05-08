@@ -26,7 +26,14 @@ jQuery(document).ready(function($) {
 		if (data == undefined) return;
 		var str = '';
 		$.each(data, function(i, v) {
-			str += '<li>'+v.player+'</li>';
+			console.log(v);
+			str += '<li';
+			if (v.role != undefined
+					&& v.role.lag != undefined
+					&& v.role.lag == 1) {
+				str += ' class="lag"';
+			}
+			str += '>'+v.player+'</li>';
 		});
 		$("#login-list ul").html(str);
 		$("#login-list div span").html(data.length);

@@ -42,6 +42,19 @@ class Roles_m extends MY_Model {
 		}
 	}
 	
+	public function get_current_room($user_id = '') {
+		if ($user_id == '') $user_id = $this->session->userdata('user_id');
+		if ($role = $this->get_by('player_id', $user_id)) {
+			return $role->room_id;
+		}
+		return False;
+	}
+	
+	public function delete_role($user_id = '') {
+		if ($user_id == '') $user_id = $this->session->userdata('user_id');
+		return $this->delete_by('player_id', $user_id);
+	}
+	
 	/**
 	 * Sets the role field of a player, overrides the current.
 	 * @param Array $role array of role and details
@@ -98,10 +111,11 @@ class Roles_m extends MY_Model {
 	 * @return Mixed Players records
 	 */
 	public function get_current_room_players($lobby = true) {
-		$timeout = now() - 5;
-		if ($lobby) $timeout + 3;
+		$lag = now() - 5;
+		$timeout = now() - 60;
+		if ($lobby) $timeout + 30;
 		$players = $this->db
-			->select('users.username as player, roles.*')
+			->select('users.username as player, roles.*, users.last_seen')
 			->join('users', 'users.id = roles.player_id', 'LEFT')
 			->where('room_id', $this->session->userdata('room_id'))
 			->where('users.last_seen >=', $timeout)
@@ -109,6 +123,8 @@ class Roles_m extends MY_Model {
 			->result_array();
 		foreach($players as &$value) {
 			$value['role'] = unserialize($value['role']);
+			$value['role']['lag'] = $value['last_seen'] < $lag ? 1 : 0;
+			unset($value['last_seen']);
 		}
 		if (isset($players[0]['role']['turn'])) {
 			$newplayers = array();

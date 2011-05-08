@@ -24,26 +24,30 @@ class Login extends Client_Controller {
   //put your code here
   function __construct() {
     parent::__construct();
-	$this->load->library('form_validation');
-	$this->load->model('comments_m');
-	$this->data['messages'] = $this->session->flashdata('messages');	
+		
+		$this->load->library('form_validation');
+		$this->load->model('comments_m');
+		$this->data['messages'] = $this->session->flashdata('messages');
   }
 
   function index() {
-	if ($_POST) {
-		if ($this->_check_login()) {
-			if ($this->users_m->login($this->input->post('username'), $this->input->post('password'))) {
-				redirect('room');
-			}
-		} else {
-			$this->data['messages'] = $this->form_validation->error_string('<div>', '</div>');
+		if ($this->session->userdata('user_id')) {
+			redirect('room');
 		}
-	}
-	$this->data['comments'] = $this->comments_m->get_latest();
-    $this->template
-			->title('Home')
-			->append_metadata(css('52/forms.css'))
-			->build('login', $this->data);
+		if ($_POST) {
+			if ($this->_check_login()) {
+				if ($this->users_m->login($this->input->post('username'), $this->input->post('password'))) {
+					redirect('room');
+				}
+			} else {
+				$this->data['messages'] = $this->form_validation->error_string('<div>', '</div>');
+			}
+		}
+		$this->data['comments'] = $this->comments_m->get_latest();
+			$this->template
+				->title('Home')
+				->append_metadata(css('52/forms.css'))
+				->build('login', $this->data);
   }
 
 	function logout() {

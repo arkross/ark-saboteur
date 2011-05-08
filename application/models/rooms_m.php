@@ -64,7 +64,7 @@ class Rooms_m extends MY_Model {
 	 * @return Record current room
 	 */
 	public function get_current() {
-		return $this-> room = $this->get($this->session->userdata('room_id'));
+		return $this->room = $this->get($this->session->userdata('room_id'));
 	}
 	
 	/**
@@ -99,15 +99,21 @@ class Rooms_m extends MY_Model {
 	/**
 	 * Leaves a room
 	 */
-	public function quit() {
+	public function quit($logout = false) {
 		$this->load->model('events_m');
 		$this->events_m->fire_event('leave_room');
 		// Checks if it's the room creator quitting
 		if ($this->roles_m->is_creator()) {
 			$this->_close();
 		}
-		$this->session->set_userdata('room_id', 1);
-		return $this->roles_m->set_role(array('role'=>'ready'));
+		if (!$logout) {
+			$this->session->set_userdata('room_id', 1);
+			return $this->roles_m->set_role(array('role'=>'ready'));
+		}
+		else {
+			$this->session->unset_userdata ('room_id');
+			return $this->roles_m->delete_role();
+		}
 	}
 
 	/**

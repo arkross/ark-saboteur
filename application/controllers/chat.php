@@ -37,8 +37,11 @@ class Chat extends Server_Controller {
 				header('ETag:'.$checksum);
 				if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) usleep(1000000);
 				$counter --;
-			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH'] && $counter > 0);
-			if ($counter == 0 && $checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
+			} while ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']
+				&& $this->users_m->still_alive()
+				&& $this->roles_m->get_current_room() == $this->session->userdata('room_id')
+				&& $counter > 0);
+			if ($checksum == $_SERVER['HTTP_IF_NONE_MATCH']) {
 				$this->_respond_304();
 			} else {
 				echo $logs;

@@ -61,6 +61,11 @@ section {
 	min-height: 420px;
 }
 
+.lag {
+	background: url('../img/ajax-loader.gif');
+	background-repeat: no-repeat;
+}
+
 /*  Header Section  */
 .sabo-logo {
 	background: url('../img/saboteur-beta-logo.png') no-repeat;
@@ -322,6 +327,7 @@ footer {
 	float: left;
 	margin-right: 10px;
 	margin-top: 10px;
+	border: 2px solid transparent;
 	cursor: pointer;
 }
 

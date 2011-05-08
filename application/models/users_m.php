@@ -33,6 +33,11 @@ class Users_m extends MY_Model {
 		}
 		return FALSE;
 	}
+	
+	public function still_alive() {
+		$user = $this->get_user();
+		return ($user->last_seen > (now()-5));
+	}
 
 	/**
 	 * Gets current user
@@ -69,7 +74,7 @@ class Users_m extends MY_Model {
 	 * ログアウトする
 	 */
 	public function logout() {
-		$this->rooms_m->quit();
+		$this->rooms_m->quit(true);
 		$this->session->unset_userdata('user_id');
 	}
 	
