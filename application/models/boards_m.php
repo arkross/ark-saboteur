@@ -13,6 +13,9 @@
  * Company : http://mimicreative.net
  */
 
+/**
+ * @author Alexander
+ */
 class Boards_m extends MY_Model {
 	public function __construct() {
 		parent::__construct();
@@ -83,7 +86,8 @@ class Boards_m extends MY_Model {
 			$card = (array)$card;
 			$card['place'] = unserialize($card['place']);
 			if ($card['place']['type'] == 'bank') {
-				$card['gold'] = $card['effect']['result'];
+				$detail = $this->cards_m->get($card['card_id']);
+				$card['gold'] = $detail['effect']['result'];
 				$card['gold'] = str_replace('gold[', '', $card['gold']);
 				$card['gold'] = str_replace(']', '', $card['gold']);
 				array_push($bank, $card);

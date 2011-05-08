@@ -215,9 +215,9 @@ class Board {
 					if ($temp + $try['value']['gold'] > $quota) {
 						continue;
 					}
-					$this->ci->events_m->fire_event($s['player'].' gets gold');
-					$this->ci->boards_m->receive_gold($try['id'], $s['player_id']);
-					$card = $this->ci->cards_m->get($try['card_id']);
+					$this->ci->events_m->fire_event($s['player'].' gets gold '.$try['value']['gold']);
+					$this->ci->boards_m->receive_gold($try['value']['id'], $s['player_id']);
+					$card = $this->ci->cards_m->get($try['value']['card_id']);
 					$this->ci->card->play($card, array('target' => $s['player_id']));
 					$temp += $try['value']['gold'];
 					unset($bank[$try['key']]);
