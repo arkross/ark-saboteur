@@ -25,6 +25,7 @@ jQuery(document).ready(function($) {
 	var playing_card;
 	var target_status;
 	var card, target;
+	var round_count = 0;
 	
 	$("#confirm-heal li").addClass('ui-widget-content');
 	$("#confirm-heal li img").live('click', function(event) {
@@ -200,9 +201,12 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		if (is_playing == '1') return;
 		if (is_creator) {
+			if (parseInt(round_count) > 3) {
+				window.location = 'room';
+				return;
+			}
 			$("#deck").smartupdaterStop();
 			$.post('game/start_game', '', function(data){
-				console.log(data);
 				$("#deck").smartupdaterRestart();
 			});
 		}
@@ -223,6 +227,7 @@ jQuery(document).ready(function($) {
 		update_board(data.maze);
 		update_winner(data.winner);
 		is_playing = data.is_playing;
+		round_count = data.round_count;
 	});
 	
 	// Leave link click event

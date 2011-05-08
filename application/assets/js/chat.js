@@ -63,13 +63,11 @@ jQuery(document).ready(function($) {
 					if (chat_id < parseInt(v.id)) chat_id = v.id;
 				} else {
 					str += '<span class="event-entry id-'+v.id+'">'+v.string+"</span>";
-					console.log(event_id + ' < ' + v.id);
 					if (event_id < parseInt(v.id)) {
 						event_id = v.id
 					}
 				}
 			});
-			console.log(event_id);
 			$(box).smartupdaterAlterUrl('chat', {chat_rev: chat_id, event_rev: event_id});
 			$(box).append(str);
 			$(box).animate({ scrollTop: $(box).attr("scrollHeight") - $(box).height() });

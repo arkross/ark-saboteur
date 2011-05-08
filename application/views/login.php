@@ -36,7 +36,8 @@ if (isset($messages)) echo $messages;
 <article class="col_10 col">
 	<h2>About Saboteur Card Game</h2>
 	<p>Saboteur is a mining-themed card game, designed by Frederic Moyersoen and published in 2004 by Z-Man Games.</p>
-	<p>I can't say much about the rules. If you're new to Saboteur Card Game, you can read all about the rules <?php echo anchor(base_url().'Saboteur_US_Rules.pdf', 'here'); ?>.</p>
+	<p>I can&#39;t say much about the rules. If you&#39;re new to Saboteur Card Game, you can read all about the rules <?php echo anchor(base_url().'Saboteur_US_Rules.pdf', 'here'); ?>.
+	For your information, this game needs at least 3 human players. I have no AI installed here.</p>
 </article>
 <article class="col_10 col">
 	<h2>What the players say</h2>

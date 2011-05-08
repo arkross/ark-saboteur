@@ -60,6 +60,14 @@ class Game extends Server_Controller {
 			} else {
 				$this->response['round'] = sprintf(lang('game.round'), $this->response['round_count']);
 			}
+			
+			if ($this->rooms_m->get_round() <= 3) {
+				// Prevents other players' golds for being broadcast
+				foreach($this->response['players'] as &$player) {
+					if ($player['player_id'] != $this->session->userdata('user_id'))
+					unset($player['role']['gold']);
+				}
+			}
 
 			$this->response['maze'] = $this->board->maze;
 			if ($this->rooms_m->is_playing()) {
@@ -72,7 +80,6 @@ class Game extends Server_Controller {
 
 
 				// Prevents other players' roles for being broadcast
-				if ($this->rooms_m->is_playing())
 				foreach($this->response['players'] as &$player) {
 					unset($player['role']['role']);
 
