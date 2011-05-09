@@ -29,7 +29,7 @@ class Board {
 	var $players = array();
 	var $win = '';
 	
-	var $playerwinner = '';
+	var $playerwinner = array();
 	
 	public function __construct() {
 		$this->ci =& get_instance();
@@ -131,8 +131,18 @@ class Board {
 		if ($this->win != '' && $this->ci->rooms_m->is_playing()) {
 			$this->end_round();
 		}
+		
+		if ($this->ci->rooms_m->get_round() > 3) {
+			$this->end_game();
+		}
 	}
 	
+	/**
+	 * Plays a card
+	 * @param int $deck_id The card ID in the deck
+	 * @param Array $options arguments containing target, and additional things
+	 * @return Array Response
+	 */
 	public function move($deck_id, $options = array()) {
 		$deck = (array)$this->ci->boards_m->get($deck_id);
 		$card = $this->ci->cards_m->get($deck['card_id']);
@@ -144,17 +154,29 @@ class Board {
 		return $return;
 	}
 	
+	/**
+	 * Place a card into the discard pile
+	 * @param int $deck_id The card ID in the deck
+	 * @return Array Response
+	 */
 	public function discard($deck_id) {
 		$card = (array)$this->ci->boards_m->get($deck_id);
 		$card['place'] = array('type' => 'discard');
 		return array('response' => $this->ci->boards_m->update($card['id'], $card), 'error' => '');
 	}
 	
+	/**
+	 * Draws a card from the deck and pass turn
+	 */
 	public function end_turn() {
 		$this->ci->boards_m->draw();
 		$this->ci->roles_m->next_turn();
 	}
 	
+	/**
+	 * Distributes gold
+	 * @return void
+	 */
 	public function end_round() {
 		if (!$this->ci->roles_m->is_creator()) return;
 		
@@ -178,7 +200,11 @@ class Board {
 
 			$this->ci->events_m->fire_event($active['player'].' gets gold first');
 			$this->ci->boards_m->receive_gold($current['id'], $active['player_id']);
-			next($take);
+			$card = $this->ci->cards_m->get($current['card_id']);
+			$this->ci->card->play($card, 
+				array('target' => $active['player_id']));
+			array_shift($take);
+			next($reversed);
 			foreach($take as $t) {
 				while($current = current($reversed)) {
 					if (next($reversed) === false) reset($reversed);
@@ -231,8 +257,21 @@ class Board {
 		}
 	}
 	
+	/**
+	 * Looks for players with the most gold
+	 */
 	public function end_game() {
-		
+		$max = 0;
+		foreach($this->players as $p) {
+			if ($p['role']['gold'] > $max)
+				$max = $p['role']['gold'];
+		}
+		foreach($this->players as $p) {
+			if ($p['role']['gold'] == $max) {
+				$status = array('winner' => 1);
+				$this->ci->roles_m->add_status($p['player_id'], $status);
+			}
+		}
 	}
 	
 	public function _clean() {

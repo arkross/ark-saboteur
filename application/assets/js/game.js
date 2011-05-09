@@ -135,6 +135,9 @@ jQuery(document).ready(function($) {
 			if (v.role.lag != undefined && v.role.lag == 1) {
 				str += ' lag';
 			}
+			if (v.role.winner != undefined && v.role.winner == '1'){
+				str += ' winner';
+			}
 			if (v.role.role != undefined) {
 				str += ' '+v.role.role;
 				str += '" title="' + v.role.role;
@@ -208,13 +211,11 @@ jQuery(document).ready(function($) {
 				});
 				return;
 			}
-			$("#deck").smartupdaterStop();
 			$.post('game/start_game', '', function(data){
 				if (data.success == "0") {
 					$("#message").html(data.error);
 					$("#message").dialog({modal:true});
 				}
-				$("#deck").smartupdaterRestart();
 			}, 'json');
 		}
 	});
@@ -314,6 +315,7 @@ jQuery(document).ready(function($) {
 					$("#peek").dialog({modal:true});
 				}
 			} else {
+				state = CARD_CHOSEN;
 				$("#message").html("Failed to Move! "+data.error);
 				$("#message").dialog({modal:true});
 			}
@@ -340,6 +342,7 @@ jQuery(document).ready(function($) {
 				'target': target
 			}, function(data) {
 				if (data.response != true) {
+					state = CARD_CHOSEN;
 					$("#message").html("Failed to Disable / Heal! "+data.error);
 					$("#message").dialog({modal:true});
 				}
