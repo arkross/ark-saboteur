@@ -169,9 +169,14 @@ class Rooms_m extends MY_Model {
 	 * @return Mixed Array of records
 	 */
 	public function dropdown() {
-		$result = parent::dropdown('id', 'title');
-		unset($result[1]);
-		return $result;
+		$result = (array)$this->get_all();
+		unset($result[0]);
+		$dropdown = array();
+		foreach($result as $r) {
+			$c = $this->roles_m->get_creator($r->id);
+			$dropdown[$r->id] = $r->title. ' - created by '.$c->username;
+		}
+		return $dropdown;
 	}
 	
 	public function _create() {

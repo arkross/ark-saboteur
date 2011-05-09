@@ -30,6 +30,7 @@ class Presence extends Server_Controller {
 	 */
 	function lobbyupdate() {
 		$counter = 5;
+		$checksum = '';
 		do {
 			$this->users_m->ping($this->session->userdata('user_id'));
 			$response = array();

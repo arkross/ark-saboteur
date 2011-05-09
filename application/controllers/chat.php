@@ -27,6 +27,7 @@ class Chat extends Server_Controller {
 	
 	public function log() {
 		if ($_POST) {
+			$checksum = '';
 			$counter = 5;
 			$chat_rev = $this->input->post('chat_rev');
 			$event_rev = $this->input->post('event_rev');

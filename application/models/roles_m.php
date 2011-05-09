@@ -22,6 +22,18 @@ class Roles_m extends MY_Model {
 		$this->_table = 'roles';
 	}
 	
+	public function get_creator($room_id = '') {
+		if ($room_id == '') $room_id = $this->session->userdata('room_id');
+		$players = $this->get_many_by('room_id', $room_id);
+		foreach($players as $p) {
+			$p->role = unserialize($p->role);
+			if ($p->role['creator']) {
+				return $this->users_m->get($p->player_id);
+			}
+		}
+		return FALSE;
+	}
+	
 	public function get_players_by_role($role = 'saboteur') {
 		$all = $this->get_current_room_players();
 		$selected = array();

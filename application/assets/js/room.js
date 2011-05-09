@@ -26,7 +26,6 @@ jQuery(document).ready(function($) {
 		if (data == undefined) return;
 		var str = '';
 		$.each(data, function(i, v) {
-			console.log(v);
 			str += '<li';
 			if (v.role != undefined
 					&& v.role.lag != undefined
@@ -58,41 +57,4 @@ jQuery(document).ready(function($) {
 			updateRoomList(data.rooms);
 		}
 	);
-	
-	/**
-	 * Refreshes Game room list
-	 * ルームのリストを更新する
-	 */
-//	$("#room-list select").smartupdater({
-//		url: 'presence/rooms',
-//		dataType: 'json',
-//		httpCache: true,
-//		minTimeout: 5000},
-//		function(data) {
-//			var str = '';
-//			$.each(data, function(i, v) {
-//				str += '<option value="'+i+'">'+v+'</option>';
-//			});
-//			$("#room-list select").html(str);
-//		}
-//	);
-//	
-//	/**
-//	 * Refreshes Logged in player list
-//	 * ログインしているプレヤーのリストを更新する
-//	 */
-//	$("#login-list ul").smartupdater({
-//		url: 'presence/players',
-//		dataType: 'json',
-//		httpCache: true,
-//		minTimeout: 5000},
-//		function(data) {
-//			var str = '';
-//			$.each(data, function(i, v) {
-//				str += '<li>'+v.player+'</li>';
-//			});
-//			$("#login-list ul").html(str);
-//			$("#login-list div span").html(data.length);
-//		}
-//	);
 });

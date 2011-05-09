@@ -125,7 +125,7 @@ jQuery(document).ready(function($) {
 		disabled = false;
 		$.each(data, function(i, v) {
 			str += '<li id="player-'+v.player_id+'"';
-			if (v.role.active != undefined && v.role.active == 1) {
+			if (v.role.active != undefined && v.role.active == 1 && is_playing == '1') {
 				str += ' class="active"';
 				if (v.player_id == user_id) {
 					state = READY;
@@ -210,8 +210,12 @@ jQuery(document).ready(function($) {
 			}
 			$("#deck").smartupdaterStop();
 			$.post('game/start_game', '', function(data){
+				if (data.success == "0") {
+					$("#message").html(data.error);
+					$("#message").dialog({modal:true});
+				}
 				$("#deck").smartupdaterRestart();
-			});
+			}, 'json');
 		}
 	});
 	
@@ -222,6 +226,7 @@ jQuery(document).ready(function($) {
 		httpCache: true,
 		dataType: 'json'
 	}, function(data){
+		is_playing = data.is_playing;
 		update_valid_room(data.valid_room);
 		update_round(data.round);
 		update_actions(data.actions);
@@ -229,7 +234,6 @@ jQuery(document).ready(function($) {
 		update_cards(data.cards);
 		update_board(data.maze);
 		update_winner(data.winner);
-		is_playing = data.is_playing;
 		round_count = data.round_count;
 	});
 	
@@ -304,14 +308,14 @@ jQuery(document).ready(function($) {
 			'target': target,
 			'reversed': reversed
 		}, function(data) {
-			if (slug == "map") {
-				$("#peek").html('<img src="'+data.error+'" />');
-				$("#peek").dialog({modal:true});
-			} else {
-				if (data.response != true) {
-					$("#message").html("Failed to Move! "+data.error);
-					$("#message").dialog({modal:true});
+			if (data.response == true) {
+				if (slug == "map") {
+					$("#peek").html('<img src="'+data.error+'" />');
+					$("#peek").dialog({modal:true});
 				}
+			} else {
+				$("#message").html("Failed to Move! "+data.error);
+				$("#message").dialog({modal:true});
 			}
 		}, 'json');
 	});

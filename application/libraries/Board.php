@@ -29,6 +29,8 @@ class Board {
 	var $players = array();
 	var $win = '';
 	
+	var $playerwinner = '';
+	
 	public function __construct() {
 		$this->ci =& get_instance();
 
@@ -135,6 +137,9 @@ class Board {
 		$deck = (array)$this->ci->boards_m->get($deck_id);
 		$card = $this->ci->cards_m->get($deck['card_id']);
 		$return = $this->ci->card->play($card, $options);
+		if ($return['response'] == true) {
+			$this->ci->events_m->fire_event('game.play_card', array($card['name']));
+		}
 		$this->check_path();
 		return $return;
 	}
@@ -224,6 +229,10 @@ class Board {
 				}
 			}
 		}
+	}
+	
+	public function end_game() {
+		
 	}
 	
 	public function _clean() {

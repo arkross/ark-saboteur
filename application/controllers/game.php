@@ -35,6 +35,7 @@ class Game extends Server_Controller {
 	 */
 	public function update() {
 		$counter = 5;
+		$checksum = '';
 		do {
 			$this->users_m->ping($this->session->userdata('user_id'));
 			$this->response['valid_room'] = $this->db
@@ -149,8 +150,6 @@ class Game extends Server_Controller {
 			$success = $this->board->move($deck_id, $args);
 		}
 		if ($success['response'] == true) {
-			if ($target != 'discard')
-				$this->events_m->fire_event('game.play_card', array($this->users_m->get_user()->username));
 			$this->board->end_turn();
 		}
 		echo json_encode($success);
@@ -163,7 +162,12 @@ class Game extends Server_Controller {
 	public function start_game() {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
-		if ($this->rooms_m->is_playing()) return;
+		if ($this->rooms_m->is_playing()) {
+			$this->response['success'] = 0;
+			$this->response['error'] = 'Failed to Start. The game is already started.';
+			echo json_encode($this->response);
+			return;
+		}
 		
 		$round = $this->rooms_m->get_round();
 		if ($round == 1) {
@@ -202,7 +206,8 @@ class Game extends Server_Controller {
 		$players = $this->roles_m->get_current_room_players(false);
 		$this->board->players = $players;
 		if (count($players) < 3 || count($players) > 10) {
-			$this->response = array_merge(array('success' => '0'), $this->response);
+			$this->response['success'] = '0';
+			$this->response['error'] = 'The players does not meet the minimum requirements of 3 players or exceeded maximum of 10 players.';
 			return;
 		} else {
 			$this->response = array_merge(array('success' => '1'), $this->response);
