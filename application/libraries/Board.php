@@ -219,7 +219,7 @@ class Board {
 					}
 				}
 			}
-		} 
+		}
 
 		// If Saboteur wins
 		else {
