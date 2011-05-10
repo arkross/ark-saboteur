@@ -68,6 +68,7 @@ jQuery(document).ready(function($) {
 					}
 				}
 			});
+			$("#switch li.active").click();
 			$(box).smartupdaterAlterUrl('chat', {chat_rev: chat_id, event_rev: event_id});
 			$(box).append(str);
 			$(box).animate({ scrollTop: $(box).attr("scrollHeight") - $(box).height() });

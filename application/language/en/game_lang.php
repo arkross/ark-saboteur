@@ -12,8 +12,8 @@
  * Blog    : http://www.arkross.com
  * Company : http://mimicreative.net
  */
-$lang['game.saboteur'] = 'You are a Saboteur';
-$lang['game.gold-digger'] = 'You are a Gold Digger';
+$lang['game.saboteur'] = 'Saboteur';
+$lang['game.gold-digger'] = 'Gold Digger';
 $lang['game.ready'] = 'Standing by';
 $lang['game.wait'] = 'Waiting';
 $lang['game.leave'] = 'Leave Game';

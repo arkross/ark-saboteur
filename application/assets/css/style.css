@@ -232,7 +232,17 @@ footer {
 	margin-right: -2px;
 }
 
+.grid-hover {
+	border: 2px solid white;
+	margin-top: -3px;
+	margin-right: -2px;
+}
+
 .grid:active {
+	background-color: #f6c709;
+}
+
+.grid-active {
 	background-color: #f6c709;
 }
 
@@ -250,6 +260,10 @@ footer {
 
 #player-list li .player-name:hover {
 	background-color: #bbbbbb;
+}
+
+.player-hover {
+	background-color: #bbb;
 }
 
 #player-list li .player-name:active {
@@ -335,7 +349,16 @@ footer {
 	margin-right: 10px;
 }
 
+#discard-cards {
+	border: 1px solid transparent;
+	height: 67px;
+}
+
 #discard-cards:hover {
+	border: 1px solid black;
+	cursor: pointer;
+}
+#discard-cards.discard-hover {
 	border: 1px solid black;
 	cursor: pointer;
 }

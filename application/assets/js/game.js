@@ -236,6 +236,7 @@ jQuery(document).ready(function($) {
 		update_board(data.maze);
 		update_winner(data.winner);
 		round_count = data.round_count;
+		reloadDragDrop();
 	});
 	
 	// Leave link click event
@@ -349,4 +350,41 @@ jQuery(document).ready(function($) {
 			}, 'json');
 		}
 	});
+	
+	$("#discard-cards").droppable({
+			hoverClass: "discard-hover",
+			drop: function(event) {
+				$(this).click();
+			}
+		});
+	
+	function reloadDragDrop() {
+		$("#hand-cards img").draggable({
+			helper: function(event) {
+				var el = $(this).clone().css('width', 42);
+				el.css('height', 57);
+				return el;
+			},
+			cursorAt: {cursor: "pointer", top: 28, left: 21},
+			opacity: 0.9,
+			start: function(event) {
+				$(this).click();
+			}
+		});
+		
+		$("#board-game div").droppable({
+			hoverClass: 'grid-hover',
+			accept: '.target-maze',
+			drop: function(event) {
+				$(this).click();
+			}
+		});
+		$("#player-list li").droppable({
+			accept: '.target-player',
+			hoverClass: 'player-hover',
+			drop: function(event) {
+				$(this).click();
+			}
+		});
+	}
 });
