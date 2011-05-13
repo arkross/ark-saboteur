@@ -27,6 +27,12 @@ jQuery(document).ready(function($) {
 	var card, target;
 	var round_count = 0;
 	
+	$("#role").tooltip({
+		position: 'bottom center',
+		effect: 'slide',
+		predelay: 1000
+	});
+	
 	$("#confirm-heal li").addClass('ui-widget-content');
 	$("#confirm-heal li img").live('click', function(event) {
 		event.preventDefault();
@@ -76,7 +82,11 @@ jQuery(document).ready(function($) {
 	
 	function update_actions(data) {
 		if (data != undefined && data != false) {
-			$("#role").html(data);
+		  var cloned = $("#all-cards img.slug-"+data);
+			var tooltip = cloned.next('div').clone();
+			cloned = cloned.clone();
+			$("#role").html(cloned.attr('name'));
+			$("#actions .tooltip").html(tooltip.html());
 		}
 	}
 	
@@ -177,6 +187,8 @@ jQuery(document).ready(function($) {
 			$.each(data.hand, function(i, v) {
 				var cloned = $('#all-cards img.card-'+v.card_id).clone(true);
 				cloned.attr('id', 'deck-' + v.id);
+				cloned.appendTo('#hand-cards');
+				cloned = $("#all-cards div.tooltip-"+v.card_id).clone();
 				cloned.appendTo('#hand-cards');
 			});
 		}
@@ -359,6 +371,10 @@ jQuery(document).ready(function($) {
 		});
 	
 	function reloadDragDrop() {
+		$("#hand-cards img").tooltip({
+			effect: 'slide',
+			predelay: 700
+		});
 		$("#hand-cards img").draggable({
 			helper: function(event) {
 				var el = $(this).clone().css('width', 42);

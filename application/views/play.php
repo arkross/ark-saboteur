@@ -28,8 +28,18 @@
 		echo ' target-'.$card['effect']['target'];
 		echo ' slug-'.$card['slug'];
 		echo ' type-'.$card['type_name'];
-		echo '" title="'.$card['name'].'" />';
-	}
+		echo '"	name="'.$card['name'].'" />';
+		?>
+	<div class="tooltip-<?php echo $card['id']; ?> tooltip">
+		
+		<div class="col"><?php echo img(base_url().$card['photo']); ?></div>
+		<div class="right">
+			<h4><?php echo $card['name']; ?></h4>
+			<p>Targets: <?php echo $card['effect']['target']; ?></p>
+			<p><?php echo $card['description']; ?></p>
+		</div>
+	</div>
+	<?php }
 	unset($cards);
 	?>
 </div>
@@ -68,6 +78,7 @@
 
 <div id="actions" class="left">
 	<div id="role"></div>
+	<div class="tooltip"></div>
 	<div id="leave" title="If you leave, the game will be disbanded as well."><?php echo lang('game.leave'); ?></div>
 </div>
 

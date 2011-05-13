@@ -48,7 +48,8 @@ class Client_Controller extends MY_Controller {
 			->append_metadata(js('jquery/jquery-1.5.2.min.js'))
 			->append_metadata(js('52/modernizr-1.7.min.js'))
 			->append_metadata(js('52/selectivizr.js'))
-			->append_metadata(js('jquery/jquery-ui-1.8.12.custom.js'));
+			->append_metadata(js('jquery/jquery-ui-1.8.12.custom.js'))
+			->append_metadata(js('jquery/jquery.tools.min.js'));
 			
 		$this->template
 			->set_partial('navigation', 'partials/navigation.php')

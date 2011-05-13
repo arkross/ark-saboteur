@@ -78,7 +78,7 @@ class Game extends Server_Controller {
 
 
 				$this->response['actions'] = $this->roles_m->get_status($this->session->userdata('user_id'));
-				$this->response['actions'] = lang('game.'.$this->response['actions']['role']);
+				$this->response['actions'] = $this->response['actions']['role'];
 
 
 				// Prevents other players' roles for being broadcast
