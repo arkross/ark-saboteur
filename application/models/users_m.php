@@ -122,17 +122,19 @@ class Users_m extends MY_Model {
 
 	public function _create() {
 		$query = "CREATE  TABLE IF NOT EXISTS `users` (
-			`id` INT NOT NULL AUTO_INCREMENT ,
-			`username` VARCHAR(255) NOT NULL ,
-			`password` VARCHAR(255) NOT NULL ,
-			`email` VARCHAR(255) NOT NULL ,
-			`avatar` TEXT NULL ,
-			`treasure` INT NULL ,
-			`active` TINYINT(1)  NOT NULL ,
-			`last_seen` INT NULL ,
-			PRIMARY KEY (`id`) )
-		ENGINE = InnoDB
-		COMMENT = 'A user is registered via email. Every user has reputation, represented by treasure.'";
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `username` VARCHAR(255) NOT NULL ,
+  `password` VARCHAR(255) NOT NULL ,
+  `email` VARCHAR(255) NOT NULL ,
+  `avatar` TEXT NULL ,
+  `treasure` INT NULL ,
+  `active` TINYINT(1)  NOT NULL ,
+  `last_seen` INT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) )
+ENGINE = InnoDB
+COMMENT = 'A user is registered via email. Every user has reputation.'";
 		
 		$insert = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `avatar`, `treasure`, `active`, `last_seen`) VALUES
 		(1, 'arkross', '85ec7356ea22f8b27867e8fc810525103d7942f3', 'nikolas.l.alexander@gmail.com', NULL, 0, 1, 1304157642),
