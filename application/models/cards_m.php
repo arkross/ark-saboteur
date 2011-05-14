@@ -153,7 +153,7 @@ class Cards_m extends MY_Model {
 					'target' => 'player',
 					'result' => 'role[saboteur]'
 				),
-				'description' => 'Saboteur has to prevent Miners from reaching the goal',
+				'description' => 'Saboteur has to prevent Miners from reaching the goal cards',
 			),
 			array(
 				'name' => 'Gold Digger',
@@ -164,7 +164,7 @@ class Cards_m extends MY_Model {
 					'target' => 'player',
 					'result' => 'role[miner]'
 				),
-				'description' => 'Gold Miner has to get the gold.'
+				'description' => 'Gold Miner has to reach the goal cards containing gold.'
 			),
 			
 			// Gold Cards
@@ -259,7 +259,7 @@ class Cards_m extends MY_Model {
 					'rules' => 'not[wagon_off]',
 					'result' => 'add[wagon_off]'
 				),
-				'description' => 'Disables the Mine Wagon.'
+				'description' => 'Disables the Mine Wagon. A player which has any tool disabled cannot play a path card.'
 			),
 			array(
 				'name' => 'Pick Off',
@@ -271,7 +271,7 @@ class Cards_m extends MY_Model {
 					'rules' => 'not[pick_off]',
 					'result' => 'add[pick_off]'
 				),
-				'description' => 'Disables the Pick.'
+				'description' => 'Disables the Pick. A player which has any tool disabled cannot play a path card.'
 			),
 			array(
 				'name' => 'Lantern Off',
@@ -283,7 +283,7 @@ class Cards_m extends MY_Model {
 					'rules' => 'not[lantern_off]',
 					'result' => 'add[lantern_off]'
 				),
-				'description' => 'Disables the Lantern.'
+				'description' => 'Disables the Lantern. A player which has any tool disabled cannot play a path card.'
 			),
 			array(
 				'name' => 'Wagon On',
@@ -379,7 +379,7 @@ class Cards_m extends MY_Model {
 					'rules' => 'occupied|maze_is[goal]',
 					'result' => 'peek'
 				),
-				'description' => 'Take a peek at one of the goal card.'
+				'description' => 'Take a peek at one of the face-down goal card.'
 			),
 			
 			// Path Cards
