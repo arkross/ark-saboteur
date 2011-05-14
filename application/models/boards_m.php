@@ -49,7 +49,10 @@ class Boards_m extends MY_Model {
 		$all = (array)$this->get_many_by('room_id', $this->session->userdata('room_id'));
 		$gold = array();
 		foreach ($all as $c) {
-			if ($c['place']['value'] == 'gold' &&
+			$c = (array)$c;
+			$c['place'] = unserialize($c['place']);
+			if (isset($c['place']['value']) &&
+				$c['place']['value'] == 'gold' &&
 				$c['place']['id'] == $player_id) {
 				$gold[] = $c;
 			}

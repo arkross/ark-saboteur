@@ -103,6 +103,9 @@ class Board {
 	public function update() {
 		$this->win = '';
 		$this->players = $this->ci->roles_m->get_current_room_players(false);
+		foreach($this->players as &$p) {
+			$p['gold_cards'] = $this->ci->boards_m->get_player_gold($p['player_id']);
+		}
 		
 		$this->deck = $this->ci->boards_m->get_deck();
 		$this->maze = $this->ci->boards_m->get_maze();

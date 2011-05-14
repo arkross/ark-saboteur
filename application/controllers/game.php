@@ -66,8 +66,10 @@ class Game extends Server_Controller {
 			if ($this->rooms_m->get_round() <= 3) {
 				// Prevents other players' golds for being broadcast
 				foreach($this->response['players'] as &$player) {
-					if ($player['player_id'] != $this->session->userdata('user_id'))
-					unset($player['role']['gold']);
+					if ($player['player_id'] != $this->session->userdata('user_id')) {
+						unset($player['role']['gold']);
+						unset($player['gold_cards']);
+					}
 				}
 			}
 
@@ -81,7 +83,7 @@ class Game extends Server_Controller {
 				$this->response['actions'] = $this->response['actions']['role'];
 
 
-				// Prevents other players' roles for being broadcast
+				// Prevents other players' roles from being broadcast
 				foreach($this->response['players'] as &$player) {
 					unset($player['role']['role']);
 

@@ -12,6 +12,12 @@
  * Company : http://mimicreative.net
  */
 
+jQuery.fn.outerHTML = function(s) {
+	return (s)
+	? this.before(s).remove()
+	: jQuery("<p>").append(this.eq(0).clone()).html();
+}
+
 jQuery(document).ready(function($) {
 	const WAITING = 0;
 	const READY = 1;
@@ -26,6 +32,11 @@ jQuery(document).ready(function($) {
 	var target_status;
 	var card, target;
 	var round_count = 0;
+	var last_hand;
+	
+	
+	
+	
 	
 	$("#role").tooltip({
 		position: 'bottom center',
@@ -155,6 +166,15 @@ jQuery(document).ready(function($) {
 			str += '">'+v.player+'</span>';
 			if (v.role.gold != undefined) {
 				str += gold_img + '<span class="gold-count">' + v.role.gold + '</span>';
+				if (v.gold_cards != undefined) {
+					str += '<div class="tooltip">';
+					$.each(v.gold_cards, function(x, y) {
+						var cloned = $('#all-cards img.card-'+y.card_id).clone(true);
+						console.log($(cloned.get(0)).outerHTML());
+						str += $(cloned.get(0)).outerHTML();
+					})
+					str += '</div>';
+				}
 			}
 			if (v.role != undefined) {
 				if (v.role.pick_off == '1') {
@@ -183,6 +203,13 @@ jQuery(document).ready(function($) {
 		
 		// update hand cards
 		if (data != undefined && data.hand != undefined) {
+			var hand_ids;
+			$.each(data.hand, function(i,v) {
+				hand_ids += v.id;
+			});
+			if (last_hand != undefined && last_hand == hand_ids) return;
+			last_hand = hand_ids;
+			
 			$('#hand-cards').html('');
 			$.each(data.hand, function(i, v) {
 				var cloned = $('#all-cards img.card-'+v.card_id).clone(true);
@@ -373,7 +400,13 @@ jQuery(document).ready(function($) {
 	function reloadDragDrop() {
 		$("#hand-cards img").tooltip({
 			effect: 'slide',
+			position: 'top right',
 			predelay: 700
+		});
+		$(".gold-count").tooltip({
+			effect: 'slide',
+			predelay: 500,
+			position: 'bottom center'
 		});
 		$("#hand-cards img").draggable({
 			helper: function(event) {
