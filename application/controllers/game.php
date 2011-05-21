@@ -142,6 +142,7 @@ class Game extends Server_Controller {
 	 */
 	public function move() {
 		if (empty($_POST)) return;
+		if (!$this->roles_m->is_active()) return;
 		$deck_id = $this->input->post('deck_id');
 		$target = $this->input->post('target');
 		$args = $_POST;

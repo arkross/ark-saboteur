@@ -96,7 +96,7 @@ jQuery(document).ready(function($) {
 		  var cloned = $("#all-cards img.slug-"+data);
 			var tooltip = cloned.next('div').clone();
 			cloned = cloned.clone();
-			$("#role").html(cloned.attr('name'));
+			$("#role").html("Hover to see your role.");
 			$("#actions .tooltip").html(tooltip.html());
 		}
 	}
@@ -289,7 +289,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// Rotate hand cards
-	$("#hand-cards img").live('dblclick', function(event) {
+	$("#hand-cards img.type-path").live('dblclick', function(event) {
 		event.preventDefault();
 		if ($(this).attr('reversed') == '1') {
 			$(this).rotate({angle:180, animateTo:360});

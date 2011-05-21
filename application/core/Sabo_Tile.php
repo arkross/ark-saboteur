@@ -60,7 +60,7 @@ class Sabo_Tile {
 	}
 	
 	function allowed_dir() {
-		$dir = array('up', 'right', 'down', 'left');
+		$dir = array('right', 'up', 'down', 'left');
 		$allowed = array();
 		foreach ($dir as $d) {
 			$allow = '_'.$d;

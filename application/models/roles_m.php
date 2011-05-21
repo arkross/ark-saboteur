@@ -22,6 +22,14 @@ class Roles_m extends MY_Model {
 		$this->_table = 'roles';
 	}
 	
+	public function is_active() {
+		$active = $this->get_active_player();
+		if ($this->session->userdata('user_id') == $active['player_id']) {
+			return true;
+		}
+		return false;
+	}
+	
 	public function get_creator($room_id = '') {
 		if ($room_id == '') $room_id = $this->session->userdata('room_id');
 		$players = $this->get_many_by('room_id', $room_id);
