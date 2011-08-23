@@ -165,6 +165,8 @@ class Game extends Server_Controller {
 	public function start_game() {
 		// Not the room creator? no way you can start the game
 		if (! $this->roles_m->is_creator()) return;
+		
+		// Already playing? please do not hit the start button again.
 		if ($this->rooms_m->is_playing()) {
 			$this->response['success'] = 0;
 			$this->response['error'] = 'Failed to Start. The game is already started.';
@@ -190,14 +192,25 @@ class Game extends Server_Controller {
 	 * Starts a new round
 	 */
 	public function start_round() {
+		// checks if the game has ended
 		if ($this->rooms_m->get_round() >= 4) {
 			$this->rooms_m->quit();
 			return;
 		}
+		
+		// begins database transaction
 		$this->boards_m->db->trans_start();
+		
+		// writes at the event log
 		$this->events_m->fire_event('start_round', array($this->rooms_m->get_round()));
+		
+		// arranges the board and hand cards.
 		$this->board->prepare();
+		
+		// Increments round count by 1
 		$this->rooms_m->set_round($this->rooms_m->get_round());
+		
+		// completes database transaction
 		$this->boards_m->db->trans_complete();
 	}
 	

@@ -119,13 +119,13 @@ class Board {
 			$sabo_win = $sabo_win || (count($hands[$player['player_id']]) ? true : false);
 		}
 		if (!$sabo_win && 
-			(($this->ci->rooms_m->get_round() == 1 && $this->ci->rooms_m->is_playing())
+			(($this->ci->rooms_m->get_round() == 1 &&
+				$this->ci->rooms_m->is_playing())
 			|| $this->ci->rooms_m->get_round() > 1)) {
 			$this->win = 'saboteur';
 		}
 		
 		// Checks whether the goal card has been reached
-		
 		if (count($this->maze) > 10
 			&& $this->ci->boards_m->goal_opened()) {
 			$this->win = 'gold-digger';
@@ -335,6 +335,8 @@ class Board {
 			array_push($mdata, $data);
 		}
 		$tree = new Sabo_Tree($mdata);
+		
+		// flips up the goal card if any path is connected
 		foreach ($tree->goal as $goal) {
 			$this->ci->boards_m->flip_up($goal);
 		}

@@ -188,6 +188,8 @@ class Boards_m extends MY_Model {
 			'room_id' => $this->session->userdata('room_id'),
 			'place' => array('type' => 'maze')
 		);
+		
+		// Goals' positions to be shuffled
 		$goals = array(
 			array('x' => 48, 'y' => 40),
 			array('x' => 48, 'y' => 38),
