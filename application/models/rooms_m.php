@@ -64,7 +64,7 @@ class Rooms_m extends MY_Model {
 	 * @return Record current room
 	 */
 	public function get_current() {
-		return $this->room = $this->get($this->session->userdata('room_id'));
+		return $this->room = $this->get($this->session->userdata('room_id') ? $this->session->userdata('room_id') : 1);
 	}
 	
 	/**
@@ -183,7 +183,7 @@ class Rooms_m extends MY_Model {
 		$query = "CREATE TABLE IF NOT EXISTS `rooms` (
 			`id` INT NOT NULL AUTO_INCREMENT ,
 			`title` VARCHAR(255) NOT NULL ,
-			`created_at` INT NOT NULL ,
+			`created_at` INT NULL ,
 			`is_playing` SMALLINT NOT NULL DEFAULT 0 COMMENT '0 if not playing, 1, 2, 3 indicates round.' ,
 			PRIMARY KEY (`id`) )
 		ENGINE = InnoDB";

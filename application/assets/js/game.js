@@ -334,7 +334,7 @@ jQuery(document).ready(function($) {
 		if (!$("img#"+playing_card).hasClass('target-maze')) return;
 		var slug = get_slug($("img#"+playing_card));
 		if (disabled && slug != 'map' && slug != 'road-off') {
-			$("#message").html("You are currently disabled.");
+			$("#message").html("You are currently disabled and cannot play path cards.");
 			$("#message").dialog({modal: true});
 			return;
 		}

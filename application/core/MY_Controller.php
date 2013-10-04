@@ -48,8 +48,6 @@ class MY_Controller extends CI_Controller {
 			$this->data['user'] = $this->user;
 		}
 		
-		if ($this->session->userdata('room_id')) {
-			$this->data['room'] = $this->rooms_m->get_current();
-		}
+		$this->data['room'] = $this->rooms_m->get_current();
 	}
 }

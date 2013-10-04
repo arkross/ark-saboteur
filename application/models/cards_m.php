@@ -391,7 +391,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[10101]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Down',
@@ -401,7 +402,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11010]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Left',
@@ -411,7 +413,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11001]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Right',
@@ -421,7 +424,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11100]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Right Down',
@@ -431,7 +435,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11110]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Right Left',
@@ -441,7 +446,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11101]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Path Up Right Down Left',
@@ -451,7 +457,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[11111]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			
 			// Blocked Cards
@@ -463,7 +470,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[00100]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up',
@@ -473,7 +481,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01000]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Right Left',
@@ -483,7 +492,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[00101]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Down',
@@ -493,7 +503,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01010]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Right',
@@ -503,7 +514,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01100]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Left',
@@ -513,7 +525,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01001]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Right Down',
@@ -523,7 +536,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01110]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Right Left',
@@ -533,7 +547,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01101]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			),
 			array(
 				'name' => 'Blocked Up Right Down Left',
@@ -543,7 +558,8 @@ class Cards_m extends MY_Model {
 				'effect' => array(
 					'target' => 'maze',
 					'rules' => 'adj[01111]'
-				)
+				),
+				'description' => 'Rotate by double-clicking this card.'
 			)
 		);
 		

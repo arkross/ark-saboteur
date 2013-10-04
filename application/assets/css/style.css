@@ -529,3 +529,7 @@ footer {
 #comment-form {
 	margin-top: 10px;
 }
+
+#role {
+	cursor: pointer;
+}
