@@ -46,8 +46,7 @@ class MY_Controller extends CI_Controller {
 		if ($this->users_m->logged_in()) {
 			$this->user = $this->users_m->get_user();
 			$this->data['user'] = $this->user;
+			$this->data['room'] = $this->rooms_m->get_current();
 		}
-		
-		$this->data['room'] = $this->rooms_m->get_current();
 	}
 }

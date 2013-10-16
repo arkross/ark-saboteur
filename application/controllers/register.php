@@ -54,7 +54,16 @@ class Register extends Client_Controller {
 				'last_seen' => 0
 			);
 			if ($this->users_m->insert($data)) {
-				$this->load->library('email');
+				$config = Array(
+					'protocol' => 'smtp',
+					'smtp_host' => 'ssl://smtp.googlemail.com',
+					'smtp_port' => 465,
+					'smtp_user' => 'alex@arkross.com',
+					'smtp_pass' => 'darkslayer',
+					'mailtype'  => 'html', 
+					'charset'   => 'iso-8859-1'
+				);
+				$this->load->library('email', $config);
 				$this->email->from('me@arkross.com', 'Saboteur Administrator');
 				$this->email->to($data['email']);
 				$this->email->subject('Account Verification');
